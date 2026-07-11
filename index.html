@@ -764,11 +764,11 @@
             <figure class="matrix-figure">
               <h3>Zodíaco chino</h3>
               <p>Cinco fases: un ciclo impulsa y otro regula. La flecha indica qué elemento actúa sobre cuál.</p>
-              <canvas class="matrix-canvas" id="chinese-affinity-matrix" width="420" height="420" role="img" aria-label="Matriz china dirigida: las flechas verdes muestran qué elemento impulsa a otro; las rojas, qué elemento lo regula."></canvas>
+              <canvas class="matrix-canvas" id="chinese-affinity-matrix" width="420" height="420" role="img" aria-label="Matriz china dirigida: las flechas verdes muestran qué elemento impulsa a otro; las grises, qué elemento lo regula."></canvas>
               <figcaption class="matrix-caption">Impulsa: una cualidad facilita la siguiente; Agua → Madera, adaptarse permite crecer. Regula: una cualidad modera otra; Agua → Fuego, observar antes de actuar baja la impulsividad.</figcaption>
               <div class="matrix-legend" aria-label="Leyenda del zodíaco chino">
                 <span><i class="matrix-line positive" aria-hidden="true"></i>Impulsa</span>
-                <span><i class="matrix-line negative" aria-hidden="true"></i>Regula</span>
+                <span><i class="matrix-line neutral" aria-hidden="true"></i>Regula</span>
               </div>
             </figure>
           </div>
@@ -1085,7 +1085,7 @@
         const western=$("#western-affinity-matrix"),chinese=$("#chinese-affinity-matrix");
         if(!western||!chinese)return;
         drawAffinityMatrix(western,["Fuego","Aire","Agua","Tierra"],[[.5,.13],[.87,.5],[.5,.87],[.13,.5]],[[0,2,"negative"],[1,3,"negative"],[0,3,"neutral"],[1,2,"neutral"],[0,1,"positive"],[2,3,"positive"]]);
-        drawAffinityMatrix(chinese,["Madera","Fuego","Tierra","Metal","Agua"],[[.5,.1],[.88,.38],[.74,.84],[.26,.84],[.12,.38]],[[0,2,"negative"],[2,4,"negative"],[4,1,"negative"],[1,3,"negative"],[3,0,"negative"],[0,1,"positive"],[1,2,"positive"],[2,3,"positive"],[3,4,"positive"],[4,0,"positive"]],true);
+        drawAffinityMatrix(chinese,["Madera","Fuego","Tierra","Metal","Agua"],[[.5,.1],[.88,.38],[.74,.84],[.26,.84],[.12,.38]],[[0,2,"neutral"],[2,4,"neutral"],[4,1,"neutral"],[1,3,"neutral"],[3,0,"neutral"],[0,1,"positive"],[1,2,"positive"],[2,3,"positive"],[3,4,"positive"],[4,0,"positive"]],true);
       }
       function chinese(date) {
         const year = date.getUTCFullYear();
