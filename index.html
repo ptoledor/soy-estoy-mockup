@@ -200,6 +200,9 @@
     }
     .hero-aside p { margin: 0; color: var(--muted); font-size: 14px; }
     .hero-aside strong { display: block; margin-bottom: 8px; color: var(--ink); font-family: var(--serif); font-size: 22px; }
+    .hero.copy-only { grid-template-columns: 1fr; }
+    .hero.copy-only h1 { max-width: 16ch; }
+    .hero.copy-only .hero-copy { max-width: 66ch; }
 
     .section {
       max-width: var(--max);
@@ -291,6 +294,7 @@
     .calculation { color: var(--ink); font-family: var(--mono); overflow-wrap: anywhere; }
 
     .practical-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; border-top: 1px solid var(--line-dark); border-bottom: 1px solid var(--line-dark); }
+    .summary-points { margin-top: 18px; }
     .practical {
       padding: 26px 24px 30px;
       border-right: 1px solid var(--line);
@@ -310,6 +314,7 @@
     }
     .action-band h3 { margin: 0 0 5px; font-family: var(--serif); font-size: 25px; font-weight: 500; }
     .action-band p { margin: 0; color: var(--muted); font-size: 14px; }
+    .action-band.solo { margin-top: 0; }
     .button-row { display: flex; flex-wrap: wrap; gap: 10px; }
     .primary, .secondary {
       min-height: 44px;
@@ -587,7 +592,7 @@
       .identity { grid-template-columns: 1fr; }
       .signature { min-height: 260px; border-right: 0; border-bottom: 1px solid var(--line); }
       .evidence-grid { grid-template-columns: 1fr; }
-      .evidence, .evidence:nth-child(2n) { border-right: 0; border-bottom: 1px solid var(--line); }
+      .evidence, .evidence:nth-child(2n), .evidence:nth-last-child(-n+2) { border-right: 0; border-bottom: 1px solid var(--line); }
       .evidence:last-child { border-bottom: 0; }
       .practical-grid, .period-grid, .climate-grid, .planner { grid-template-columns: 1fr; }
       .practical, .period-card, .climate-card { border-right: 0; border-bottom: 1px solid var(--line); }
@@ -653,16 +658,12 @@
 
     <main id="content">
       <div class="view" id="soy-view" role="tabpanel">
-        <header class="hero">
+        <header class="hero copy-only">
           <div>
-            <p class="eyebrow">Soy · síntesis base</p>
+            <p class="eyebrow">Soy · tu síntesis base</p>
             <h1>Tu fecha, cruzada entre distintas tradiciones.</h1>
-            <p class="hero-copy">Reunimos numerología, zodíaco tropical, zodíaco chino y tarot. Primero mostramos el resumen; después, el cálculo y el límite de cada componente.</p>
+            <p class="hero-copy">Reunimos numerología, zodíaco tropical, zodíaco chino y tarot para observar coincidencias y tensiones. No define tu personalidad; ofrece un marco para mirar patrones de tu vida.</p>
           </div>
-          <aside class="hero-aside">
-            <strong>Qué es</strong>
-            <p>Un cruce de tradiciones simbólicas para observar coincidencias y tensiones. No define tu personalidad ni predice lo que harás.</p>
-          </aside>
         </header>
 
         <section class="section rule" aria-labelledby="identity-title">
@@ -670,19 +671,24 @@
           <div class="identity">
             <div class="signature summary-signature">
               <div><span class="micro-label">Lectura principal</span></div>
-              <div><h2 id="identity-title">Temas que aparecen</h2><p>La síntesis va primero. El detalle de cada sistema viene después.</p></div>
+              <div><h2 id="identity-title">En pocas palabras</h2><p>Una lectura breve antes de revisar cómo se calculó.</p></div>
             </div>
             <div class="identity-copy">
               <p class="lead" id="soy-synthesis">—</p>
-              <p class="caveat">El resumen no asigna mayor verdad a una tradición. Solo reúne sus temas y deja las diferencias visibles en los componentes.</p>
+              <p class="caveat">Es una síntesis editorial de asociaciones simbólicas, no una descripción completa ni un diagnóstico.</p>
             </div>
+          </div>
+          <div class="practical-grid summary-points">
+            <article class="practical"><span class="micro-label">Un recurso</span><b id="gift-title">—</b><p id="gift-copy">—</p></article>
+            <article class="practical"><span class="micro-label">Una tensión</span><b id="shadow-title">—</b><p id="shadow-copy">—</p></article>
+            <article class="practical"><span class="micro-label">Una pregunta</span><b>Para contrastar</b><p id="soy-question">—</p></article>
           </div>
         </section>
 
         <section class="section rule" aria-labelledby="components-title">
           <div class="section-head">
-            <div><p class="section-kicker">02 · Cruce de tradiciones</p><h2 class="section-title" id="components-title">De dónde sale cada parte.</h2></div>
-            <p class="section-intro">Abrir “ver cuenta y criterio” permite auditar cada resultado. Si una tradición tiene variantes, lo decimos.</p>
+            <div><p class="section-kicker">02 · Cómo se compone</p><h2 class="section-title" id="components-title">Las tradiciones, por separado.</h2></div>
+            <p class="section-intro">Puedes abrir cada parte para ver la cuenta, el criterio y sus límites. Si una tradición tiene variantes, lo decimos.</p>
           </div>
           <div class="evidence-grid">
             <article class="evidence">
@@ -708,18 +714,9 @@
           </div>
         </section>
 
-        <section class="section rule" aria-labelledby="use-title">
-          <div class="section-head">
-            <div><p class="section-kicker">Bajarlo a tierra</p><h2 class="section-title" id="use-title">Tres cosas para observar.</h2></div>
-            <p class="section-intro">No buscamos que “creas” el perfil. Buscamos que puedas contrastarlo con tu experiencia.</p>
-          </div>
-          <div class="practical-grid">
-            <article class="practical"><span class="micro-label">Un recurso</span><b id="gift-title">—</b><p id="gift-copy">—</p></article>
-            <article class="practical"><span class="micro-label">Una tensión</span><b id="shadow-title">—</b><p id="shadow-copy">—</p></article>
-            <article class="practical"><span class="micro-label">Una pregunta</span><b>Para contrastar</b><p id="soy-question">—</p></article>
-          </div>
-          <div class="action-band">
-            <div><h3>Tu forma base no explica tu momento.</h3><p>Ve a Estoy para entender el período actual sin cambiar esta lectura.</p></div>
+        <section class="section rule" aria-label="Acceso a Estoy">
+          <div class="action-band solo">
+            <div><h3>Soy no cambia día a día.</h3><p>Estoy pone estas señales en contexto temporal y propone un foco para el período actual.</p></div>
             <div class="button-row"><button class="secondary" id="copy-soy" type="button">Copiar mi Soy</button><button class="primary" data-go="estoy" type="button">Accede a Estoy</button></div>
           </div>
         </section>
@@ -1033,7 +1030,7 @@
         const sun=western(birth), chin=chinese(birth), tarotTrace=traceDigits(`${pad(birth.getUTCDate())}${pad(birth.getUTCMonth()+1)}${birth.getUTCFullYear()}`, false);
         let tarotNumber=sumDigits(`${pad(birth.getUTCDate())}${pad(birth.getUTCMonth()+1)}${birth.getUTCFullYear()}`), tarotSteps=[tarotNumber];
         while(tarotNumber>22){tarotNumber=sumDigits(tarotNumber);tarotSteps.push(tarotNumber);} const tarot=ARCANA[tarotNumber];
-        $("#soy-synthesis").textContent=`En este cruce aparecen ${profile.key}, ${sun[5][0]} y ${tarot[1]}. No forman una conclusión única: son temas que distintas tradiciones asocian a la misma fecha.`;
+        $("#soy-synthesis").textContent=`El cruce combina ${profile.gift.toLowerCase()} con un estilo de ${sun[5][0]} y ${sun[5][1]}. El punto de cuidado es ${profile.shadow.toLowerCase()}. Como aprendizaje complementario aparecen ${tarot[1]}.`;
         $("#life-label").textContent=`Camino ${life.number}`; $("#life-meaning").textContent=profile.meaning; $("#life-calc").textContent=life.expression;
         $("#sun-label").textContent=`${sun[0]} · ${sun[1]}`; $("#sun-meaning").textContent=`${sun[2]}: ${sun[5].join(", ")}.`; $("#sun-calc").textContent=`${pad(birth.getUTCDate())}/${pad(birth.getUTCMonth()+1)} cae entre ${pad(sun[3][1])}/${pad(sun[3][0])} y ${pad(sun[4][1])}/${pad(sun[4][0])}.`;
         $("#chinese-label").textContent=`${chin.animal} de ${chin.element}`; $("#chinese-meaning").textContent=`${chin.polarity} · año lunisolar efectivo ${chin.effective}.`; $("#chinese-calc").textContent=`${isoDate(birth)} → año ${chin.effective} → posición ${mod(chin.effective-4,12)+1}/12 y tronco ${mod(chin.effective-4,10)+1}/10.`; $("#chinese-note").textContent=chin.note; $("#chinese-kind").textContent=chin.approximate?"Aproximación":"Tradición";
