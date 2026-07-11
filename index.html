@@ -1,0 +1,1128 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#ebe7dc">
+  <title>Soy / Estoy — mockup completo</title>
+  <style>
+    :root {
+      --paper: #ebe7dc;
+      --paper-2: #f4f1e9;
+      --ink: #171812;
+      --muted: #606157;
+      --line: #c9c5b8;
+      --line-dark: #9c988c;
+      --brass: #8d6417;
+      --green: #234b3d;
+      --red: #8b3f32;
+      --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+      --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --mono: "Cascadia Code", "SFMono-Regular", Consolas, monospace;
+      --max: 1120px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--sans);
+      line-height: 1.5;
+    }
+    button, input, textarea { font: inherit; }
+    button { color: inherit; }
+    a { color: inherit; }
+    [hidden] { display: none !important; }
+
+    .skip {
+      position: fixed;
+      left: 12px;
+      top: -80px;
+      z-index: 99;
+      padding: 10px 14px;
+      background: var(--ink);
+      color: var(--paper-2);
+    }
+    .skip:focus { top: 12px; }
+
+    .shell { min-height: 100vh; }
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      border-bottom: 1px solid var(--line);
+      background: rgba(235, 231, 220, .94);
+      backdrop-filter: blur(12px);
+    }
+    .topbar-inner {
+      max-width: var(--max);
+      margin: 0 auto;
+      min-height: 68px;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .brand {
+      display: flex;
+      align-items: baseline;
+      gap: 9px;
+      font-family: var(--mono);
+      text-transform: uppercase;
+      letter-spacing: .15em;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+    .brand strong { font-size: 14px; }
+    .brand i { color: var(--brass); font-style: normal; }
+    .prototype {
+      color: var(--muted);
+      font-size: 10px;
+      letter-spacing: .12em;
+    }
+    .main-tabs { display: flex; align-self: stretch; }
+    .tab {
+      min-width: 112px;
+      border: 0;
+      border-left: 1px solid var(--line);
+      padding: 0 20px;
+      background: transparent;
+      cursor: pointer;
+      font-family: var(--mono);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+    }
+    .tab:last-child { border-right: 1px solid var(--line); }
+    .tab[aria-selected="true"] { background: var(--ink); color: var(--paper-2); }
+    .tab:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible, summary:focus-visible {
+      outline: 3px solid #d09b2f;
+      outline-offset: 3px;
+    }
+
+    .profile-bar {
+      border-bottom: 1px solid var(--line);
+      background: var(--paper-2);
+    }
+    .profile-inner {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 18px 24px;
+      display: grid;
+      grid-template-columns: 1.2fr 1fr 1fr auto;
+      align-items: end;
+      gap: 14px;
+    }
+    .field { display: grid; gap: 6px; }
+    .field span, .micro-label {
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: .13em;
+    }
+    .field input {
+      min-width: 0;
+      width: 100%;
+      border: 0;
+      border-bottom: 1px solid var(--line-dark);
+      border-radius: 0;
+      padding: 8px 0;
+      background: transparent;
+      color: var(--ink);
+    }
+    .recalculate {
+      min-height: 43px;
+      border: 1px solid var(--ink);
+      background: var(--ink);
+      color: var(--paper-2);
+      padding: 9px 16px;
+      cursor: pointer;
+      font-family: var(--mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+    }
+    .privacy-note {
+      grid-column: 1 / -1;
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .privacy-note strong { color: var(--ink); }
+
+    main { overflow: hidden; }
+    .view { animation: enter .35s ease both; }
+    @keyframes enter { from { opacity: .15; transform: translateY(5px); } }
+    @media (prefers-reduced-motion: reduce) { .view { animation: none; } html { scroll-behavior: auto; } }
+
+    .hero {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: clamp(56px, 9vw, 112px) 24px 48px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.3fr) minmax(250px, .7fr);
+      gap: clamp(32px, 8vw, 100px);
+      align-items: end;
+    }
+    .eyebrow, .section-kicker {
+      margin: 0 0 16px;
+      color: var(--brass);
+      font-family: var(--mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .2em;
+    }
+    h1, h2, h3, p { text-wrap: pretty; }
+    h1 {
+      max-width: 13ch;
+      margin: 0;
+      font-family: var(--serif);
+      font-weight: 500;
+      font-size: clamp(48px, 8vw, 94px);
+      line-height: .94;
+      letter-spacing: -.035em;
+    }
+    .hero-copy {
+      margin: 24px 0 0;
+      max-width: 55ch;
+      color: var(--muted);
+      font-family: var(--serif);
+      font-size: clamp(18px, 2.2vw, 23px);
+      line-height: 1.45;
+    }
+    .hero-aside {
+      border-top: 1px solid var(--ink);
+      padding-top: 18px;
+    }
+    .hero-aside p { margin: 0; color: var(--muted); font-size: 14px; }
+    .hero-aside strong { display: block; margin-bottom: 8px; color: var(--ink); font-family: var(--serif); font-size: 22px; }
+
+    .section {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 54px 24px;
+    }
+    .section.rule { border-top: 1px solid var(--line); }
+    .section-head {
+      display: grid;
+      grid-template-columns: 1fr minmax(280px, .8fr);
+      gap: 32px;
+      align-items: end;
+      margin-bottom: 28px;
+    }
+    .section-title {
+      margin: 0;
+      font-family: var(--serif);
+      font-weight: 500;
+      font-size: clamp(34px, 5vw, 56px);
+      line-height: 1;
+      letter-spacing: -.025em;
+    }
+    .section-intro { margin: 0; color: var(--muted); font-size: 15px; }
+
+    .identity {
+      display: grid;
+      grid-template-columns: minmax(200px, .7fr) minmax(0, 1.3fr);
+      border: 1px solid var(--line-dark);
+      background: var(--paper-2);
+    }
+    .signature {
+      padding: clamp(28px, 5vw, 48px);
+      border-right: 1px solid var(--line);
+      display: grid;
+      align-content: space-between;
+      gap: 40px;
+      min-height: 340px;
+    }
+    .signature-number {
+      display: block;
+      color: var(--brass);
+      font-family: var(--serif);
+      font-size: clamp(98px, 18vw, 176px);
+      font-weight: 500;
+      line-height: .72;
+      letter-spacing: -.08em;
+    }
+    .signature h2 { margin: 0; font-family: var(--serif); font-size: 25px; font-weight: 500; }
+    .signature p { margin: 8px 0 0; color: var(--muted); font-size: 14px; }
+    .identity-copy {
+      padding: clamp(28px, 5vw, 52px);
+      display: grid;
+      align-content: center;
+    }
+    .identity-copy .lead {
+      margin: 0;
+      font-family: var(--serif);
+      font-size: clamp(27px, 4vw, 43px);
+      line-height: 1.15;
+    }
+    .identity-copy .caveat { margin: 24px 0 0; max-width: 60ch; color: var(--muted); font-size: 14px; }
+
+    .evidence-grid { display: grid; grid-template-columns: repeat(2, 1fr); border: 1px solid var(--line-dark); }
+    .evidence {
+      min-width: 0;
+      padding: 26px;
+      border-bottom: 1px solid var(--line);
+      border-right: 1px solid var(--line);
+      background: rgba(244, 241, 233, .42);
+    }
+    .evidence:nth-child(2n) { border-right: 0; }
+    .evidence:nth-last-child(-n+2) { border-bottom: 0; }
+    .evidence-top { display: flex; justify-content: space-between; align-items: start; gap: 14px; }
+    .evidence h3 { margin: 7px 0 6px; font-family: var(--serif); font-size: 28px; font-weight: 500; }
+    .evidence .meaning { min-height: 44px; margin: 0; color: var(--muted); font-size: 14px; }
+    .kind {
+      flex: 0 0 auto;
+      border: 1px solid var(--line-dark);
+      padding: 4px 7px;
+      font-family: var(--mono);
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: .09em;
+    }
+    details { margin-top: 20px; border-top: 1px solid var(--line); padding-top: 12px; }
+    summary { cursor: pointer; color: var(--brass); font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: .08em; }
+    details p { margin: 12px 0 0; color: var(--muted); font-size: 12px; }
+    .calculation { color: var(--ink); font-family: var(--mono); overflow-wrap: anywhere; }
+
+    .practical-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; border-top: 1px solid var(--line-dark); border-bottom: 1px solid var(--line-dark); }
+    .practical {
+      padding: 26px 24px 30px;
+      border-right: 1px solid var(--line);
+    }
+    .practical:last-child { border-right: 0; }
+    .practical b { display: block; margin: 7px 0 10px; font-family: var(--serif); font-size: 23px; font-weight: 500; }
+    .practical p { margin: 0; color: var(--muted); font-size: 14px; }
+
+    .action-band {
+      margin-top: 36px;
+      padding: 28px;
+      border: 1px solid var(--ink);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 28px;
+    }
+    .action-band h3 { margin: 0 0 5px; font-family: var(--serif); font-size: 25px; font-weight: 500; }
+    .action-band p { margin: 0; color: var(--muted); font-size: 14px; }
+    .button-row { display: flex; flex-wrap: wrap; gap: 10px; }
+    .primary, .secondary {
+      min-height: 44px;
+      padding: 10px 16px;
+      border: 1px solid var(--ink);
+      cursor: pointer;
+      font-family: var(--mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+    .primary { background: var(--ink); color: var(--paper-2); }
+    .secondary { background: transparent; }
+
+    .now-hero {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: clamp(48px, 8vw, 92px) 24px 44px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.25fr) minmax(230px, .75fr);
+      gap: 44px;
+      align-items: center;
+    }
+    .now-title { max-width: 15ch; margin: 0; font-family: var(--serif); font-size: clamp(44px, 7vw, 78px); font-weight: 500; line-height: .98; letter-spacing: -.035em; }
+    .now-lead { max-width: 55ch; margin: 20px 0 0; color: var(--muted); font-size: 16px; }
+    .period-lock { display: inline-flex; margin-top: 22px; gap: 8px; align-items: center; color: var(--green); font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: .08em; }
+    .period-lock::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--green); }
+    .moon-wrap { display: grid; justify-items: center; gap: 18px; }
+    .moon {
+      position: relative;
+      width: clamp(150px, 24vw, 238px);
+      aspect-ratio: 1;
+      overflow: hidden;
+      border: 1px solid var(--line-dark);
+      border-radius: 50%;
+      background: var(--ink);
+      box-shadow: inset 0 0 0 10px var(--paper), inset 0 0 0 11px var(--line-dark);
+    }
+    .moon::after { content: ""; position: absolute; inset: 12%; border-radius: 50%; background: var(--paper-2); transform: translateX(var(--moon-shift, -62%)); }
+    .moon-caption { text-align: center; }
+    .moon-caption strong { display: block; font-family: var(--serif); font-size: 22px; font-weight: 500; }
+    .moon-caption span { color: var(--muted); font-family: var(--mono); font-size: 10px; }
+
+    .period-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; border: 1px solid var(--line-dark); background: var(--paper-2); }
+    .period-card { padding: 28px; border-right: 1px solid var(--line); }
+    .period-card:last-child { border-right: 0; }
+    .period-card .verb { display: block; margin: 7px 0 10px; font-family: var(--serif); font-size: 30px; font-weight: 500; }
+    .period-card p { margin: 0; color: var(--muted); font-size: 14px; }
+    .period-card[data-tone="focus"] { border-top: 5px solid var(--green); }
+    .period-card[data-tone="watch"] { border-top: 5px solid var(--brass); }
+    .period-card[data-tone="release"] { border-top: 5px solid var(--red); }
+
+    .daily {
+      margin-top: 18px;
+      border: 1px dashed var(--line-dark);
+      padding: 18px 22px;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 18px;
+    }
+    .daily-symbol { font-family: var(--serif); font-size: 40px; line-height: 1; color: var(--brass); }
+    .daily h3 { margin: 0; font-family: var(--serif); font-size: 21px; font-weight: 500; }
+    .daily p { margin: 4px 0 0; color: var(--muted); font-size: 13px; }
+    .daily .kind { color: var(--muted); }
+
+    .timeline-scroll { overflow-x: auto; padding-bottom: 8px; scroll-snap-type: x proximity; }
+    .timeline { display: flex; min-width: 850px; border-top: 1px solid var(--line-dark); border-bottom: 1px solid var(--line-dark); }
+    .timeline article {
+      position: relative;
+      flex: 1;
+      min-height: 155px;
+      padding: 20px;
+      border-right: 1px solid var(--line);
+      scroll-snap-align: center;
+    }
+    .timeline article:last-child { border-right: 0; }
+    .timeline article.current { background: var(--ink); color: var(--paper-2); }
+    .timeline h3 { margin: 8px 0 5px; font-family: var(--serif); font-size: 20px; font-weight: 500; }
+    .timeline p { margin: 0; color: var(--muted); font-size: 12px; }
+    .timeline .current p { color: #c9c8bf; }
+    .timeline .dates { position: absolute; left: 20px; right: 20px; bottom: 18px; font-family: var(--mono); font-size: 10px; }
+    .today-line { position: absolute; top: 0; bottom: 0; width: 1px; background: #d6a33c; }
+    .today-line span { position: absolute; top: 8px; left: 7px; color: #e6bd69; font-family: var(--mono); font-size: 9px; text-transform: uppercase; }
+
+    .climate-grid { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--line-dark); }
+    .climate-card { min-width: 0; padding: 24px; border-right: 1px solid var(--line); background: rgba(244, 241, 233, .5); }
+    .climate-card:last-child { border-right: 0; }
+    .climate-value { margin: 8px 0 8px; font-family: var(--serif); font-size: 28px; font-weight: 500; }
+    .climate-card p { margin: 0; color: var(--muted); font-size: 13px; }
+    .climate-card .calculation { margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--line); font-size: 11px; }
+
+    .convergence {
+      display: grid;
+      grid-template-columns: minmax(230px, .65fr) minmax(0, 1.35fr);
+      border: 1px solid var(--line-dark);
+      background: var(--paper-2);
+    }
+    .convergence-score { padding: 36px; border-right: 1px solid var(--line); }
+    .score { display: block; margin: 12px 0; color: var(--brass); font-family: var(--serif); font-size: clamp(34px, 5vw, 52px); line-height: .98; }
+    .convergence-score p { margin: 0; color: var(--muted); font-size: 13px; }
+    .signal-list { margin: 0; padding: 0; list-style: none; }
+    .signal-list li { display: grid; grid-template-columns: 13px 1fr auto; gap: 13px; align-items: start; padding: 18px 22px; border-bottom: 1px solid var(--line); }
+    .signal-list li:last-child { border-bottom: 0; }
+    .signal-dot { width: 8px; height: 8px; margin-top: 6px; border-radius: 50%; background: var(--line-dark); }
+    .signal-list li.matches .signal-dot { background: var(--brass); }
+    .signal-list strong { font-family: var(--serif); font-size: 18px; font-weight: 500; }
+    .signal-list small { display: block; color: var(--muted); font-size: 12px; }
+    .signal-key { color: var(--muted); font-family: var(--mono); font-size: 10px; text-transform: uppercase; }
+
+    .planner {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 1px;
+      background: var(--line-dark);
+      border: 1px solid var(--line-dark);
+    }
+    .plan-field { padding: 22px; background: var(--paper-2); }
+    .plan-field label { display: block; min-height: 34px; font-family: var(--serif); font-size: 20px; }
+    .plan-field textarea { width: 100%; min-height: 118px; resize: vertical; margin-top: 16px; border: 0; border-bottom: 1px solid var(--line-dark); border-radius: 0; background: transparent; color: var(--ink); }
+    .saved { min-height: 18px; margin: 12px 0 0; color: var(--green); font-family: var(--mono); font-size: 10px; }
+
+    .method {
+      display: grid;
+      grid-template-columns: minmax(220px, .65fr) minmax(0, 1.35fr);
+      gap: 50px;
+    }
+    .method h2 { margin: 0; font-family: var(--serif); font-size: 36px; font-weight: 500; line-height: 1.05; }
+    .method-list { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--line-dark); }
+    .method-list li { padding: 18px 0; border-bottom: 1px solid var(--line); }
+    .method-list strong { display: block; margin-bottom: 5px; font-size: 14px; }
+    .method-list span { color: var(--muted); font-size: 13px; }
+
+    .moment-summary {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: clamp(48px, 8vw, 88px) 24px 44px;
+    }
+    .moment-summary h1 {
+      max-width: 15ch;
+      font-size: clamp(44px, 7vw, 78px);
+    }
+    .moment-summary > p:not(.eyebrow) {
+      max-width: 58ch;
+      margin: 20px 0 0;
+      color: var(--muted);
+      font-family: var(--serif);
+      font-size: clamp(17px, 2.1vw, 21px);
+    }
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      margin-top: 38px;
+      border: 1px solid var(--ink);
+      background: var(--ink);
+      color: var(--paper-2);
+    }
+    .summary-item {
+      min-width: 0;
+      padding: 22px;
+      border-right: 1px solid #45463f;
+    }
+    .summary-item:last-child { border-right: 0; }
+    .summary-item .micro-label { color: #aaa99f; }
+    .summary-item strong {
+      display: block;
+      margin-top: 8px;
+      font-family: var(--serif);
+      font-size: clamp(20px, 3vw, 27px);
+      font-weight: 500;
+      line-height: 1.15;
+    }
+    .summary-item span:last-child {
+      display: block;
+      margin-top: 7px;
+      color: #c9c8bf;
+      font-size: 12px;
+    }
+    .ordered-climate { grid-template-columns: repeat(4, 1fr); }
+    .ordered-climate .climate-card { position: relative; padding-top: 30px; }
+    .ordered-climate .climate-card::before {
+      content: attr(data-order);
+      position: absolute;
+      right: 18px;
+      top: 16px;
+      color: var(--line-dark);
+      font-family: var(--mono);
+      font-size: 10px;
+    }
+    .lunar-block {
+      display: grid;
+      grid-template-columns: minmax(220px, .65fr) minmax(0, 1.35fr);
+      border: 1px solid var(--line-dark);
+      background: var(--paper-2);
+    }
+    .lunar-visual {
+      padding: 32px;
+      border-right: 1px solid var(--line);
+      display: grid;
+      align-content: center;
+      justify-items: center;
+      gap: 16px;
+    }
+    .lunar-reading { padding: 30px; }
+    .lunar-reading h3 {
+      margin: 6px 0 10px;
+      font-family: var(--serif);
+      font-size: clamp(30px, 4vw, 43px);
+      font-weight: 500;
+      line-height: 1;
+    }
+    .lunar-reading > p { margin: 0 0 24px; color: var(--muted); font-size: 14px; }
+    .compact-actions {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border-top: 1px solid var(--line);
+    }
+    .compact-action { padding: 18px 16px 0 0; }
+    .compact-action + .compact-action { padding-left: 16px; border-left: 1px solid var(--line); }
+    .compact-action strong { display: block; margin: 5px 0; font-family: var(--serif); font-size: 19px; font-weight: 500; }
+    .compact-action p { margin: 0; color: var(--muted); font-size: 12px; }
+    .disclosure {
+      margin-top: 18px;
+      padding: 0;
+      border: 1px solid var(--line-dark);
+      background: rgba(244, 241, 233, .45);
+    }
+    .disclosure > summary {
+      padding: 16px 18px;
+      color: var(--ink);
+      list-style-position: inside;
+    }
+    .disclosure[open] > summary { border-bottom: 1px solid var(--line); }
+    .disclosure-body { padding: 18px; }
+    .disclosure .convergence { border: 0; }
+    .single-plan { grid-template-columns: 1fr; }
+    .single-plan .plan-field {
+      display: grid;
+      grid-template-columns: minmax(190px, .55fr) minmax(0, 1.45fr);
+      gap: 24px;
+      align-items: start;
+    }
+    .single-plan textarea { margin-top: 0; min-height: 86px; }
+    .method-drawer { max-width: var(--max); margin: 0 auto 40px; }
+    .method-drawer .method-list { padding: 0 18px 18px; border-top: 0; }
+
+    footer { border-top: 1px solid var(--line); }
+    .footer-inner { max-width: var(--max); margin: 0 auto; padding: 28px 24px 96px; display: flex; justify-content: space-between; gap: 24px; color: var(--muted); font-size: 12px; }
+
+    .toast {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      z-index: 40;
+      max-width: min(360px, calc(100vw - 40px));
+      padding: 13px 16px;
+      background: var(--ink);
+      color: var(--paper-2);
+      font-size: 13px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, .2);
+    }
+
+    .mobile-tabs { display: none; }
+    @media (max-width: 760px) {
+      .topbar-inner { min-height: 58px; padding: 0 16px; }
+      .prototype, .main-tabs { display: none; }
+      .profile-inner { padding: 14px 16px; grid-template-columns: 1fr 1fr; }
+      .field:first-child { grid-column: 1 / -1; }
+      .recalculate { grid-column: 1 / -1; }
+      .hero, .now-hero { grid-template-columns: 1fr; padding-left: 16px; padding-right: 16px; }
+      .hero { padding-top: 50px; }
+      .hero-aside { max-width: 45ch; }
+      .section { padding: 44px 16px; }
+      .section-head { grid-template-columns: 1fr; gap: 14px; }
+      .identity { grid-template-columns: 1fr; }
+      .signature { min-height: 260px; border-right: 0; border-bottom: 1px solid var(--line); }
+      .evidence-grid { grid-template-columns: 1fr; }
+      .evidence, .evidence:nth-child(2n) { border-right: 0; border-bottom: 1px solid var(--line); }
+      .evidence:last-child { border-bottom: 0; }
+      .practical-grid, .period-grid, .climate-grid, .planner { grid-template-columns: 1fr; }
+      .practical, .period-card, .climate-card { border-right: 0; border-bottom: 1px solid var(--line); }
+      .practical:last-child, .period-card:last-child, .climate-card:last-child { border-bottom: 0; }
+      .action-band { align-items: stretch; flex-direction: column; }
+      .button-row > * { flex: 1; }
+      .moon-wrap { grid-row: 1; }
+      .daily { grid-template-columns: auto 1fr; }
+      .daily .kind { grid-column: 2; }
+      .convergence, .method { grid-template-columns: 1fr; }
+      .convergence-score { border-right: 0; border-bottom: 1px solid var(--line); }
+      .method { gap: 28px; }
+      .moment-summary { padding-left: 16px; padding-right: 16px; }
+      .summary-grid, .lunar-block, .compact-actions { grid-template-columns: 1fr; }
+      .summary-item { border-right: 0; border-bottom: 1px solid #45463f; }
+      .summary-item:last-child { border-bottom: 0; }
+      .lunar-visual { border-right: 0; border-bottom: 1px solid var(--line); }
+      .compact-action, .compact-action + .compact-action { padding: 15px 0; border-left: 0; border-bottom: 1px solid var(--line); }
+      .compact-action:last-child { border-bottom: 0; }
+      .single-plan .plan-field { grid-template-columns: 1fr; }
+      .method-drawer { margin-left: 16px; margin-right: 16px; }
+      .footer-inner { flex-direction: column; }
+      .mobile-tabs {
+        position: fixed;
+        left: 12px;
+        right: 12px;
+        bottom: 12px;
+        z-index: 30;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        border: 1px solid var(--ink);
+        background: var(--paper-2);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, .18);
+      }
+      .mobile-tabs .tab { min-height: 48px; border: 0; }
+      .mobile-tabs .tab + .tab { border-left: 1px solid var(--ink); }
+      .toast { bottom: 74px; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#content">Ir al contenido</a>
+  <div class="shell">
+    <header class="topbar">
+      <div class="topbar-inner">
+        <div class="brand"><strong>SOY</strong><i>/</i><strong>ESTOY</strong><span class="prototype">prototipo</span></div>
+        <nav class="main-tabs" role="tablist" aria-label="Secciones del producto">
+          <button class="tab" role="tab" data-view="soy" aria-selected="true">Soy</button>
+          <button class="tab" role="tab" data-view="estoy" aria-selected="false">Estoy</button>
+        </nav>
+      </div>
+    </header>
+
+    <section class="profile-bar" aria-label="Datos para la lectura">
+      <form class="profile-inner" id="profile-form">
+        <label class="field"><span>Tu nombre</span><input id="name" autocomplete="name" value="Isidora" maxlength="40"></label>
+        <label class="field"><span>Fecha de nacimiento</span><input id="birth" type="date" value="1990-06-15" min="1940-01-01" max="2035-12-31" required></label>
+        <label class="field"><span>Fecha a consultar</span><input id="target" type="date" required></label>
+        <button class="recalculate" type="submit">Actualizar lectura</button>
+        <p class="privacy-note"><strong>No pedimos hora ni lugar.</strong> Este mockup no calcula ascendente ni casas; mostrarlos sin hora exacta sería inventar precisión.</p>
+      </form>
+    </section>
+
+    <main id="content">
+      <div class="view" id="soy-view" role="tabpanel">
+        <header class="hero">
+          <div>
+            <p class="eyebrow">Soy · tu forma base</p>
+            <h1>Un mapa para leerte, no una caja para encerrarte.</h1>
+            <p class="hero-copy">Cruza tradiciones simbólicas conocidas, muestra cada cuenta y separa datos, reglas e interpretación.</p>
+          </div>
+          <aside class="hero-aside">
+            <strong>Qué vas a encontrar</strong>
+            <p>Cuatro lentes sobre la misma fecha. Ninguna predice tu destino. Juntas sirven para nombrar tendencias, dones y tensiones que puedes observar.</p>
+          </aside>
+        </header>
+
+        <section class="section rule" aria-labelledby="identity-title">
+          <p class="section-kicker">Lectura principal</p>
+          <div class="identity">
+            <div class="signature">
+              <div><span class="micro-label">Camino de vida</span><span class="signature-number" id="life-number">—</span></div>
+              <div><h2 id="identity-title">Tu firma simbólica</h2><p id="life-key">—</p></div>
+            </div>
+            <div class="identity-copy">
+              <p class="lead" id="soy-synthesis">—</p>
+              <p class="caveat">Esta síntesis es una interpretación editorial basada en los componentes que ves abajo. Úsala como pregunta de trabajo, no como diagnóstico.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="section rule" aria-labelledby="components-title">
+          <div class="section-head">
+            <div><p class="section-kicker">Los componentes</p><h2 class="section-title" id="components-title">Todo a la vista.</h2></div>
+            <p class="section-intro">Abrir “ver cuenta y criterio” permite auditar cada resultado. Si una tradición tiene variantes, lo decimos.</p>
+          </div>
+          <div class="evidence-grid">
+            <article class="evidence">
+              <div class="evidence-top"><div><span class="micro-label">Numerología</span><h3 id="life-label">—</h3></div><span class="kind">Regla</span></div>
+              <p class="meaning" id="life-meaning">—</p>
+              <details><summary>Ver cuenta y criterio</summary><p class="calculation" id="life-calc">—</p><p>Suma los dígitos de la fecha completa. Conserva 11, 22 y 33 si aparecen al reducir. Otras escuelas pueden usar otra reducción.</p></details>
+            </article>
+            <article class="evidence">
+              <div class="evidence-top"><div><span class="micro-label">Zodíaco occidental</span><h3 id="sun-label">—</h3></div><span class="kind">Tradición</span></div>
+              <p class="meaning" id="sun-meaning">—</p>
+              <details><summary>Ver cuenta y criterio</summary><p class="calculation" id="sun-calc">—</p><p>Correspondencia del zodíaco tropical por fecha. Esto es signo solar, no una carta natal completa.</p></details>
+            </article>
+            <article class="evidence">
+              <div class="evidence-top"><div><span class="micro-label">Zodíaco chino</span><h3 id="chinese-label">—</h3></div><span class="kind" id="chinese-kind">Tradición</span></div>
+              <p class="meaning" id="chinese-meaning">—</p>
+              <details><summary>Ver cuenta y criterio</summary><p class="calculation" id="chinese-calc">—</p><p id="chinese-note">El animal cambia en el Año Nuevo lunisolar, no el 1 de enero.</p></details>
+            </article>
+            <article class="evidence">
+              <div class="evidence-top"><div><span class="micro-label">Tarot de nacimiento</span><h3 id="tarot-label">—</h3></div><span class="kind">Regla</span></div>
+              <p class="meaning" id="tarot-meaning">—</p>
+              <details><summary>Ver cuenta y criterio</summary><p class="calculation" id="tarot-calc">—</p><p>Asocia la suma reducida con un arcano mayor. Es un mapa simbólico; no es una tirada ni una predicción.</p></details>
+            </article>
+          </div>
+        </section>
+
+        <section class="section rule" aria-labelledby="use-title">
+          <div class="section-head">
+            <div><p class="section-kicker">Bajarlo a tierra</p><h2 class="section-title" id="use-title">Tres cosas para observar.</h2></div>
+            <p class="section-intro">No buscamos que “creas” el perfil. Buscamos que puedas contrastarlo con tu experiencia.</p>
+          </div>
+          <div class="practical-grid">
+            <article class="practical"><span class="micro-label">Un recurso</span><b id="gift-title">—</b><p id="gift-copy">—</p></article>
+            <article class="practical"><span class="micro-label">Una tensión</span><b id="shadow-title">—</b><p id="shadow-copy">—</p></article>
+            <article class="practical"><span class="micro-label">Una pregunta</span><b>Para contrastar</b><p id="soy-question">—</p></article>
+          </div>
+          <div class="action-band">
+            <div><h3>Tu forma base no explica tu momento.</h3><p>Ve a Estoy para entender el período actual sin cambiar esta lectura.</p></div>
+            <div class="button-row"><button class="secondary" id="copy-soy" type="button">Copiar mi Soy</button><button class="primary" data-go="estoy" type="button">Accede a Estoy</button></div>
+          </div>
+        </section>
+      </div>
+
+      <div class="view" id="estoy-view" role="tabpanel" hidden>
+        <header class="moment-summary">
+          <p class="eyebrow">Estoy · resumen</p>
+          <h1 id="moment-title">—</h1>
+          <p id="moment-copy">—</p>
+          <div class="summary-grid" aria-label="Resumen del momento">
+            <div class="summary-item"><span class="micro-label">Tu momento</span><strong id="summary-moment">—</strong><span id="summary-moment-note">—</span></div>
+            <div class="summary-item"><span class="micro-label">Tu período</span><strong id="summary-period">—</strong><span id="summary-period-note">—</span></div>
+            <div class="summary-item"><span class="micro-label">Tu foco</span><strong id="summary-focus">—</strong><span id="summary-focus-note">—</span></div>
+          </div>
+        </header>
+
+        <section class="section rule" aria-labelledby="climate-title">
+          <div class="section-head">
+            <div><p class="section-kicker">01 · De lo general a lo personal</p><h2 class="section-title" id="climate-title">El clima de fondo.</h2></div>
+            <p class="section-intro">Primero el año que compartimos, luego tus ciclos personales y finalmente la temporada solar antes de llegar a la Luna.</p>
+          </div>
+          <div class="climate-grid ordered-climate">
+            <article class="climate-card" data-order="01"><span class="micro-label">Año universal · compartido</span><div class="climate-value" id="universal-year-value">—</div><p id="universal-year-copy">—</p><details><summary>Ver cálculo</summary><p class="calculation" id="universal-year-calc">—</p></details></article>
+            <article class="climate-card" data-order="02"><span class="micro-label">Año personal · tuyo</span><div class="climate-value" id="personal-year-value">—</div><p id="personal-year-copy">—</p><details><summary>Ver cálculo</summary><p class="calculation" id="personal-year-calc">—</p></details></article>
+            <article class="climate-card" data-order="03"><span class="micro-label">Año chino · relacional</span><div class="climate-value" id="relation-value">—</div><p id="relation-copy">—</p><details><summary>Ver comparación</summary><p class="calculation" id="relation-calc">—</p></details></article>
+            <article class="climate-card" data-order="04"><span class="micro-label">Temporada solar · mensual</span><div class="climate-value" id="solar-relation-value">—</div><p id="solar-relation-copy">—</p><details><summary>Ver comparación</summary><p class="calculation" id="solar-relation-calc">—</p></details></article>
+          </div>
+        </section>
+
+        <section class="section rule" aria-labelledby="moon-title">
+          <div class="section-head">
+            <div><p class="section-kicker">02 · El ritmo de estos días</p><h2 class="section-title" id="moon-title">Luego miramos la Luna.</h2></div>
+            <p class="section-intro">La Luna no define quién eres: solo marca el borde del período actual y ayuda a convertir el clima en una semana planificable.</p>
+          </div>
+          <div class="lunar-block">
+            <div class="lunar-visual">
+              <div class="moon" id="moon" aria-hidden="true"></div>
+              <div class="moon-caption"><strong id="phase-name">—</strong><span id="phase-value">—</span></div>
+            </div>
+            <div class="lunar-reading">
+              <span class="period-lock" id="period-lock">—</span>
+              <h3>Para ordenar este período</h3>
+              <p>Son sugerencias de planificación, no instrucciones ni predicciones.</p>
+              <div class="compact-actions">
+                <div class="compact-action"><span class="micro-label">Prioriza</span><strong id="period-focus-title">—</strong><p id="period-focus-copy">—</p></div>
+                <div class="compact-action"><span class="micro-label">Cuida</span><strong id="period-watch-title">—</strong><p id="period-watch-copy">—</p></div>
+                <div class="compact-action"><span class="micro-label">Después</span><strong id="period-release-title">—</strong><p id="period-release-copy">—</p></div>
+              </div>
+            </div>
+          </div>
+          <aside class="daily">
+            <div class="daily-symbol" id="day-symbol">·</div>
+            <div><h3 id="daily-title">—</h3><p id="daily-copy">—</p></div>
+            <span class="kind">Solo hoy · no cambia el período</span>
+          </aside>
+          <details class="disclosure">
+            <summary>Ver períodos anteriores y siguientes</summary>
+            <div class="disclosure-body"><div class="timeline-scroll" tabindex="0" aria-label="Períodos lunares cercanos"><div class="timeline" id="timeline"></div></div></div>
+          </details>
+          <details class="disclosure">
+            <summary>Ver cómo se construyó el resumen</summary>
+            <div class="disclosure-body">
+              <div class="convergence">
+                <div class="convergence-score"><span class="micro-label">Regla de síntesis</span><span class="score" id="score">—</span><p id="score-copy">—</p></div>
+                <ul class="signal-list" id="signal-list"></ul>
+              </div>
+            </div>
+          </details>
+        </section>
+
+        <section class="section rule" aria-labelledby="planner-title">
+          <div class="section-head">
+            <div><p class="section-kicker">03 · Tu parte</p><h2 class="section-title" id="planner-title">¿Qué harás con esto?</h2></div>
+            <p class="section-intro">Una decisión real vale más que seguir leyendo. Se guarda solo en este navegador.</p>
+          </div>
+          <div class="planner single-plan">
+            <div class="plan-field"><label for="plan-priority">Mi decisión para este período</label><div><textarea id="plan-priority" placeholder="Ej. terminar la propuesta antes de abrir otra tarea"></textarea><p class="saved"></p></div></div>
+          </div>
+          <div class="action-band">
+            <div><h3>La prueba real dura 28 días.</h3><p>Una lectura al inicio de cada período y una sugerencia breve cada día, entregadas por WhatsApp antes de automatizar.</p></div>
+            <div class="button-row"><button class="secondary" data-go="soy" type="button">Volver a Soy</button><button class="primary" id="trial-button" type="button">Accede a Estoy</button></div>
+          </div>
+        </section>
+
+        <details class="disclosure method-drawer">
+          <summary>Método, fuentes y límites</summary>
+          <ul class="method-list">
+            <li><strong>Dato</strong><span>Fecha declarada por la persona. No inferimos hora, lugar ni rasgos que no se puedan calcular.</span></li>
+            <li><strong>Regla</strong><span>Numerología y bordes de cuarto lunar calculados de forma determinista; la cuenta queda visible.</span></li>
+            <li><strong>Correspondencia tradicional</strong><span>Zodíacos, arcanos y regencias semanales. Son marcos culturales, no hechos científicos.</span></li>
+            <li><strong>Aproximación etiquetada</strong><span>La fase lunar de este mockup se estima por fecha y con resolución diaria. El producto final usará el motor Python como fuente única.</span></li>
+            <li><strong>Interpretación</strong><span>El lenguaje práctico es una síntesis editorial. No diagnostica, no decide por ti y no promete resultados.</span></li>
+          </ul>
+        </details>
+      </div>
+    </main>
+
+    <footer><div class="footer-inner"><span>Soy / Estoy · mockup de validación</span><span>Esoterismo aterrizado, calculable y honesto.</span></div></footer>
+  </div>
+
+  <nav class="mobile-tabs" role="tablist" aria-label="Secciones del producto">
+    <button class="tab" role="tab" data-view="soy" aria-selected="true">Soy</button>
+    <button class="tab" role="tab" data-view="estoy" aria-selected="false">Estoy</button>
+  </nav>
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const DAY = 86400000;
+      const $ = selector => document.querySelector(selector);
+      const $$ = selector => [...document.querySelectorAll(selector)];
+      const pad = value => String(value).padStart(2, "0");
+      const mod = (value, divisor) => ((value % divisor) + divisor) % divisor;
+
+      const LIFE = {
+        1: { key: "inicio", meaning: "liderazgo, independencia e impulso creador", gift: "Abrir camino", giftCopy: "Tu recurso aparece cuando una situación necesita dirección y una primera decisión.", shadow: "No hacerlo todo solo", shadowCopy: "El impulso de liderar puede aislarte o convertir velocidad en impaciencia.", question: "¿Dónde necesitas iniciar y dónde te conviene pedir compañía?" },
+        2: { key: "vínculo", meaning: "cooperación, sensibilidad y diplomacia", gift: "Leer el vínculo", giftCopy: "Puedes notar matices y construir acuerdos donde otros solo ven posiciones.", shadow: "No desaparecer en el otro", shadowCopy: "La sensibilidad puede convertirse en duda, complacencia o espera excesiva.", question: "¿Qué acuerdo necesita escucha y qué decisión sigue siendo tuya?" },
+        3: { key: "expresión", meaning: "expresión, alegría y creatividad", gift: "Dar forma a una idea", giftCopy: "Tu recurso crece al comunicar, crear y levantar energía compartida.", shadow: "Elegir un foco", shadowCopy: "La abundancia de ideas puede dispersar la atención o dejar cosas a medias.", question: "¿Qué merece ser expresado y qué ruido puedes dejar fuera?" },
+        4: { key: "estructura", meaning: "orden, trabajo sostenido y construcción", gift: "Sostener el proceso", giftCopy: "Tu recurso está en crear método, límites y continuidad para volver algo real.", shadow: "Dejar entrar el cambio", shadowCopy: "La estructura puede endurecerse y convertir seguridad en rigidez o exceso de deber.", question: "¿Qué necesita método y qué estructura ya cumplió su función?" },
+        5: { key: "libertad", meaning: "libertad, cambio y exploración", gift: "Mover lo estancado", giftCopy: "Tu capacidad de adaptación abre opciones cuando el camino conocido se queda corto.", shadow: "Quedarte lo suficiente", shadowCopy: "El movimiento constante puede volverse evasión, ansiedad o rechazo al compromiso.", question: "¿Qué cambio te expande y cuál solo evita una incomodidad?" },
+        6: { key: "armonía", meaning: "cuidado, responsabilidad y armonía", gift: "Cuidar con criterio", giftCopy: "Tu recurso está en hacer habitable un espacio, un vínculo o una responsabilidad.", shadow: "No cargar de más", shadowCopy: "Cuidar puede convertirse en control, idealización o agotamiento silencioso.", question: "¿Qué sí te corresponde cuidar y qué necesita volver a su dueño?" },
+        7: { key: "búsqueda", meaning: "introspección, estudio y búsqueda espiritual", gift: "Ir al fondo", giftCopy: "Tu recurso aparece al investigar, observar patrones y tolerar preguntas abiertas.", shadow: "Volver al mundo", shadowCopy: "La profundidad puede convertirse en aislamiento, desconfianza o análisis sin acción.", question: "¿Qué merece más estudio y qué ya sabes suficiente para probar?" },
+        8: { key: "poder", meaning: "estrategia, recursos y realización", gift: "Mover recursos", giftCopy: "Tu recurso está en organizar poder, dinero y decisiones hacia un resultado concreto.", shadow: "Aflojar el control", shadowCopy: "La ambición puede endurecer el trato o confundir logro con valor personal.", question: "¿Qué resultado importa y qué costo no estás dispuesto a normalizar?" },
+        9: { key: "cierre", meaning: "compasión, cierre de ciclos y visión amplia", gift: "Ver el cuadro completo", giftCopy: "Tu recurso aparece al integrar experiencia, comprender matices y ayudar a cerrar.", shadow: "Soltar sin sacrificarte", shadowCopy: "La amplitud puede convertirse en melancolía, rescate o dificultad para poner final.", question: "¿Qué necesita una despedida clara para dejar espacio a lo nuevo?" },
+        11: { key: "intuición maestra", meaning: "inspiración y sensibilidad intensa", gift: "Traducir sensibilidad", giftCopy: "Tu recurso está en captar señales sutiles y convertirlas en una visión comunicable.", shadow: "Regular la intensidad", shadowCopy: "La apertura puede sentirse como nerviosismo, sobrecarga o idealismo doloroso.", question: "¿Qué intuición merece una prueba concreta antes de convertirse en certeza?" },
+        22: { key: "constructor maestro", meaning: "visión práctica y construcción a gran escala", gift: "Convertir visión en obra", giftCopy: "Tu recurso está en bajar una ambición grande a sistemas, etapas y resultados sostenibles.", shadow: "No exigir perfección", shadowCopy: "La escala puede sentirse como presión, miedo o control excesivo de cada detalle.", question: "¿Cuál es el siguiente bloque real, no la obra completa?" },
+        33: { key: "servicio maestro", meaning: "guía, servicio y compasión madura", gift: "Acompañar sin imponer", giftCopy: "Tu recurso está en sostener aprendizaje y cuidado con una mirada amplia.", shadow: "Cuidar tus límites", shadowCopy: "El servicio puede volverse salvacionismo, agotamiento o amor sin borde.", question: "¿Cómo puedes acompañar sin hacerte responsable del camino ajeno?" }
+      };
+
+      const PERSONAL = {
+        1: ["inicio", "inicio, decisiones nuevas y siembra de identidad"], 2: ["vínculo", "alianzas, paciencia, escucha y maduración emocional"],
+        3: ["expresión", "creatividad, sociabilidad y visibilidad"], 4: ["estructura", "orden, bases concretas y responsabilidad"],
+        5: ["cambio", "movimiento, libertad y ajuste de rumbo"], 6: ["vínculo", "cuidado, acuerdos y armonización de vínculos"],
+        7: ["revisión", "introspección, estudio, pausa y búsqueda interior"], 8: ["estructura", "materialización, recursos y estrategia"],
+        9: ["cierre", "limpieza, perdón y preparación para otro ciclo"]
+      };
+
+      const MOMENT = {
+        inicio: ["Abrir algo concreto", "Hay energía de comienzo; conviene elegir una dirección antes de multiplicar opciones."],
+        vínculo: ["Coordinar antes de avanzar", "El momento favorece acuerdos, escucha y decisiones que consideran a otras personas."],
+        expresión: ["Hacer visible lo importante", "El momento favorece comunicar, mostrar y recoger respuesta antes de seguir puliendo."],
+        estructura: ["Ordenar y sostener", "El momento favorece método, límites y continuidad más que velocidad o novedad."],
+        cambio: ["Mover lo que ya no encaja", "El momento favorece ajustar rumbo sin convertir cada incomodidad en una ruptura."],
+        revisión: ["Revisar antes de decidir", "El momento favorece observar patrones, aprender y corregir con menos ruido."],
+        cierre: ["Cerrar para recuperar espacio", "El momento favorece terminar, editar y dejar de sostener lo que ya cumplió su función."]
+      };
+      const THEME_WORK = {
+        inicio:"lo nuevo que quieres abrir", vínculo:"el vínculo o acuerdo que estás cuidando",
+        expresión:"la idea que necesitas comunicar", estructura:"lo que estás construyendo",
+        cambio:"el ajuste de rumbo que estás considerando", revisión:"la pregunta que necesitas revisar",
+        cierre:"lo que necesita terminar"
+      };
+
+      const SIGNS = [
+        ["Capricornio", "Tierra", "Cardinal", [12,22], [1,19], ["disciplina", "ambición", "estructura"]],
+        ["Acuario", "Aire", "Fijo", [1,20], [2,18], ["originalidad", "visión", "independencia"]],
+        ["Piscis", "Agua", "Mutable", [2,19], [3,20], ["intuición", "sensibilidad", "imaginación"]],
+        ["Aries", "Fuego", "Cardinal", [3,21], [4,19], ["iniciativa", "coraje", "energía"]],
+        ["Tauro", "Tierra", "Fijo", [4,20], [5,20], ["constancia", "placer", "estabilidad"]],
+        ["Géminis", "Aire", "Mutable", [5,21], [6,20], ["curiosidad", "comunicación", "movimiento"]],
+        ["Cáncer", "Agua", "Cardinal", [6,21], [7,22], ["cuidado", "memoria", "emoción"]],
+        ["Leo", "Fuego", "Fijo", [7,23], [8,22], ["creatividad", "presencia", "generosidad"]],
+        ["Virgo", "Tierra", "Mutable", [8,23], [9,22], ["precisión", "servicio", "análisis"]],
+        ["Libra", "Aire", "Cardinal", [9,23], [10,22], ["armonía", "vínculo", "belleza"]],
+        ["Escorpio", "Agua", "Fijo", [10,23], [11,21], ["intensidad", "transformación", "profundidad"]],
+        ["Sagitario", "Fuego", "Mutable", [11,22], [12,21], ["expansión", "búsqueda", "optimismo"]]
+      ];
+      const ELEMENT_LANGUAGE = {
+        Fuego:"acción, impulso y decisión", Tierra:"prueba, estabilidad y forma concreta",
+        Aire:"ideas, conversación y perspectiva", Agua:"emoción, intuición y elaboración"
+      };
+      const MODALITY_LANGUAGE = {
+        Cardinal:"iniciar y marcar dirección", Fijo:"sostener y consolidar", Mutable:"adaptar y cerrar ciclos"
+      };
+
+      const ARCANA = {
+        1:["El Mago","voluntad, foco y manifestación"],2:["La Sacerdotisa","intuición, misterio y escucha interna"],3:["La Emperatriz","fertilidad creativa, placer y abundancia"],4:["El Emperador","estructura, autoridad y orden"],5:["El Hierofante","tradición, aprendizaje y guía"],6:["Los Enamorados","elección, vínculo y coherencia"],7:["El Carro","dirección, avance y voluntad"],8:["La Fuerza","coraje sereno y autocontrol"],9:["El Ermitaño","sabiduría, retiro y búsqueda interior"],10:["La Rueda","ciclos, cambio y oportunidad"],11:["La Justicia","equilibrio, verdad y consecuencias"],12:["El Colgado","pausa, entrega y otra perspectiva"],13:["La Muerte","transformación, cierre y renacimiento"],14:["La Templanza","paciencia e integración"],15:["El Diablo","deseo, sombra y poder personal"],16:["La Torre","ruptura, revelación y liberación"],17:["La Estrella","esperanza, inspiración y reparación"],18:["La Luna","inconsciente, sensibilidad y símbolos"],19:["El Sol","vitalidad, claridad y confianza"],20:["El Juicio","llamado, despertar y revisión"],21:["El Mundo","integración, logro y cierre mayor"],22:["El Loco","libertad, salto y camino abierto"]
+      };
+
+      const ANIMALS = ["Rata","Buey","Tigre","Conejo","Dragón","Serpiente","Caballo","Cabra","Mono","Gallo","Perro","Cerdo"];
+      const ELEMENTS = ["Madera","Fuego","Tierra","Metal","Agua"];
+      const CHINESE_ELEMENT_TONE = {Madera:"crecimiento y expansión",Fuego:"visibilidad e impulso",Tierra:"estabilidad y centro",Metal:"estructura y precisión",Agua:"adaptación e introspección"};
+      const POLARITY_TONE = {Yang:"un movimiento más activo y exterior",Yin:"un movimiento más receptivo y gradual"};
+      const TRINES = [["Rata","Dragón","Mono"],["Buey","Serpiente","Gallo"],["Tigre","Caballo","Perro"],["Conejo","Cabra","Cerdo"]];
+      const OPPOSITES = {Rata:"Caballo",Caballo:"Rata",Buey:"Cabra",Cabra:"Buey",Tigre:"Mono",Mono:"Tigre",Conejo:"Gallo",Gallo:"Conejo","Dragón":"Perro",Perro:"Dragón",Serpiente:"Cerdo",Cerdo:"Serpiente"};
+      const CNY = {2000:[2,5],2001:[1,24],2002:[2,12],2003:[2,1],2004:[1,22],2005:[2,9],2006:[1,29],2007:[2,18],2008:[2,7],2009:[1,26],2010:[2,14],2011:[2,3],2012:[1,23],2013:[2,10],2014:[1,31],2015:[2,19],2016:[2,8],2017:[1,28],2018:[2,16],2019:[2,5],2020:[1,25],2021:[2,12],2022:[2,1],2023:[1,22],2024:[2,10],2025:[1,29],2026:[2,17],2027:[2,6],2028:[1,26],2029:[2,13],2030:[2,3],2031:[1,23],2032:[2,11],2033:[1,31],2034:[2,19],2035:[2,8]};
+
+      const QUARTERS = [
+        { name:"Luna nueva", key:"inicio", theme:"Sembrar y elegir dirección", focus:["Elegir", "Una intención clara y una primera acción pequeña."], watch:["El apuro", "No confundas comenzar con resolverlo todo ahora."], release:["La escala", "Deja la expansión para cuando la intención tenga forma."] },
+        { name:"Creciente", key:"estructura", theme:"Probar, ajustar y comprometer", focus:["Construir", "Haz avanzar lo que ya elegiste y mira qué necesita soporte."], watch:["La fricción", "Los obstáculos sirven para ajustar; no son un veredicto."], release:["Nuevos frentes", "Protege energía evitando abrir otra prioridad."] },
+        { name:"Luna llena", key:"expresión", theme:"Ver, mostrar e integrar", focus:["Observar", "Mira resultados, conversaciones y emociones que ya son visibles."], watch:["La intensidad", "Más claridad no obliga a decidir en caliente."], release:["El control", "Deja que la información complete el cuadro antes de corregir."] },
+        { name:"Menguante", key:"cierre", theme:"Editar, cerrar y recuperar espacio", focus:["Depurar", "Termina, ordena o simplifica algo que ya cumplió su función."], watch:["La exigencia", "Cerrar también puede ser descansar y aceptar un límite."], release:["Lo nuevo", "Evita sembrar por ansiedad lo que todavía no necesita empezar."] }
+      ];
+
+      const WEEKDAYS = [
+        ["Domingo","Sol","identidad, visibilidad y vitalidad","☉"], ["Lunes","Luna","cuidado, memoria y mundo emocional","☾"],
+        ["Martes","Marte","acción, deseo y capacidad de afirmar rumbo","♂"], ["Miércoles","Mercurio","mente, intercambio y aprendizaje","☿"],
+        ["Jueves","Júpiter","expansión, confianza y sentido","♃"], ["Viernes","Venus","placer, belleza y vínculo","♀"],
+        ["Sábado","Saturno","responsabilidad, tiempo y estructura","♄"]
+      ];
+
+      function parseDate(value) {
+        const [year, month, day] = value.split("-").map(Number);
+        return new Date(Date.UTC(year, month - 1, day));
+      }
+      function isoDate(date) { return `${date.getUTCFullYear()}-${pad(date.getUTCMonth()+1)}-${pad(date.getUTCDate())}`; }
+      function addDays(date, days) { return new Date(date.getTime() + days * DAY); }
+      function daysBetween(a, b) { return Math.round((b - a) / DAY); }
+      function formatDate(date, year = false) { return new Intl.DateTimeFormat("es-CL", { timeZone:"UTC", day:"numeric", month:"short", ...(year ? {year:"numeric"} : {}) }).format(date); }
+      function sumDigits(value) { return String(value).replace(/\D/g, "").split("").reduce((sum, digit) => sum + Number(digit), 0); }
+      function reduce(value, preserveMasters = false) {
+        const steps = [value];
+        while (value > 9 && !(preserveMasters && [11,22,33].includes(value))) { value = sumDigits(value); steps.push(value); }
+        return { value, steps };
+      }
+      function traceDigits(source, preserveMasters = false) {
+        const digits = String(source).replace(/\D/g, "").split("").map(Number);
+        const initial = digits.reduce((sum, digit) => sum + digit, 0);
+        const reduced = reduce(initial, preserveMasters);
+        const steps = [`${digits.join(" + ")} = ${initial}`];
+        let previous = initial;
+        reduced.steps.slice(1).forEach(next => { steps.push(`${String(previous).split("").join(" + ")} = ${next}`); previous = next; });
+        return { number: reduced.value, expression: steps.join(" → ") };
+      }
+      function western(date) {
+        const md = (date.getUTCMonth()+1) * 100 + date.getUTCDate();
+        return SIGNS.find(sign => { const start = sign[3][0]*100+sign[3][1], end = sign[4][0]*100+sign[4][1]; return start <= end ? md >= start && md <= end : md >= start || md <= end; });
+      }
+      function solarRelation(natal, current) {
+        const complementary = new Set(["Fuego:Aire","Aire:Fuego","Tierra:Agua","Agua:Tierra"]);
+        let label, copy;
+        if (natal[0] === current[0]) {
+          label = `Sol en ${current[0]} · mismo signo`;
+          copy = `La temporada repite tu lenguaje solar de ${ELEMENT_LANGUAGE[current[1]]}. Puede sentirse familiar; no equivale a un retorno solar exacto.`;
+        } else if (natal[1] === current[1]) {
+          label = `Sol en ${current[0]} · mismo elemento`;
+          copy = `La temporada y tu Sol natal comparten ${current[1]}: ${ELEMENT_LANGUAGE[current[1]]}. La modalidad cambia de ${natal[2]} a ${current[2]}.`;
+        } else if (complementary.has(`${natal[1]}:${current[1]}`)) {
+          label = `Sol en ${current[0]} · apoyo complementario`;
+          copy = `${current[1]} trae ${ELEMENT_LANGUAGE[current[1]]}; tu base ${natal[1]} responde desde ${ELEMENT_LANGUAGE[natal[1]]}. Pueden apoyarse sin ser iguales.`;
+        } else {
+          label = `Sol en ${current[0]} · contraste`;
+          copy = `La temporada habla desde ${ELEMENT_LANGUAGE[current[1]]}; tu Sol natal, desde ${ELEMENT_LANGUAGE[natal[1]]}. Úsalo como contraste de lenguaje, no como conflicto anunciado.`;
+        }
+        return { label, copy, modality:`${current[2]} propone ${MODALITY_LANGUAGE[current[2]]}; tu base ${natal[2]}, ${MODALITY_LANGUAGE[natal[2]]}.` };
+      }
+      function periodSynthesis(themeKey, lunarQuarter, currentSun) {
+        const subject=THEME_WORK[themeKey]||"tu tema de fondo";
+        const solarNote=`La temporada ${currentSun[0]} aporta ${ELEMENT_LANGUAGE[currentSun[1]]} como matiz.`;
+        const methods=[
+          {title:`Aterriza ${subject}`,copy:"Define una versión pequeña y una primera evidencia concreta.",watch:"La escala",watchCopy:"No conviertas el comienzo en un plan total.",later:"Expandir",laterCopy:"Primero comprueba que la dirección tiene sentido."},
+          {title:`Prueba ${subject}`,copy:"Hazlo avanzar lo suficiente para descubrir qué necesita ajuste.",watch:"La fricción",watchCopy:"Un obstáculo informa; no invalida todo el tema.",later:"Abrir otro frente",laterCopy:"Protege continuidad antes de sumar novedad."},
+          {title:`Observa ${subject}`,copy:"Mira qué ya es visible y recoge respuesta antes de corregir.",watch:"La intensidad",watchCopy:"Claridad no significa decidir en caliente.",later:"Controlar el resultado",laterCopy:"Deja que la información complete el cuadro."},
+          {title:`Simplifica ${subject}`,copy:"Cierra tareas secundarias, edita exceso y recupera capacidad.",watch:"Confundir cierre con abandono",watchCopy:"Puedes podar la forma sin renunciar al tema.",later:"Empezar por ansiedad",laterCopy:"Haz espacio antes de sumar algo nuevo."}
+        ];
+        return {...methods[lunarQuarter], explanation:`Tu año personal marca “${themeKey}” como tema. La ${QUARTERS[lunarQuarter].name.toLowerCase()} indica cómo trabajarlo ahora. ${solarNote}`};
+      }
+      function chinese(date) {
+        const year = date.getUTCFullYear();
+        const md = (date.getUTCMonth()+1)*100 + date.getUTCDate();
+        let effective = year, approximate = false, note = "Fecha fuera de la ventana crítica; el año se resuelve sin tabla.";
+        if (md < 121) effective = year - 1;
+        else if (md <= 220) {
+          const boundary = CNY[year];
+          if (boundary) { effective = md >= boundary[0]*100+boundary[1] ? year : year-1; note = `Año Nuevo chino ${year}: ${pad(boundary[1])}/${pad(boundary[0])}.`; }
+          else { approximate = true; note = "Fecha entre 21 de enero y 20 de febrero fuera de la tabla disponible; se usa el año gregoriano como aproximación."; }
+        }
+        return { effective, animal:ANIMALS[mod(effective-4,12)], element:ELEMENTS[Math.floor(mod(effective-4,10)/2)], polarity:effective%2===0?"Yang":"Yin", approximate, note };
+      }
+      function chineseRelation(natal, current) {
+        if (natal.animal === current.animal) return { label:"Año propio", key:"revisión", copy:"El mismo animal reaparece: la tradición lo lee como revisión de identidad, ritmo y decisiones." };
+        if (OPPOSITES[natal.animal] === current.animal) return { label:"Oposición", key:"cambio", copy:"Los animales se oponen en el ciclo: úsalo como lente para observar tensiones de ritmo, no como pronóstico de conflicto." };
+        if (TRINES.some(group => group.includes(natal.animal) && group.includes(current.animal))) return { label:"Mismo trino", key:"estructura", copy:"Comparten una familia simbólica: la tradición sugiere afinidad de impulso y cooperación." };
+        return { label:"Relación neutra", key:null, copy:"No aparece año propio, oposición ni trino. No forzamos una lectura donde la tabla no marca una relación." };
+      }
+      function julianDay(date) {
+        let year=date.getUTCFullYear(), month=date.getUTCMonth()+1, day=date.getUTCDate();
+        if(month<=2){year-=1;month+=12;} const a=Math.trunc(year/100), b=2-a+Math.trunc(a/4);
+        return Math.trunc(365.25*(year+4716))+Math.trunc(30.6001*(month+1))+day+b-1524.5;
+      }
+      function moonPhase(date) {
+        const jd=julianDay(date), dt=((jd-2382148)**2)/(41048480*86400), t=(jd+dt-2451545.0)/36525, t2=t**2, t3=t**3;
+        const rad=x=>x*Math.PI/180, deg=x=>x*180/Math.PI;
+        const d=rad(mod(297.85+445267.1115*t-0.00163*t2+t3/545868,360));
+        const m=rad(mod(357.53+35999.0503*t,360));
+        const m1=rad(mod(134.96+477198.8676*t+0.008997*t2+t3/69699,360));
+        let elong=deg(d)+6.29*Math.sin(m1)-2.10*Math.sin(m)+1.27*Math.sin(2*d-m1)+0.66*Math.sin(2*d);
+        let phase=((Math.trunc(mod(elong,360))+6.43)/360)*28; if(phase>=28) phase-=28; return phase;
+      }
+      function quarter(date) { return Math.min(3, Math.floor(moonPhase(date)/7)); }
+      function periodFor(date) {
+        const q=quarter(date); let start=date, end=date, guard=0;
+        while(guard<12 && quarter(addDays(start,-1))===q){start=addDays(start,-1);guard++;}
+        guard=0; while(guard<12 && quarter(addDays(end,1))===q){end=addDays(end,1);guard++;}
+        return { start, end, quarter:q, days:daysBetween(start,end)+1 };
+      }
+      function nearbyPeriods(date) {
+        const current=periodFor(date), before=[], after=[]; let cursor=current.start;
+        for(let i=0;i<2;i++){const p=periodFor(addDays(cursor,-1));before.unshift(p);cursor=p.start;}
+        cursor=current.end; for(let i=0;i<2;i++){const p=periodFor(addDays(cursor,1));after.push(p);cursor=p.end;}
+        return [...before,current,...after];
+      }
+      function personalYear(birth, target) { return traceDigits(`${pad(birth.getUTCDate())}${pad(birth.getUTCMonth()+1)}${target.getUTCFullYear()}`, false); }
+      function universalYear(target) { return traceDigits(String(target.getUTCFullYear()), false); }
+
+      function renderSoy(birth, name) {
+        const life=traceDigits(`${pad(birth.getUTCDate())}${pad(birth.getUTCMonth()+1)}${birth.getUTCFullYear()}`, true), profile=LIFE[life.number];
+        const sun=western(birth), chin=chinese(birth), tarotTrace=traceDigits(`${pad(birth.getUTCDate())}${pad(birth.getUTCMonth()+1)}${birth.getUTCFullYear()}`, false);
+        let tarotNumber=sumDigits(`${pad(birth.getUTCDate())}${pad(birth.getUTCMonth()+1)}${birth.getUTCFullYear()}`), tarotSteps=[tarotNumber];
+        while(tarotNumber>22){tarotNumber=sumDigits(tarotNumber);tarotSteps.push(tarotNumber);} const tarot=ARCANA[tarotNumber];
+        $("#life-number").textContent=life.number; $("#life-key").textContent=`${profile.key} · ${profile.meaning}`;
+        $("#soy-synthesis").textContent=`${name}, tu fecha reúne ${profile.key}, ${sun[5][0]} y el tema de ${tarot[0].toLowerCase()}. La invitación no es actuar siempre así, sino reconocer cuándo esos recursos ayudan y cuándo se endurecen.`;
+        $("#life-label").textContent=`Camino ${life.number}`; $("#life-meaning").textContent=profile.meaning; $("#life-calc").textContent=life.expression;
+        $("#sun-label").textContent=`${sun[0]} · ${sun[1]}`; $("#sun-meaning").textContent=`${sun[2]}: ${sun[5].join(", ")}.`; $("#sun-calc").textContent=`${pad(birth.getUTCDate())}/${pad(birth.getUTCMonth()+1)} cae entre ${pad(sun[3][1])}/${pad(sun[3][0])} y ${pad(sun[4][1])}/${pad(sun[4][0])}.`;
+        $("#chinese-label").textContent=`${chin.animal} de ${chin.element}`; $("#chinese-meaning").textContent=`${chin.polarity} · año lunisolar efectivo ${chin.effective}.`; $("#chinese-calc").textContent=`${isoDate(birth)} → año ${chin.effective} → posición ${mod(chin.effective-4,12)+1}/12 y tronco ${mod(chin.effective-4,10)+1}/10.`; $("#chinese-note").textContent=chin.note; $("#chinese-kind").textContent=chin.approximate?"Aproximación":"Tradición";
+        $("#tarot-label").textContent=`${tarot[0]} · ${tarotNumber}`; $("#tarot-meaning").textContent=tarot[1]; $("#tarot-calc").textContent=`Suma inicial ${tarotSteps.join(" → ")} (se reduce hasta 1–22).`;
+        $("#gift-title").textContent=profile.gift; $("#gift-copy").textContent=profile.giftCopy; $("#shadow-title").textContent=profile.shadow; $("#shadow-copy").textContent=profile.shadowCopy; $("#soy-question").textContent=profile.question;
+        return { life, profile, sun, chin, tarot };
+      }
+
+      function renderTimeline(periods, target) {
+        const current=periodFor(target); $("#timeline").innerHTML="";
+        periods.forEach(period=>{
+          const phase=QUARTERS[period.quarter], article=document.createElement("article"), isCurrent=isoDate(period.start)===isoDate(current.start);
+          article.className=isCurrent?"current":"";
+          article.innerHTML=`<span class="micro-label">${period.days} días</span><h3>${phase.name}</h3><p>${phase.theme}</p><span class="dates">${formatDate(period.start)} — ${formatDate(period.end)}</span>`;
+          if(isCurrent){const marker=document.createElement("div");marker.className="today-line";marker.style.left=`${((daysBetween(period.start,target)+.5)/period.days)*100}%`;marker.innerHTML="<span>fecha</span>";article.appendChild(marker);}
+          $("#timeline").appendChild(article);
+        });
+      }
+
+      function renderEstoy(birth, target, name) {
+        const current=periodFor(target), phase=QUARTERS[current.quarter], value=moonPhase(target), weekday=WEEKDAYS[target.getUTCDay()];
+        const py=personalYear(birth,target), uy=universalYear(target), natalChinese=chinese(birth), currentChinese=chinese(target), relation=chineseRelation(natalChinese,currentChinese);
+        const natalSun=western(birth), currentSun=western(target), sunRelation=solarRelation(natalSun,currentSun);
+
+        const centralKey=PERSONAL[py.number][0], moment=MOMENT[centralKey], synthesis=periodSynthesis(centralKey,current.quarter,currentSun);
+        const signals=[
+          {title:"Año personal",value:`${py.number} · ${centralKey}`,role:"tema",emphasis:true,calc:py.expression},
+          {title:"Cuarto lunar",value:phase.name,role:"ritmo",emphasis:true,calc:`${value.toFixed(2)} / 7 → cuarto ${current.quarter}`},
+          {title:"Año universal",value:`${uy.number} · ${PERSONAL[uy.number][0]}`,role:"contexto",calc:uy.expression},
+          {title:"Año chino",value:relation.label,role:"matiz",calc:`${natalChinese.animal} de ${natalChinese.element} ${natalChinese.polarity} vs. ${currentChinese.animal} de ${currentChinese.element} ${currentChinese.polarity}`},
+          {title:"Temporada solar",value:currentSun[0],role:"matiz",calc:`Sol actual ${currentSun[0]} vs. Sol natal ${natalSun[0]}`}
+        ];
+
+        $("#moment-title").textContent=`${name}, tu tema de fondo es ${moment[0].toLowerCase()}.`;
+        $("#moment-copy").textContent=synthesis.explanation;
+        $("#summary-moment").textContent=moment[0]; $("#summary-moment-note").textContent=`Año personal ${py.number}. Las demás capas lo matizan; no compiten por reemplazarlo.`;
+        $("#summary-period").textContent=`${formatDate(current.start)} — ${formatDate(current.end)}`; $("#summary-period-note").textContent=`${phase.name} · ${current.days} días`;
+        $("#summary-focus").textContent=synthesis.title; $("#summary-focus-note").textContent=synthesis.copy;
+        $("#period-lock").textContent=`Período estable · ${formatDate(current.start,true)} — ${formatDate(current.end,true)}`;
+        $("#phase-name").textContent=phase.name; $("#phase-value").textContent=`fase ${value.toFixed(2)} / 28 · aproximación diaria`;
+        $("#moon").style.setProperty("--moon-shift", `${-85 + (value/28)*170}%`);
+        $("#period-focus-title").textContent=synthesis.title; $("#period-focus-copy").textContent=synthesis.copy;
+        $("#period-watch-title").textContent=synthesis.watch; $("#period-watch-copy").textContent=synthesis.watchCopy;
+        $("#period-release-title").textContent=synthesis.later; $("#period-release-copy").textContent=synthesis.laterCopy;
+        $("#day-symbol").textContent=weekday[3]; $("#daily-title").textContent=`${weekday[0]} · ${weekday[1]}`; $("#daily-copy").textContent=`La correspondencia tradicional propone ${weekday[2]}. Úsalo como foco breve, no como mandato.`;
+        renderTimeline(nearbyPeriods(target),target);
+        $("#personal-year-value").textContent=`${py.number} · ${PERSONAL[py.number][0]}`; $("#personal-year-copy").textContent=PERSONAL[py.number][1]; $("#personal-year-calc").textContent=py.expression;
+        $("#universal-year-value").textContent=`${uy.number} · ${PERSONAL[uy.number][0]}`; $("#universal-year-copy").textContent=PERSONAL[uy.number][1]; $("#universal-year-calc").textContent=uy.expression;
+        $("#relation-value").textContent=`${currentChinese.animal} de ${currentChinese.element} · ${currentChinese.polarity}`;
+        $("#relation-copy").textContent=`${currentChinese.element} aporta ${CHINESE_ELEMENT_TONE[currentChinese.element]}; ${currentChinese.polarity}, ${POLARITY_TONE[currentChinese.polarity]}. ${relation.label} frente a tu base ${natalChinese.animal} de ${natalChinese.element}.`;
+        $("#relation-calc").textContent=`Año actual: ${currentChinese.effective} → ${currentChinese.animal}, ${currentChinese.element}, ${currentChinese.polarity}. Natal: ${natalChinese.effective} → ${natalChinese.animal}, ${natalChinese.element}, ${natalChinese.polarity}. ${relation.copy}`;
+        $("#solar-relation-value").textContent=sunRelation.label;
+        $("#solar-relation-copy").textContent=sunRelation.copy;
+        $("#solar-relation-calc").textContent=`Fecha consultada: ${isoDate(target)} → ${currentSun[0]}, ${currentSun[1]}, ${currentSun[2]}. Fecha natal: ${isoDate(birth)} → ${natalSun[0]}, ${natalSun[1]}, ${natalSun[2]}. ${sunRelation.modality} Comparación tropical por fecha; no calcula grados ni aspectos planetarios.`;
+
+        $("#score").textContent="Tema + ritmo";
+        $("#score-copy").textContent=`El año personal define el tema “${centralKey}”. La ${phase.name.toLowerCase()} solo modifica cómo trabajarlo durante este período. Las otras capas aportan contexto, no votos.`;
+        $("#signal-list").innerHTML="";
+        signals.forEach(signal=>{const li=document.createElement("li");li.className=signal.emphasis?"matches":"";li.innerHTML=`<span class="signal-dot"></span><span><strong>${signal.title}: ${signal.value}</strong><small class="calculation">${signal.calc}</small></span><span class="signal-key">${signal.role}</span>`;$("#signal-list").appendChild(li);});
+      }
+
+      function setView(view, scroll=true) {
+        const isSoy=view==="soy"; $("#soy-view").hidden=!isSoy; $("#estoy-view").hidden=isSoy;
+        $$('[data-view]').forEach(button=>button.setAttribute("aria-selected",String(button.dataset.view===view)));
+        history.replaceState(null,"",`#${view}`); if(scroll) window.scrollTo({top:0,behavior:"smooth"});
+      }
+      function toast(message) { const node=$("#toast"); node.textContent=message; node.hidden=false; clearTimeout(toast.timer); toast.timer=setTimeout(()=>node.hidden=true,3200); }
+      function renderAll() {
+        const birth=parseDate($("#birth").value), target=parseDate($("#target").value), name=$("#name").value.trim()||"Tu lectura";
+        if(Number.isNaN(birth.getTime())||Number.isNaN(target.getTime())) return;
+        renderSoy(birth,name); renderEstoy(birth,target,name);
+      }
+
+      $("#target").value=isoDate(new Date());
+      $("#profile-form").addEventListener("submit",event=>{event.preventDefault();renderAll();toast("Lectura actualizada con las fechas visibles.");});
+      $("#profile-form").addEventListener("change",renderAll);
+      $$('[data-view]').forEach(button=>button.addEventListener("click",()=>setView(button.dataset.view)));
+      $$('[data-go]').forEach(button=>button.addEventListener("click",()=>setView(button.dataset.go)));
+      $("#copy-soy").addEventListener("click",async()=>{
+        const text=`Mi Soy · Camino ${$("#life-number").textContent} · ${$("#sun-label").textContent} · ${$("#chinese-label").textContent} · ${$("#tarot-label").textContent}. Lectura simbólica, con cálculos visibles.`;
+        try { await navigator.clipboard.writeText(text); toast("Resumen copiado. Incluye el límite: lectura simbólica."); } catch { toast("Tu navegador no permitió copiar; puedes seleccionar los resultados."); }
+      });
+      $("#trial-button").addEventListener("click",()=>toast("En la prueba real, este botón abre WhatsApp para coordinar 28 días. Aquí no enviamos datos."));
+      $$(".plan-field textarea").forEach(area=>{
+        const key=`soy-estoy:${area.id}`; area.value=localStorage.getItem(key)||"";
+        area.addEventListener("input",()=>{localStorage.setItem(key,area.value);const note=area.parentElement.querySelector(".saved");note.textContent="Guardado en este navegador";clearTimeout(area.timer);area.timer=setTimeout(()=>note.textContent="",1800);});
+      });
+      renderAll(); setView(location.hash==="#estoy"?"estoy":"soy",false);
+    })();
+  </script>
+</body>
+</html>
