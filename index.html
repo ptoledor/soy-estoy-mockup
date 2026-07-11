@@ -765,7 +765,7 @@
               <h3>Zodíaco chino</h3>
               <p>Cinco fases: un ciclo impulsa y otro regula. La flecha indica qué elemento actúa sobre cuál.</p>
               <canvas class="matrix-canvas" id="chinese-affinity-matrix" width="420" height="420" role="img" aria-label="Matriz china dirigida: las flechas verdes muestran qué elemento impulsa a otro; las rojas, qué elemento lo regula."></canvas>
-              <figcaption class="matrix-caption">Impulsar alimenta un movimiento; regular contiene su exceso. No representan compatibilidad positiva o negativa.</figcaption>
+              <figcaption class="matrix-caption">Impulsa: una cualidad facilita la siguiente; Agua → Madera, adaptarse permite crecer. Regula: una cualidad modera otra; Agua → Fuego, observar antes de actuar baja la impulsividad.</figcaption>
               <div class="matrix-legend" aria-label="Leyenda del zodíaco chino">
                 <span><i class="matrix-line positive" aria-hidden="true"></i>Impulsa</span>
                 <span><i class="matrix-line negative" aria-hidden="true"></i>Regula</span>
@@ -962,6 +962,10 @@
       const ANIMALS = ["Rata","Buey","Tigre","Conejo","Dragón","Serpiente","Caballo","Cabra","Mono","Gallo","Perro","Cerdo"];
       const ELEMENTS = ["Madera","Fuego","Tierra","Metal","Agua"];
       const CHINESE_ELEMENT_TONE = {Madera:"crecimiento y expansión",Fuego:"visibilidad e impulso",Tierra:"estabilidad y centro",Metal:"estructura y precisión",Agua:"adaptación e introspección"};
+      const CHINESE_ELEMENT_ACTION = {Madera:"crecer y abrir alternativas",Fuego:"actuar y hacerte visible",Tierra:"sostener y dar estructura",Metal:"ordenar, decidir y recortar",Agua:"observar, adaptarte y tomar profundidad"};
+      const CHINESE_ELEMENT_EXCESS = {Madera:"la dispersión de abrir demasiados frentes",Fuego:"el apuro por actuar o exponerte",Tierra:"la inmovilidad de buscar demasiada seguridad",Metal:"la rigidez de ordenar o recortar de más",Agua:"la espera excesiva antes de actuar"};
+      const CHINESE_IMPULSE = {Madera:"Fuego",Fuego:"Tierra",Tierra:"Metal",Metal:"Agua",Agua:"Madera"};
+      const CHINESE_REGULATION = {Madera:"Tierra",Tierra:"Agua",Agua:"Fuego",Fuego:"Metal",Metal:"Madera"};
       const POLARITY_TONE = {Yang:"un movimiento más activo y exterior",Yin:"un movimiento más receptivo y gradual"};
       const TRINES = [["Rata","Dragón","Mono"],["Buey","Serpiente","Gallo"],["Tigre","Caballo","Perro"],["Conejo","Cabra","Cerdo"]];
       const TRINE_TONES = [
@@ -1101,6 +1105,34 @@
         if (TRINES.some(group => group.includes(natal.animal) && group.includes(current.animal))) return { label:"Mismo trino", key:"estructura", copy:"Comparten una familia simbólica: la tradición sugiere afinidad de impulso y cooperación." };
         return { label:"Relación neutra", key:null, copy:"No aparece año propio, oposición ni trino. No forzamos una lectura donde la tabla no marca una relación." };
       }
+      function chineseElementRelation(natal, current) {
+        const base=natal.element, period=current.element;
+        if(base===period) return {
+          label:`El año refuerza tu ${base}`,
+          copy:`El año repite tu elemento ${base}: puede intensificar ${CHINESE_ELEMENT_TONE[base]}. Aprovéchalo para ${CHINESE_ELEMENT_ACTION[base]}, cuidando ${CHINESE_ELEMENT_EXCESS[base]}.`,
+          rule:`${base} = ${period} · mismo elemento`
+        };
+        if(CHINESE_IMPULSE[base]===period) return {
+          label:`Tu ${base} impulsa el ${period} del año`,
+          copy:`Tu ${base} impulsa el ${period} del año: apoyarte en ${CHINESE_ELEMENT_TONE[base]} puede ayudarte a ${CHINESE_ELEMENT_ACTION[period]}.`,
+          rule:`${base} → ${period} · impulsa`
+        };
+        if(CHINESE_IMPULSE[period]===base) return {
+          label:`El ${period} del año impulsa tu ${base}`,
+          copy:`El ${period} del año impulsa tu ${base}: el contexto puede facilitarte ${CHINESE_ELEMENT_ACTION[base]}.`,
+          rule:`${period} → ${base} · impulsa`
+        };
+        if(CHINESE_REGULATION[base]===period) return {
+          label:`Tu ${base} regula el ${period} del año`,
+          copy:`Tu ${base} regula el ${period} del año: ${CHINESE_ELEMENT_ACTION[base]} puede ayudarte a evitar ${CHINESE_ELEMENT_EXCESS[period]}.`,
+          rule:`${base} → ${period} · regula`
+        };
+        return {
+          label:`El ${period} del año regula tu ${base}`,
+          copy:`El ${period} del año regula tu ${base}: el contexto puede pedirte moderar ${CHINESE_ELEMENT_EXCESS[base]} y priorizar ${CHINESE_ELEMENT_ACTION[period]}.`,
+          rule:`${period} → ${base} · regula`
+        };
+      }
       function chineseAnimalTone(animal) {
         const trineIndex=TRINES.findIndex(group=>group.includes(animal));
         return trineIndex>=0?TRINE_TONES[trineIndex]:"sin tema de trino disponible";
@@ -1170,7 +1202,7 @@
 
       function renderEstoy(birth, target, name) {
         const current=periodFor(target), phase=QUARTERS[current.quarter], value=moonPhase(target), weekday=WEEKDAYS[target.getUTCDay()];
-        const py=personalYear(birth,target), uy=universalYear(target), natalChinese=chinese(birth), currentChinese=chinese(target), relation=chineseRelation(natalChinese,currentChinese);
+        const py=personalYear(birth,target), uy=universalYear(target), natalChinese=chinese(birth), currentChinese=chinese(target), relation=chineseRelation(natalChinese,currentChinese), elementRelation=chineseElementRelation(natalChinese,currentChinese);
         const natalSun=western(birth), currentSun=western(target), sunRelation=solarRelation(natalSun,currentSun);
 
         const centralKey=PERSONAL[py.number][0], moment=MOMENT[centralKey], synthesis=periodSynthesis(centralKey,current.quarter,currentSun);
@@ -1198,8 +1230,8 @@
         $("#personal-year-value").textContent=`${py.number} · ${PERSONAL[py.number][0]}`; $("#personal-year-copy").textContent=PERSONAL[py.number][1]; $("#personal-year-calc").textContent=py.expression;
         $("#universal-year-value").textContent=`${uy.number} · ${PERSONAL[uy.number][0]}`; $("#universal-year-copy").textContent=PERSONAL[uy.number][1]; $("#universal-year-calc").textContent=uy.expression;
         $("#relation-value").textContent=`${currentChinese.animal} de ${currentChinese.element} · ${currentChinese.polarity}`;
-        $("#relation-copy").textContent=`${currentChinese.element} aporta ${CHINESE_ELEMENT_TONE[currentChinese.element]}; ${currentChinese.polarity}, ${POLARITY_TONE[currentChinese.polarity]}. ${relation.label} frente a tu base ${natalChinese.animal} de ${natalChinese.element}.`;
-        $("#relation-calc").textContent=`Año actual: ${currentChinese.effective} → ${currentChinese.animal}, ${currentChinese.element}, ${currentChinese.polarity}. Natal: ${natalChinese.effective} → ${natalChinese.animal}, ${natalChinese.element}, ${natalChinese.polarity}. ${relation.copy}`;
+        $("#relation-copy").textContent=`${elementRelation.copy} ${currentChinese.polarity}: ${POLARITY_TONE[currentChinese.polarity]}.`;
+        $("#relation-calc").textContent=`Año actual: ${currentChinese.effective} → ${currentChinese.animal}, ${currentChinese.element}, ${currentChinese.polarity}. Natal: ${natalChinese.effective} → ${natalChinese.animal}, ${natalChinese.element}, ${natalChinese.polarity}. Elementos: ${elementRelation.rule}. Animales: ${relation.copy}`;
         $("#solar-relation-value").textContent=sunRelation.label;
         $("#solar-relation-copy").textContent=sunRelation.copy;
         $("#solar-relation-calc").textContent=`Fecha consultada: ${isoDate(target)} → ${currentSun[0]}, ${currentSun[1]}, ${currentSun[2]}. Fecha natal: ${isoDate(birth)} → ${natalSun[0]}, ${natalSun[1]}, ${natalSun[2]}. ${sunRelation.modality} Comparación tropical por fecha; no calcula grados ni aspectos planetarios.`;
