@@ -714,7 +714,7 @@
           </div>
           <div class="evidence-grid">
             <article class="evidence">
-              <div class="evidence-top"><div><span class="micro-label">Numerología</span><h3 id="life-label">—</h3></div><span class="kind">Regla</span></div>
+              <div class="evidence-top"><div><span class="micro-label">Numerología: Camino de vida</span><h3 id="life-label">—</h3></div><span class="kind">Regla</span></div>
               <p class="meaning" id="life-meaning">—</p>
               <details><summary>Ver cuenta y criterio</summary><p class="calculation" id="life-calc">—</p><p>Suma los dígitos de la fecha completa. Conserva 11, 22 y 33 si aparecen al reducir. Otras escuelas pueden usar otra reducción.</p></details>
             </article>
@@ -1126,7 +1126,7 @@
         let tarotNumber=sumDigits(`${pad(birth.getUTCDate())}${pad(birth.getUTCMonth()+1)}${birth.getUTCFullYear()}`), tarotSteps=[tarotNumber];
         while(tarotNumber>22){tarotNumber=sumDigits(tarotNumber);tarotSteps.push(tarotNumber);} const tarot=ARCANA[tarotNumber];
         $("#soy-synthesis").textContent=`El cruce combina ${profile.gift.toLowerCase()} con un estilo de ${sun[5][0]} y ${sun[5][1]}. El punto de cuidado es ${profile.shadow.toLowerCase()}. Como aprendizaje complementario aparecen ${tarot[1]}.`;
-        $("#life-label").textContent=`Camino de vida ${life.number}`; $("#life-meaning").textContent=profile.meaning; $("#life-calc").textContent=life.expression;
+        $("#life-label").textContent=`Número ${life.number}`; $("#life-meaning").textContent=profile.meaning; $("#life-calc").textContent=life.expression;
         $("#sun-label").textContent=`${sun[0]} · ${sun[1]}`;
         $("#sun-sign-traits").textContent=sun[5].join(", ");
         $("#sun-element-traits").textContent=`${sun[1]}: ${ELEMENT_LANGUAGE[sun[1]]}`;
@@ -1214,7 +1214,7 @@
       $$('[data-view]').forEach(button=>button.addEventListener("click",()=>setView(button.dataset.view)));
       $$('[data-go]').forEach(button=>button.addEventListener("click",()=>setView(button.dataset.go)));
       $("#copy-soy").addEventListener("click",async()=>{
-        const text=`Mi Soy · ${$("#life-label").textContent} · ${$("#sun-label").textContent} · ${$("#chinese-label").textContent} · ${$("#tarot-label").textContent}. Lectura simbólica, con cálculos visibles.`;
+        const text=`Mi Soy · Camino de vida: ${$("#life-label").textContent} · ${$("#sun-label").textContent} · ${$("#chinese-label").textContent} · ${$("#tarot-label").textContent}. Lectura simbólica, con cálculos visibles.`;
         try { await navigator.clipboard.writeText(text); toast("Resumen copiado. Incluye el límite: lectura simbólica."); } catch { toast("Tu navegador no permitió copiar; puedes seleccionar los resultados."); }
       });
       $("#trial-button").addEventListener("click",()=>toast("En la prueba real, este botón abre WhatsApp para coordinar 28 días. Aquí no enviamos datos."));
