@@ -279,6 +279,10 @@
     .evidence-top { display: flex; justify-content: space-between; align-items: start; gap: 14px; }
     .evidence h3 { margin: 7px 0 6px; font-family: var(--serif); font-size: 28px; font-weight: 500; }
     .evidence .meaning { min-height: 44px; margin: 0; color: var(--muted); font-size: 14px; }
+    .trait-list { margin-top: 14px; border-top: 1px solid var(--line); }
+    .trait-row { display: grid; grid-template-columns: 72px 1fr; gap: 12px; padding: 9px 0; border-bottom: 1px solid var(--line); }
+    .trait-row span { color: var(--muted); font-family: var(--mono); font-size: 9px; text-transform: uppercase; letter-spacing: .08em; }
+    .trait-row p { margin: 0; color: var(--ink); font-size: 12px; line-height: 1.45; }
     .kind {
       flex: 0 0 auto;
       border: 1px solid var(--line-dark);
@@ -698,12 +702,20 @@
             </article>
             <article class="evidence">
               <div class="evidence-top"><div><span class="micro-label">Zodíaco occidental</span><h3 id="sun-label">—</h3></div><span class="kind">Tradición</span></div>
-              <p class="meaning" id="sun-meaning">—</p>
+              <div class="trait-list" aria-label="Características del zodíaco occidental">
+                <div class="trait-row"><span>Signo</span><p id="sun-sign-traits">—</p></div>
+                <div class="trait-row"><span>Elemento</span><p id="sun-element-traits">—</p></div>
+                <div class="trait-row"><span>Modalidad</span><p id="sun-modality-traits">—</p></div>
+              </div>
               <details><summary>Ver cuenta y criterio</summary><p class="calculation" id="sun-calc">—</p><p>Correspondencia del zodíaco tropical por fecha. Esto es signo solar, no una carta natal completa.</p></details>
             </article>
             <article class="evidence">
               <div class="evidence-top"><div><span class="micro-label">Zodíaco chino</span><h3 id="chinese-label">—</h3></div><span class="kind" id="chinese-kind">Tradición</span></div>
-              <p class="meaning" id="chinese-meaning">—</p>
+              <div class="trait-list" aria-label="Características del zodíaco chino">
+                <div class="trait-row"><span>Animal</span><p id="chinese-animal-traits">—</p></div>
+                <div class="trait-row"><span>Elemento</span><p id="chinese-element-traits">—</p></div>
+                <div class="trait-row"><span>Polaridad</span><p id="chinese-polarity-traits">—</p></div>
+              </div>
               <details><summary>Ver cuenta y criterio</summary><p class="calculation" id="chinese-calc">—</p><p id="chinese-note">El animal cambia en el Año Nuevo lunisolar, no el 1 de enero.</p></details>
             </article>
             <article class="evidence">
@@ -904,6 +916,12 @@
       const CHINESE_ELEMENT_TONE = {Madera:"crecimiento y expansión",Fuego:"visibilidad e impulso",Tierra:"estabilidad y centro",Metal:"estructura y precisión",Agua:"adaptación e introspección"};
       const POLARITY_TONE = {Yang:"un movimiento más activo y exterior",Yin:"un movimiento más receptivo y gradual"};
       const TRINES = [["Rata","Dragón","Mono"],["Buey","Serpiente","Gallo"],["Tigre","Caballo","Perro"],["Conejo","Cabra","Cerdo"]];
+      const TRINE_TONES = [
+        "estrategia, carisma social y capacidad de abrir caminos",
+        "disciplina, precisión y paciencia para construir resultados",
+        "acción, lealtad, idealismo y movimiento directo",
+        "sensibilidad, cuidado, belleza y cooperación afectiva"
+      ];
       const OPPOSITES = {Rata:"Caballo",Caballo:"Rata",Buey:"Cabra",Cabra:"Buey",Tigre:"Mono",Mono:"Tigre",Conejo:"Gallo",Gallo:"Conejo","Dragón":"Perro",Perro:"Dragón",Serpiente:"Cerdo",Cerdo:"Serpiente"};
       const CNY = {2000:[2,5],2001:[1,24],2002:[2,12],2003:[2,1],2004:[1,22],2005:[2,9],2006:[1,29],2007:[2,18],2008:[2,7],2009:[1,26],2010:[2,14],2011:[2,3],2012:[1,23],2013:[2,10],2014:[1,31],2015:[2,19],2016:[2,8],2017:[1,28],2018:[2,16],2019:[2,5],2020:[1,25],2021:[2,12],2022:[2,1],2023:[1,22],2024:[2,10],2025:[1,29],2026:[2,17],2027:[2,6],2028:[1,26],2029:[2,13],2030:[2,3],2031:[1,23],2032:[2,11],2033:[1,31],2034:[2,19],2035:[2,8]};
 
@@ -995,6 +1013,10 @@
         if (TRINES.some(group => group.includes(natal.animal) && group.includes(current.animal))) return { label:"Mismo trino", key:"estructura", copy:"Comparten una familia simbólica: la tradición sugiere afinidad de impulso y cooperación." };
         return { label:"Relación neutra", key:null, copy:"No aparece año propio, oposición ni trino. No forzamos una lectura donde la tabla no marca una relación." };
       }
+      function chineseAnimalTone(animal) {
+        const trineIndex=TRINES.findIndex(group=>group.includes(animal));
+        return trineIndex>=0?TRINE_TONES[trineIndex]:"sin tema de trino disponible";
+      }
       function julianDay(date) {
         let year=date.getUTCFullYear(), month=date.getUTCMonth()+1, day=date.getUTCDate();
         if(month<=2){year-=1;month+=12;} const a=Math.trunc(year/100), b=2-a+Math.trunc(a/4);
@@ -1031,9 +1053,17 @@
         let tarotNumber=sumDigits(`${pad(birth.getUTCDate())}${pad(birth.getUTCMonth()+1)}${birth.getUTCFullYear()}`), tarotSteps=[tarotNumber];
         while(tarotNumber>22){tarotNumber=sumDigits(tarotNumber);tarotSteps.push(tarotNumber);} const tarot=ARCANA[tarotNumber];
         $("#soy-synthesis").textContent=`El cruce combina ${profile.gift.toLowerCase()} con un estilo de ${sun[5][0]} y ${sun[5][1]}. El punto de cuidado es ${profile.shadow.toLowerCase()}. Como aprendizaje complementario aparecen ${tarot[1]}.`;
-        $("#life-label").textContent=`Camino ${life.number}`; $("#life-meaning").textContent=profile.meaning; $("#life-calc").textContent=life.expression;
-        $("#sun-label").textContent=`${sun[0]} · ${sun[1]}`; $("#sun-meaning").textContent=`${sun[2]}: ${sun[5].join(", ")}.`; $("#sun-calc").textContent=`${pad(birth.getUTCDate())}/${pad(birth.getUTCMonth()+1)} cae entre ${pad(sun[3][1])}/${pad(sun[3][0])} y ${pad(sun[4][1])}/${pad(sun[4][0])}.`;
-        $("#chinese-label").textContent=`${chin.animal} de ${chin.element}`; $("#chinese-meaning").textContent=`${chin.polarity} · año lunisolar efectivo ${chin.effective}.`; $("#chinese-calc").textContent=`${isoDate(birth)} → año ${chin.effective} → posición ${mod(chin.effective-4,12)+1}/12 y tronco ${mod(chin.effective-4,10)+1}/10.`; $("#chinese-note").textContent=chin.note; $("#chinese-kind").textContent=chin.approximate?"Aproximación":"Tradición";
+        $("#life-label").textContent=`Camino de vida ${life.number}`; $("#life-meaning").textContent=profile.meaning; $("#life-calc").textContent=life.expression;
+        $("#sun-label").textContent=`${sun[0]} · ${sun[1]}`;
+        $("#sun-sign-traits").textContent=sun[5].join(", ");
+        $("#sun-element-traits").textContent=`${sun[1]}: ${ELEMENT_LANGUAGE[sun[1]]}`;
+        $("#sun-modality-traits").textContent=`${sun[2]}: ${MODALITY_LANGUAGE[sun[2]]}`;
+        $("#sun-calc").textContent=`${pad(birth.getUTCDate())}/${pad(birth.getUTCMonth()+1)} cae entre ${pad(sun[3][1])}/${pad(sun[3][0])} y ${pad(sun[4][1])}/${pad(sun[4][0])}.`;
+        $("#chinese-label").textContent=`${chin.animal} de ${chin.element}`;
+        $("#chinese-animal-traits").textContent=`${chin.animal}: ${chineseAnimalTone(chin.animal)} (tema de su trino)`;
+        $("#chinese-element-traits").textContent=`${chin.element}: ${CHINESE_ELEMENT_TONE[chin.element]}`;
+        $("#chinese-polarity-traits").textContent=`${chin.polarity}: ${POLARITY_TONE[chin.polarity]}`;
+        $("#chinese-calc").textContent=`${isoDate(birth)} → año ${chin.effective} → posición ${mod(chin.effective-4,12)+1}/12 y tronco ${mod(chin.effective-4,10)+1}/10.`; $("#chinese-note").textContent=chin.note; $("#chinese-kind").textContent=chin.approximate?"Aproximación":"Tradición";
         $("#tarot-label").textContent=`${tarot[0]} · ${tarotNumber}`; $("#tarot-meaning").textContent=tarot[1]; $("#tarot-calc").textContent=`Suma inicial ${tarotSteps.join(" → ")} (se reduce hasta 1–22).`;
         $("#gift-title").textContent=profile.gift; $("#gift-copy").textContent=profile.giftCopy; $("#shadow-title").textContent=profile.shadow; $("#shadow-copy").textContent=profile.shadowCopy; $("#soy-question").textContent=profile.question;
         return { life, profile, sun, chin, tarot };
