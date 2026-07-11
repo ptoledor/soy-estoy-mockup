@@ -16,6 +16,7 @@
       --brass: #8d6417;
       --green: #234b3d;
       --red: #8b3f32;
+      --matrix-direct: #8d6417;
       --matrix-positive: #2f6b4f;
       --matrix-negative: #a5483d;
       --matrix-neutral: #77776f;
@@ -322,6 +323,7 @@
     .matrix-line.positive { border-color: var(--matrix-positive); }
     .matrix-line.negative { border-color: var(--matrix-negative); border-top-style: dashed; }
     .matrix-line.neutral { border-color: var(--matrix-neutral); border-top-style: dotted; }
+    .matrix-loop { width: 16px; height: 16px; border: 3px solid var(--matrix-direct); border-radius: 50%; }
     .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
 
     .action-band {
@@ -753,9 +755,10 @@
             <figure class="matrix-figure">
               <h3>Zodíaco occidental</h3>
               <p>Cuatro elementos conectados en cruz.</p>
-              <canvas class="matrix-canvas" id="western-affinity-matrix" width="420" height="420" role="img" aria-label="Matriz occidental: Fuego y Aire, y Tierra y Agua, tienen afinidad complementaria; Fuego y Tierra, y Aire y Agua, requieren ajuste; Fuego y Agua, y Aire y Tierra, muestran tensión fuerte."></canvas>
-              <figcaption class="matrix-caption">Complementarios: Fuego–Aire y Tierra–Agua. Ajuste: Fuego–Tierra y Aire–Agua. Tensión fuerte: Fuego–Agua y Aire–Tierra.</figcaption>
+              <canvas class="matrix-canvas" id="western-affinity-matrix" width="420" height="420" role="img" aria-label="Matriz occidental: el aro ocre indica afinidad directa de cada elemento consigo mismo; Fuego y Aire, y Tierra y Agua, tienen afinidad complementaria; Fuego y Tierra, y Aire y Agua, requieren ajuste; Fuego y Agua, y Aire y Tierra, muestran tensión fuerte."></canvas>
+              <figcaption class="matrix-caption">El aro ocre muestra afinidad directa con el mismo elemento. Las líneas distinguen complementariedad, ajuste y tensión fuerte entre elementos distintos.</figcaption>
               <div class="matrix-legend" aria-label="Leyenda del zodíaco occidental">
+                <span><i class="matrix-loop" aria-hidden="true"></i>Directa</span>
                 <span><i class="matrix-line positive" aria-hidden="true"></i>Complementaria</span>
                 <span><i class="matrix-line neutral" aria-hidden="true"></i>Ajuste</span>
                 <span><i class="matrix-line negative" aria-hidden="true"></i>Tensión fuerte</span>
@@ -764,9 +767,10 @@
             <figure class="matrix-figure">
               <h3>Zodíaco chino</h3>
               <p>Cinco fases: un ciclo impulsa y otro regula. La flecha indica qué elemento actúa sobre cuál.</p>
-              <canvas class="matrix-canvas" id="chinese-affinity-matrix" width="420" height="420" role="img" aria-label="Matriz china dirigida: las flechas verdes muestran qué elemento impulsa a otro; las grises, qué elemento lo regula."></canvas>
-              <figcaption class="matrix-caption">Impulsa: una cualidad facilita la siguiente; Agua → Madera, adaptarse permite crecer. Regula: una cualidad modera otra; Agua → Fuego, observar antes de actuar baja la impulsividad.</figcaption>
+              <canvas class="matrix-canvas" id="chinese-affinity-matrix" width="420" height="420" role="img" aria-label="Matriz china dirigida: el aro ocre indica que un elemento se refuerza a sí mismo; las flechas verdes muestran qué elemento impulsa a otro; las grises, qué elemento lo regula."></canvas>
+              <figcaption class="matrix-caption">El aro ocre indica refuerzo del mismo elemento. Impulsa: Agua → Madera, adaptarse permite crecer. Regula: Agua → Fuego, observar antes de actuar baja la impulsividad.</figcaption>
               <div class="matrix-legend" aria-label="Leyenda del zodíaco chino">
+                <span><i class="matrix-loop" aria-hidden="true"></i>Refuerza</span>
                 <span><i class="matrix-line positive" aria-hidden="true"></i>Impulsa</span>
                 <span><i class="matrix-line neutral" aria-hidden="true"></i>Regula</span>
               </div>
@@ -1054,15 +1058,15 @@
         canvas.style.height=`${size}px`;
         const ctx=canvas.getContext("2d"); ctx.scale(ratio,ratio);
         const css=getComputedStyle(document.documentElement);
-        const colors={positive:css.getPropertyValue("--matrix-positive").trim(),negative:css.getPropertyValue("--matrix-negative").trim(),neutral:css.getPropertyValue("--matrix-neutral").trim()};
+        const colors={direct:css.getPropertyValue("--matrix-direct").trim(),positive:css.getPropertyValue("--matrix-positive").trim(),negative:css.getPropertyValue("--matrix-negative").trim(),neutral:css.getPropertyValue("--matrix-neutral").trim()};
         const ink=css.getPropertyValue("--ink").trim(), paper=css.getPropertyValue("--paper-2").trim();
         const radius=Math.max(28,Math.min(36,size*.085));
         edges.forEach(edge=>{
           const a=positions[edge[0]],b=positions[edge[1]],type=edge[2];
           const ax=a[0]*size,ay=a[1]*size,bx=b[0]*size,by=b[1]*size;
           const angle=Math.atan2(by-ay,bx-ax),ux=Math.cos(angle),uy=Math.sin(angle);
-          const startX=directed?ax+ux*(radius+2):ax,startY=directed?ay+uy*(radius+2):ay;
-          const endX=directed?bx-ux*(radius+3):bx,endY=directed?by-uy*(radius+3):by;
+          const startX=directed?ax+ux*(radius+11):ax,startY=directed?ay+uy*(radius+11):ay;
+          const endX=directed?bx-ux*(radius+11):bx,endY=directed?by-uy*(radius+11):by;
           ctx.beginPath(); ctx.moveTo(startX,startY); ctx.lineTo(endX,endY);
           ctx.strokeStyle=colors[type]; ctx.lineWidth=type==="positive"?3:2;
           ctx.setLineDash(type==="negative"?[8,6]:type==="neutral"?[2,5]:[]); ctx.stroke();
@@ -1077,6 +1081,7 @@
         ctx.setLineDash([]);
         positions.forEach((position,index)=>{
           const x=position[0]*size,y=position[1]*size;
+          ctx.beginPath(); ctx.arc(x,y,radius+6,0,Math.PI*2); ctx.strokeStyle=colors.direct; ctx.lineWidth=3; ctx.stroke();
           ctx.beginPath(); ctx.arc(x,y,radius,0,Math.PI*2); ctx.fillStyle=paper; ctx.fill(); ctx.strokeStyle=ink; ctx.lineWidth=1.5; ctx.stroke();
           ctx.fillStyle=ink; ctx.font=`500 ${Math.max(11,Math.min(14,size*.032))}px ${getComputedStyle(document.body).fontFamily}`; ctx.textAlign="center"; ctx.textBaseline="middle"; ctx.fillText(nodes[index],x,y);
         });
