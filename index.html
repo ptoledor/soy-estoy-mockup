@@ -249,6 +249,7 @@
     }
     .signature h2 { margin: 0; font-family: var(--serif); font-size: 25px; font-weight: 500; }
     .signature p { margin: 8px 0 0; color: var(--muted); font-size: 14px; }
+    .summary-signature { min-height: 260px; align-content: center; }
     .identity-copy {
       padding: clamp(28px, 5vw, 52px);
       display: grid;
@@ -656,7 +657,7 @@
           <div>
             <p class="eyebrow">Soy · síntesis base</p>
             <h1>Tu fecha, cruzada entre distintas tradiciones.</h1>
-            <p class="hero-copy">Partimos por la numerología como eje. Después la contrastamos con zodíaco tropical, zodíaco chino y tarot. Cada resultado muestra su cálculo y su límite.</p>
+            <p class="hero-copy">Reunimos numerología, zodíaco tropical, zodíaco chino y tarot. Primero mostramos el resumen; después, el cálculo y el límite de cada componente.</p>
           </div>
           <aside class="hero-aside">
             <strong>Qué es</strong>
@@ -665,15 +666,15 @@
         </header>
 
         <section class="section rule" aria-labelledby="identity-title">
-          <p class="section-kicker">01 · Numerología y resumen</p>
+          <p class="section-kicker">01 · Resumen</p>
           <div class="identity">
-            <div class="signature">
-              <div><span class="micro-label">Camino de vida</span><span class="signature-number" id="life-number">—</span></div>
-              <div><h2 id="identity-title">Resumen desde tu camino de vida</h2><p id="life-key">—</p></div>
+            <div class="signature summary-signature">
+              <div><span class="micro-label">Lectura principal</span></div>
+              <div><h2 id="identity-title">Temas que aparecen</h2><p>La síntesis va primero. El detalle de cada sistema viene después.</p></div>
             </div>
             <div class="identity-copy">
               <p class="lead" id="soy-synthesis">—</p>
-              <p class="caveat">La numerología organiza este resumen. Las demás tradiciones agregan contexto; ninguna convierte la lectura en un diagnóstico.</p>
+              <p class="caveat">El resumen no asigna mayor verdad a una tradición. Solo reúne sus temas y deja las diferencias visibles en los componentes.</p>
             </div>
           </div>
         </section>
@@ -1032,8 +1033,7 @@
         const sun=western(birth), chin=chinese(birth), tarotTrace=traceDigits(`${pad(birth.getUTCDate())}${pad(birth.getUTCMonth()+1)}${birth.getUTCFullYear()}`, false);
         let tarotNumber=sumDigits(`${pad(birth.getUTCDate())}${pad(birth.getUTCMonth()+1)}${birth.getUTCFullYear()}`), tarotSteps=[tarotNumber];
         while(tarotNumber>22){tarotNumber=sumDigits(tarotNumber);tarotSteps.push(tarotNumber);} const tarot=ARCANA[tarotNumber];
-        $("#life-number").textContent=life.number; $("#life-key").textContent=`${profile.key} · ${profile.meaning}`;
-        $("#soy-synthesis").textContent=`La numerología pone ${profile.key} como eje. En otras tradiciones, ${sun[0]} agrega ${sun[5][0]} y ${tarot[0]} introduce ${tarot[1]}. Este cruce no prueba que seas así; propone temas para contrastar.`;
+        $("#soy-synthesis").textContent=`En este cruce aparecen ${profile.key}, ${sun[5][0]} y ${tarot[1]}. No forman una conclusión única: son temas que distintas tradiciones asocian a la misma fecha.`;
         $("#life-label").textContent=`Camino ${life.number}`; $("#life-meaning").textContent=profile.meaning; $("#life-calc").textContent=life.expression;
         $("#sun-label").textContent=`${sun[0]} · ${sun[1]}`; $("#sun-meaning").textContent=`${sun[2]}: ${sun[5].join(", ")}.`; $("#sun-calc").textContent=`${pad(birth.getUTCDate())}/${pad(birth.getUTCMonth()+1)} cae entre ${pad(sun[3][1])}/${pad(sun[3][0])} y ${pad(sun[4][1])}/${pad(sun[4][0])}.`;
         $("#chinese-label").textContent=`${chin.animal} de ${chin.element}`; $("#chinese-meaning").textContent=`${chin.polarity} · año lunisolar efectivo ${chin.effective}.`; $("#chinese-calc").textContent=`${isoDate(birth)} → año ${chin.effective} → posición ${mod(chin.effective-4,12)+1}/12 y tronco ${mod(chin.effective-4,10)+1}/10.`; $("#chinese-note").textContent=chin.note; $("#chinese-kind").textContent=chin.approximate?"Aproximación":"Tradición";
@@ -1113,7 +1113,7 @@
       $$('[data-view]').forEach(button=>button.addEventListener("click",()=>setView(button.dataset.view)));
       $$('[data-go]').forEach(button=>button.addEventListener("click",()=>setView(button.dataset.go)));
       $("#copy-soy").addEventListener("click",async()=>{
-        const text=`Mi Soy · Camino ${$("#life-number").textContent} · ${$("#sun-label").textContent} · ${$("#chinese-label").textContent} · ${$("#tarot-label").textContent}. Lectura simbólica, con cálculos visibles.`;
+        const text=`Mi Soy · ${$("#life-label").textContent} · ${$("#sun-label").textContent} · ${$("#chinese-label").textContent} · ${$("#tarot-label").textContent}. Lectura simbólica, con cálculos visibles.`;
         try { await navigator.clipboard.writeText(text); toast("Resumen copiado. Incluye el límite: lectura simbólica."); } catch { toast("Tu navegador no permitió copiar; puedes seleccionar los resultados."); }
       });
       $("#trial-button").addEventListener("click",()=>toast("En la prueba real, este botón abre WhatsApp para coordinar 28 días. Aquí no enviamos datos."));
