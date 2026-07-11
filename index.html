@@ -654,33 +654,33 @@
       <div class="view" id="soy-view" role="tabpanel">
         <header class="hero">
           <div>
-            <p class="eyebrow">Soy · tu forma base</p>
-            <h1>Un mapa para leerte, no una caja para encerrarte.</h1>
-            <p class="hero-copy">Cruza tradiciones simbólicas conocidas, muestra cada cuenta y separa datos, reglas e interpretación.</p>
+            <p class="eyebrow">Soy · síntesis base</p>
+            <h1>Tu fecha, cruzada entre distintas tradiciones.</h1>
+            <p class="hero-copy">Partimos por la numerología como eje. Después la contrastamos con zodíaco tropical, zodíaco chino y tarot. Cada resultado muestra su cálculo y su límite.</p>
           </div>
           <aside class="hero-aside">
-            <strong>Qué vas a encontrar</strong>
-            <p>Cuatro lentes sobre la misma fecha. Ninguna predice tu destino. Juntas sirven para nombrar tendencias, dones y tensiones que puedes observar.</p>
+            <strong>Qué es</strong>
+            <p>Un cruce de tradiciones simbólicas para observar coincidencias y tensiones. No define tu personalidad ni predice lo que harás.</p>
           </aside>
         </header>
 
         <section class="section rule" aria-labelledby="identity-title">
-          <p class="section-kicker">Lectura principal</p>
+          <p class="section-kicker">01 · Numerología y resumen</p>
           <div class="identity">
             <div class="signature">
               <div><span class="micro-label">Camino de vida</span><span class="signature-number" id="life-number">—</span></div>
-              <div><h2 id="identity-title">Tu firma simbólica</h2><p id="life-key">—</p></div>
+              <div><h2 id="identity-title">Resumen desde tu camino de vida</h2><p id="life-key">—</p></div>
             </div>
             <div class="identity-copy">
               <p class="lead" id="soy-synthesis">—</p>
-              <p class="caveat">Esta síntesis es una interpretación editorial basada en los componentes que ves abajo. Úsala como pregunta de trabajo, no como diagnóstico.</p>
+              <p class="caveat">La numerología organiza este resumen. Las demás tradiciones agregan contexto; ninguna convierte la lectura en un diagnóstico.</p>
             </div>
           </div>
         </section>
 
         <section class="section rule" aria-labelledby="components-title">
           <div class="section-head">
-            <div><p class="section-kicker">Los componentes</p><h2 class="section-title" id="components-title">Todo a la vista.</h2></div>
+            <div><p class="section-kicker">02 · Cruce de tradiciones</p><h2 class="section-title" id="components-title">De dónde sale cada parte.</h2></div>
             <p class="section-intro">Abrir “ver cuenta y criterio” permite auditar cada resultado. Si una tradición tiene variantes, lo decimos.</p>
           </div>
           <div class="evidence-grid">
@@ -702,7 +702,7 @@
             <article class="evidence">
               <div class="evidence-top"><div><span class="micro-label">Tarot de nacimiento</span><h3 id="tarot-label">—</h3></div><span class="kind">Regla</span></div>
               <p class="meaning" id="tarot-meaning">—</p>
-              <details><summary>Ver cuenta y criterio</summary><p class="calculation" id="tarot-calc">—</p><p>Asocia la suma reducida con un arcano mayor. Es un mapa simbólico; no es una tirada ni una predicción.</p></details>
+              <details><summary>Ver cuenta y criterio</summary><p class="calculation" id="tarot-calc">—</p><p>Asocia la suma reducida con un arcano mayor. Es una correspondencia simbólica; no una tirada ni una predicción.</p></details>
             </article>
           </div>
         </section>
@@ -1033,7 +1033,7 @@
         let tarotNumber=sumDigits(`${pad(birth.getUTCDate())}${pad(birth.getUTCMonth()+1)}${birth.getUTCFullYear()}`), tarotSteps=[tarotNumber];
         while(tarotNumber>22){tarotNumber=sumDigits(tarotNumber);tarotSteps.push(tarotNumber);} const tarot=ARCANA[tarotNumber];
         $("#life-number").textContent=life.number; $("#life-key").textContent=`${profile.key} · ${profile.meaning}`;
-        $("#soy-synthesis").textContent=`${name}, tu fecha reúne ${profile.key}, ${sun[5][0]} y el tema de ${tarot[0].toLowerCase()}. La invitación no es actuar siempre así, sino reconocer cuándo esos recursos ayudan y cuándo se endurecen.`;
+        $("#soy-synthesis").textContent=`La numerología pone ${profile.key} como eje. En otras tradiciones, ${sun[0]} agrega ${sun[5][0]} y ${tarot[0]} introduce ${tarot[1]}. Este cruce no prueba que seas así; propone temas para contrastar.`;
         $("#life-label").textContent=`Camino ${life.number}`; $("#life-meaning").textContent=profile.meaning; $("#life-calc").textContent=life.expression;
         $("#sun-label").textContent=`${sun[0]} · ${sun[1]}`; $("#sun-meaning").textContent=`${sun[2]}: ${sun[5].join(", ")}.`; $("#sun-calc").textContent=`${pad(birth.getUTCDate())}/${pad(birth.getUTCMonth()+1)} cae entre ${pad(sun[3][1])}/${pad(sun[3][0])} y ${pad(sun[4][1])}/${pad(sun[4][0])}.`;
         $("#chinese-label").textContent=`${chin.animal} de ${chin.element}`; $("#chinese-meaning").textContent=`${chin.polarity} · año lunisolar efectivo ${chin.effective}.`; $("#chinese-calc").textContent=`${isoDate(birth)} → año ${chin.effective} → posición ${mod(chin.effective-4,12)+1}/12 y tronco ${mod(chin.effective-4,10)+1}/10.`; $("#chinese-note").textContent=chin.note; $("#chinese-kind").textContent=chin.approximate?"Aproximación":"Tradición";
