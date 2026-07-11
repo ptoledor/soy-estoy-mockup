@@ -116,10 +116,17 @@
       margin: 0 auto;
       padding: 18px 24px;
       display: grid;
-      grid-template-columns: 1.2fr 1fr 1fr auto;
+      grid-template-columns: 1.2fr 1fr auto;
       align-items: end;
       gap: 14px;
     }
+    .start-copy { display: none; grid-column: 1 / -1; max-width: 720px; margin-bottom: 22px; }
+    .start-copy h1 { max-width: 15ch; margin: 8px 0 18px; font-family: var(--serif); font-size: clamp(44px, 7vw, 82px); font-weight: 400; line-height: .98; letter-spacing: -.035em; }
+    .start-copy p:last-child { max-width: 62ch; margin: 0; color: var(--muted); font-size: clamp(16px, 2vw, 19px); line-height: 1.55; }
+    body:not(.profile-ready) .profile-bar { min-height: calc(100vh - 64px); display: grid; align-items: center; }
+    body:not(.profile-ready) .profile-inner { width: 100%; max-width: 800px; grid-template-columns: 1fr 1fr; padding-top: 56px; padding-bottom: 56px; }
+    body:not(.profile-ready) .start-copy { display: block; }
+    body:not(.profile-ready) .recalculate { grid-column: 1 / -1; justify-self: start; min-width: 210px; }
     .field { display: grid; gap: 6px; }
     .field span, .micro-label {
       color: var(--muted);
@@ -157,6 +164,14 @@
       font-size: 12px;
     }
     .privacy-note strong { color: var(--ink); }
+    [hidden] { display: none !important; }
+
+    .target-control { border-bottom: 1px solid var(--line); background: var(--paper-2); }
+    .target-inner { max-width: var(--max); margin: 0 auto; padding: 18px 24px; display: flex; align-items: end; justify-content: space-between; gap: 18px; }
+    .target-intro { max-width: 48ch; }
+    .target-intro p { margin: 5px 0 0; color: var(--muted); font-size: 13px; }
+    .target-actions { display: flex; align-items: end; gap: 14px; }
+    .target-actions .field { min-width: 210px; }
 
     main { overflow: hidden; }
     .view { animation: enter .35s ease both; }
@@ -605,8 +620,14 @@
       .topbar-inner { min-height: 58px; padding: 0 16px; }
       .prototype, .main-tabs { display: none; }
       .profile-inner { padding: 14px 16px; grid-template-columns: 1fr 1fr; }
-      .field:first-child { grid-column: 1 / -1; }
+      body:not(.profile-ready) .profile-bar { min-height: calc(100vh - 58px); }
+      body:not(.profile-ready) .profile-inner { grid-template-columns: 1fr; padding-top: 44px; padding-bottom: 44px; }
+      body:not(.profile-ready) .start-copy, body:not(.profile-ready) .recalculate { grid-column: 1; }
+      .field-name, .field-birth { grid-column: 1 / -1; }
       .recalculate { grid-column: 1 / -1; }
+      .target-inner, .target-actions { align-items: stretch; flex-direction: column; }
+      .target-actions .field { min-width: 0; }
+      .target-actions .recalculate { width: 100%; }
       .hero, .now-hero { grid-template-columns: 1fr; padding-left: 16px; padding-right: 16px; }
       .hero { padding-top: 50px; }
       .hero-aside { max-width: 45ch; }
@@ -663,7 +684,7 @@
     <header class="topbar">
       <div class="topbar-inner">
         <div class="brand"><strong>SOY</strong><i>/</i><strong>ESTOY</strong><span class="prototype">prototipo</span></div>
-        <nav class="main-tabs" role="tablist" aria-label="Secciones del producto">
+        <nav class="main-tabs" role="tablist" aria-label="Secciones del producto" hidden>
           <button class="tab" role="tab" data-view="soy" aria-selected="true">Soy</button>
           <button class="tab" role="tab" data-view="estoy" aria-selected="false">Estoy</button>
         </nav>
@@ -672,15 +693,19 @@
 
     <section class="profile-bar" aria-label="Datos para la lectura">
       <form class="profile-inner" id="profile-form">
-        <label class="field"><span>Tu nombre</span><input id="name" autocomplete="name" value="Isidora" maxlength="40"></label>
-        <label class="field"><span>Fecha de nacimiento</span><input id="birth" type="date" value="1990-06-15" min="1940-01-01" max="2035-12-31" required></label>
-        <label class="field"><span>Fecha a consultar</span><input id="target" type="date" required></label>
-        <button class="recalculate" type="submit">Actualizar lectura</button>
+        <div class="start-copy">
+          <p class="eyebrow">Soy · tu síntesis base</p>
+          <h1>Tu fecha, leída desde distintas tradiciones.</h1>
+          <p>Numerología, zodíaco tropical, zodíaco chino y tarot observan la misma fecha desde ángulos distintos. Ingresa tus datos para ver la síntesis antes de abrir cada componente.</p>
+        </div>
+        <label class="field field-name"><span>Tu nombre</span><input id="name" autocomplete="name" maxlength="40" required></label>
+        <label class="field field-birth"><span>Fecha de nacimiento</span><input id="birth" type="date" min="1900-01-01" required></label>
+        <button class="recalculate" id="profile-submit" type="submit">Ver mi Soy</button>
         <p class="privacy-note"><strong>No pedimos hora ni lugar.</strong> Este mockup no calcula ascendente ni casas; mostrarlos sin hora exacta sería inventar precisión.</p>
       </form>
     </section>
 
-    <main id="content">
+    <main id="content" hidden>
       <div class="view" id="soy-view" role="tabpanel">
         <header class="hero copy-only">
           <div>
@@ -787,6 +812,15 @@
       </div>
 
       <div class="view" id="estoy-view" role="tabpanel" hidden>
+        <section class="target-control" aria-label="Fecha para consultar Estoy">
+          <form class="target-inner" id="target-form">
+            <div class="target-intro"><span class="micro-label">Estoy · consulta temporal</span><p>Tu Soy permanece igual. Cambia esta fecha únicamente para mirar otro momento.</p></div>
+            <div class="target-actions">
+              <label class="field"><span>Fecha a consultar</span><input id="target" type="date" required></label>
+              <button class="recalculate" type="submit">Consultar fecha</button>
+            </div>
+          </form>
+        </section>
         <header class="moment-summary">
           <p class="eyebrow">Estoy · resumen</p>
           <h1 id="moment-title">—</h1>
@@ -882,7 +916,7 @@
     <footer><div class="footer-inner"><span>Soy / Estoy · mockup de validación</span><span>Esoterismo aterrizado, calculable y honesto.</span></div></footer>
   </div>
 
-  <nav class="mobile-tabs" role="tablist" aria-label="Secciones del producto">
+  <nav class="mobile-tabs" role="tablist" aria-label="Secciones del producto" hidden>
     <button class="tab" role="tab" data-view="soy" aria-selected="true">Soy</button>
     <button class="tab" role="tab" data-view="estoy" aria-selected="false">Estoy</button>
   </nav>
@@ -1259,10 +1293,22 @@
         if(Number.isNaN(birth.getTime())||Number.isNaN(target.getTime())) return;
         renderSoy(birth,name); renderEstoy(birth,target,name);
       }
+      function revealProduct() {
+        document.body.classList.add("profile-ready");
+        $("#content").hidden=false;
+        $$(".main-tabs, .mobile-tabs").forEach(nav=>nav.hidden=false);
+        $("#profile-submit").textContent="Actualizar Soy";
+      }
 
       $("#target").value=isoDate(new Date());
-      $("#profile-form").addEventListener("submit",event=>{event.preventDefault();renderAll();toast("Lectura actualizada con las fechas visibles.");});
-      $("#profile-form").addEventListener("change",renderAll);
+      $("#birth").max=isoDate(new Date());
+      $("#profile-form").addEventListener("submit",event=>{
+        event.preventDefault();
+        const firstReading=!document.body.classList.contains("profile-ready");
+        renderAll(); revealProduct(); setView("soy");
+        toast(firstReading?"Tu Soy está listo.":"Tu Soy fue actualizado.");
+      });
+      $("#target-form").addEventListener("submit",event=>{event.preventDefault();renderAll();setView("estoy");toast("Estoy actualizado para la fecha elegida.");});
       $$('[data-view]').forEach(button=>button.addEventListener("click",()=>setView(button.dataset.view)));
       $$('[data-go]').forEach(button=>button.addEventListener("click",()=>setView(button.dataset.go)));
       $("#copy-soy").addEventListener("click",async()=>{
@@ -1275,7 +1321,6 @@
         area.addEventListener("input",()=>{localStorage.setItem(key,area.value);const note=area.parentElement.querySelector(".saved");note.textContent="Guardado en este navegador";clearTimeout(area.timer);area.timer=setTimeout(()=>note.textContent="",1800);});
       });
       window.addEventListener("resize",drawAffinityMatrices);
-      renderAll(); setView(location.hash==="#estoy"?"estoy":"soy",false); drawAffinityMatrices();
     })();
   </script>
 </body>
