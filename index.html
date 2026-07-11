@@ -16,6 +16,9 @@
       --brass: #8d6417;
       --green: #234b3d;
       --red: #8b3f32;
+      --matrix-positive: #2f6b4f;
+      --matrix-negative: #a5483d;
+      --matrix-neutral: #77776f;
       --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
       --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       --mono: "Cascadia Code", "SFMono-Regular", Consolas, monospace;
@@ -306,6 +309,20 @@
     .practical:last-child { border-right: 0; }
     .practical b { display: block; margin: 7px 0 10px; font-family: var(--serif); font-size: 23px; font-weight: 500; }
     .practical p { margin: 0; color: var(--muted); font-size: 14px; }
+
+    .matrix-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 36px; }
+    .matrix-figure { margin: 0; min-width: 0; border-top: 1px solid var(--line-dark); padding-top: 18px; }
+    .matrix-figure h3 { margin: 0 0 4px; font-family: var(--serif); font-size: 24px; font-weight: 500; }
+    .matrix-figure > p { margin: 0; color: var(--muted); font-size: 12px; }
+    .matrix-canvas { display: block; width: 100%; aspect-ratio: 1; margin: 12px 0; }
+    .matrix-caption { min-height: 38px; }
+    .matrix-legend { display: flex; flex-wrap: wrap; gap: 18px; margin-top: 20px; font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: .06em; }
+    .matrix-legend span { display: inline-flex; align-items: center; gap: 8px; }
+    .matrix-line { width: 28px; height: 0; border-top: 3px solid; }
+    .matrix-line.positive { border-color: var(--matrix-positive); }
+    .matrix-line.negative { border-color: var(--matrix-negative); border-top-style: dashed; }
+    .matrix-line.neutral { border-color: var(--matrix-neutral); border-top-style: dotted; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
 
     .action-band {
       margin-top: 36px;
@@ -599,6 +616,7 @@
       .evidence, .evidence:nth-child(2n), .evidence:nth-last-child(-n+2) { border-right: 0; border-bottom: 1px solid var(--line); }
       .evidence:last-child { border-bottom: 0; }
       .practical-grid, .period-grid, .climate-grid, .planner { grid-template-columns: 1fr; }
+      .matrix-grid { grid-template-columns: 1fr; gap: 30px; }
       .practical, .period-card, .climate-card { border-right: 0; border-bottom: 1px solid var(--line); }
       .practical:last-child, .period-card:last-child, .climate-card:last-child { border-bottom: 0; }
       .action-band { align-items: stretch; flex-direction: column; }
@@ -723,6 +741,32 @@
               <p class="meaning" id="tarot-meaning">—</p>
               <details><summary>Ver cuenta y criterio</summary><p class="calculation" id="tarot-calc">—</p><p>Asocia la suma reducida con un arcano mayor. Es una correspondencia simbólica; no una tirada ni una predicción.</p></details>
             </article>
+          </div>
+        </section>
+
+        <section class="section rule" aria-labelledby="affinities-title">
+          <div class="section-head">
+            <div><p class="section-kicker">03 · Afinidades elementales</p><h2 class="section-title" id="affinities-title">Cómo se relacionan los elementos.</h2></div>
+            <p class="section-intro">Las líneas verdes muestran afinidad; las rojas, tensión. El gris queda reservado para relaciones neutrales, aunque las tablas actuales clasifican todos los pares distintos.</p>
+          </div>
+          <div class="matrix-grid">
+            <figure class="matrix-figure">
+              <h3>Zodíaco occidental</h3>
+              <p>Cuatro elementos conectados en cruz.</p>
+              <canvas class="matrix-canvas" id="western-affinity-matrix" width="420" height="420" role="img" aria-label="Matriz occidental: Fuego y Aire, y Tierra y Agua, tienen afinidad positiva; los demás pares distintos muestran tensión."></canvas>
+              <figcaption class="matrix-caption">Afinidad: Fuego–Aire y Tierra–Agua. Tensión: Fuego–Agua, Aire–Tierra, Fuego–Tierra y Aire–Agua.</figcaption>
+            </figure>
+            <figure class="matrix-figure">
+              <h3>Zodíaco chino</h3>
+              <p>Cinco fases: ciclo generativo y ciclo de control.</p>
+              <canvas class="matrix-canvas" id="chinese-affinity-matrix" width="420" height="420" role="img" aria-label="Matriz china: el ciclo generativo conecta Madera, Fuego, Tierra, Metal y Agua; el ciclo de control conecta los cinco pares restantes."></canvas>
+              <figcaption class="matrix-caption">Afinidad: ciclo generativo. Tensión: ciclo de control. No quedan pares distintos sin clasificar.</figcaption>
+            </figure>
+          </div>
+          <div class="matrix-legend" aria-label="Leyenda de afinidades">
+            <span><i class="matrix-line positive" aria-hidden="true"></i>Positiva</span>
+            <span><i class="matrix-line neutral" aria-hidden="true"></i>Neutral</span>
+            <span><i class="matrix-line negative" aria-hidden="true"></i>Negativa</span>
           </div>
         </section>
 
@@ -995,6 +1039,35 @@
         ];
         return {...methods[lunarQuarter], explanation:`Tu año personal marca “${themeKey}” como tema. La ${QUARTERS[lunarQuarter].name.toLowerCase()} indica cómo trabajarlo ahora. ${solarNote}`};
       }
+      function drawAffinityMatrix(canvas, nodes, positions, edges) {
+        const size=Math.max(280,Math.min(460,canvas.parentElement.clientWidth||420));
+        const ratio=Math.min(window.devicePixelRatio||1,2);
+        canvas.width=Math.round(size*ratio); canvas.height=Math.round(size*ratio);
+        canvas.style.height=`${size}px`;
+        const ctx=canvas.getContext("2d"); ctx.scale(ratio,ratio);
+        const css=getComputedStyle(document.documentElement);
+        const colors={positive:css.getPropertyValue("--matrix-positive").trim(),negative:css.getPropertyValue("--matrix-negative").trim(),neutral:css.getPropertyValue("--matrix-neutral").trim()};
+        const ink=css.getPropertyValue("--ink").trim(), paper=css.getPropertyValue("--paper-2").trim();
+        edges.forEach(edge=>{
+          const a=positions[edge[0]],b=positions[edge[1]],type=edge[2];
+          ctx.beginPath(); ctx.moveTo(a[0]*size,a[1]*size); ctx.lineTo(b[0]*size,b[1]*size);
+          ctx.strokeStyle=colors[type]; ctx.lineWidth=type==="positive"?3:2;
+          ctx.setLineDash(type==="negative"?[8,6]:type==="neutral"?[2,5]:[]); ctx.stroke();
+        });
+        ctx.setLineDash([]);
+        const radius=Math.max(28,Math.min(36,size*.085));
+        positions.forEach((position,index)=>{
+          const x=position[0]*size,y=position[1]*size;
+          ctx.beginPath(); ctx.arc(x,y,radius,0,Math.PI*2); ctx.fillStyle=paper; ctx.fill(); ctx.strokeStyle=ink; ctx.lineWidth=1.5; ctx.stroke();
+          ctx.fillStyle=ink; ctx.font=`500 ${Math.max(11,Math.min(14,size*.032))}px ${getComputedStyle(document.body).fontFamily}`; ctx.textAlign="center"; ctx.textBaseline="middle"; ctx.fillText(nodes[index],x,y);
+        });
+      }
+      function drawAffinityMatrices() {
+        const western=$("#western-affinity-matrix"),chinese=$("#chinese-affinity-matrix");
+        if(!western||!chinese)return;
+        drawAffinityMatrix(western,["Fuego","Aire","Agua","Tierra"],[[.5,.13],[.87,.5],[.5,.87],[.13,.5]],[[0,2,"negative"],[0,3,"negative"],[1,2,"negative"],[1,3,"negative"],[0,1,"positive"],[2,3,"positive"]]);
+        drawAffinityMatrix(chinese,["Madera","Fuego","Tierra","Metal","Agua"],[[.5,.1],[.88,.38],[.74,.84],[.26,.84],[.12,.38]],[[0,2,"negative"],[2,4,"negative"],[4,1,"negative"],[1,3,"negative"],[3,0,"negative"],[0,1,"positive"],[1,2,"positive"],[2,3,"positive"],[3,4,"positive"],[4,0,"positive"]]);
+      }
       function chinese(date) {
         const year = date.getUTCFullYear();
         const md = (date.getUTCMonth()+1)*100 + date.getUTCDate();
@@ -1125,6 +1198,7 @@
       function setView(view, scroll=true) {
         const isSoy=view==="soy"; $("#soy-view").hidden=!isSoy; $("#estoy-view").hidden=isSoy;
         $$('[data-view]').forEach(button=>button.setAttribute("aria-selected",String(button.dataset.view===view)));
+        if(isSoy)requestAnimationFrame(drawAffinityMatrices);
         history.replaceState(null,"",`#${view}`); if(scroll) window.scrollTo({top:0,behavior:"smooth"});
       }
       function toast(message) { const node=$("#toast"); node.textContent=message; node.hidden=false; clearTimeout(toast.timer); toast.timer=setTimeout(()=>node.hidden=true,3200); }
@@ -1148,7 +1222,8 @@
         const key=`soy-estoy:${area.id}`; area.value=localStorage.getItem(key)||"";
         area.addEventListener("input",()=>{localStorage.setItem(key,area.value);const note=area.parentElement.querySelector(".saved");note.textContent="Guardado en este navegador";clearTimeout(area.timer);area.timer=setTimeout(()=>note.textContent="",1800);});
       });
-      renderAll(); setView(location.hash==="#estoy"?"estoy":"soy",false);
+      window.addEventListener("resize",drawAffinityMatrices);
+      renderAll(); setView(location.hash==="#estoy"?"estoy":"soy",false); drawAffinityMatrices();
     })();
   </script>
 </body>
