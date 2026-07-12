@@ -315,6 +315,8 @@
     summary { cursor: pointer; color: var(--brass); font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: .08em; }
     details p { margin: 12px 0 0; color: var(--muted); font-size: 12px; }
     .calculation { color: var(--ink); font-family: var(--mono); overflow-wrap: anywhere; }
+    .evidence-note { margin: 14px 0 0; padding: 10px 12px; border: 1px solid var(--line); border-left: 2px solid var(--brass); background: var(--paper-2); color: var(--muted); font-size: 12px; }
+    .evidence-note strong { color: var(--ink); font-weight: 600; }
 
     .practical-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; border-top: 1px solid var(--line-dark); border-bottom: 1px solid var(--line-dark); }
     .summary-points { margin-top: 18px; }
@@ -765,6 +767,7 @@
                 <div class="trait-row"><span>Elemento</span><p id="chinese-element-traits">—</p></div>
                 <div class="trait-row"><span>Polaridad</span><p id="chinese-polarity-traits">—</p></div>
               </div>
+              <p class="evidence-note" id="chinese-shift-note">—</p>
               <details><summary>Ver cuenta y criterio</summary><p class="calculation" id="chinese-calc">—</p><p id="chinese-note">El animal cambia en el Año Nuevo lunisolar, no el 1 de enero.</p></details>
             </article>
             <article class="evidence">
@@ -1234,14 +1237,18 @@
       function chinese(date) {
         const year = date.getUTCFullYear();
         const md = (date.getUTCMonth()+1)*100 + date.getUTCDate();
+        const boundary = CNY[year];
+        const boundaryLabel = boundary ? `${pad(boundary[1])}/${pad(boundary[0])}/${year}` : null;
         let effective = year, approximate = false, note = "Fecha fuera de la ventana crítica; el año se resuelve sin tabla.";
-        if (md < 121) effective = year - 1;
+        if (md < 121) {
+          effective = year - 1;
+          note = boundaryLabel ? `Año Nuevo chino ${year}: ${pad(boundary[1])}/${pad(boundary[0])}.` : `El Año Nuevo chino de ${year} cae después del 20 de enero.`;
+        }
         else if (md <= 220) {
-          const boundary = CNY[year];
           if (boundary) { effective = md >= boundary[0]*100+boundary[1] ? year : year-1; note = `Año Nuevo chino ${year}: ${pad(boundary[1])}/${pad(boundary[0])}.`; }
           else { approximate = true; note = "Fecha entre 21 de enero y 20 de febrero fuera de la tabla disponible; se usa el año gregoriano como aproximación."; }
         }
-        return { effective, animal:ANIMALS[mod(effective-4,12)], element:ELEMENTS[Math.floor(mod(effective-4,10)/2)], polarity:effective%2===0?"Yang":"Yin", approximate, note };
+        return { effective, animal:ANIMALS[mod(effective-4,12)], element:ELEMENTS[Math.floor(mod(effective-4,10)/2)], polarity:effective%2===0?"Yang":"Yin", approximate, note, shifted: effective !== year, boundaryLabel };
       }
       function chineseRelation(natal, current) {
         if (natal.animal === current.animal) return { label:"Año propio", key:"revisión", copy:"El mismo animal reaparece: la tradición lo lee como revisión de identidad, ritmo y decisiones." };
@@ -1347,6 +1354,14 @@
         $("#chinese-affinity-matrix").setAttribute("aria-label",`Matriz china para ${chin.animal} de ${chin.element}. ${chin.element} es tu elemento y está marcado en dorado. Las flechas muestran qué fases impulsa y regula.`);
         requestAnimationFrame(drawAffinityMatrices);
         $("#chinese-calc").textContent=`${isoDate(birth)} → año ${chin.effective} → posición ${mod(chin.effective-4,12)+1}/12 y tronco ${mod(chin.effective-4,10)+1}/10.`; $("#chinese-note").textContent=chin.note; $("#chinese-kind").textContent=chin.approximate?"Aproximación":"Tradición";
+        const shiftNote=$("#chinese-shift-note");
+        if(chin.shifted){
+          shiftNote.innerHTML=chin.boundaryLabel
+            ? `Naciste antes del Año Nuevo chino (<strong>${chin.boundaryLabel}</strong>), por eso tu año es <strong>${chin.effective}</strong> y no ${birth.getUTCFullYear()}. El año chino cambia con el Año Nuevo lunisolar —entre el 21 de enero y el 20 de febrero según el año—, no el 1 de enero.`
+            : `Naciste antes del Año Nuevo chino de ${birth.getUTCFullYear()}, por eso tu año es <strong>${chin.effective}</strong>. El año chino cambia con el Año Nuevo lunisolar —entre el 21 de enero y el 20 de febrero según el año—, no el 1 de enero.`;
+        } else {
+          shiftNote.textContent="El año chino cambia con el Año Nuevo lunisolar —entre el 21 de enero y el 20 de febrero según el año—, no el 1 de enero.";
+        }
         $("#tarot-label").textContent=`${tarot[0]} · ${tarotNumber}`; $("#tarot-meaning").textContent=tarot[1]; $("#tarot-calc").textContent=`Suma inicial ${tarotSteps.join(" → ")} (se reduce hasta 1–22).`;
         $("#gift-title").textContent=profile.gift; $("#gift-copy").textContent=profile.giftCopy; $("#shadow-title").textContent=profile.shadow; $("#shadow-copy").textContent=profile.shadowCopy; $("#soy-question").textContent=profile.question;
         return { life, profile, sun, chin, tarot };
@@ -1379,7 +1394,8 @@
 
         $("#moment-title").textContent=`${name}, tu tema de fondo es ${moment[0].toLowerCase()}.`;
         $("#moment-copy").textContent=synthesis.explanation;
-        $("#summary-moment").textContent=moment[0]; $("#summary-moment-note").textContent=`Año personal ${py.number}. Las demás capas lo matizan; no compiten por reemplazarlo.`;
+        const prenatal=target.getTime()<birth.getTime()?"La fecha consultada es anterior al nacimiento declarado: esta lectura describe el período, no a la persona. ":"";
+        $("#summary-moment").textContent=moment[0]; $("#summary-moment-note").textContent=`${prenatal}Año personal ${py.number}. Las demás capas lo matizan; no compiten por reemplazarlo.`;
         $("#summary-period").textContent=`${formatDate(current.start)} — ${formatDate(current.end)}`; $("#summary-period-note").textContent=`${phase.name} · ${current.days} días`;
         $("#summary-focus").textContent=synthesis.title; $("#summary-focus-note").textContent=synthesis.copy;
         $("#period-lock").textContent=`Período estable · ${formatDate(current.start,true)} — ${formatDate(current.end,true)}`;
@@ -1425,7 +1441,6 @@
       }
 
       $("#target").value=isoDate(new Date());
-      $("#birth").max=isoDate(new Date());
       $("#profile-form").addEventListener("submit",event=>{
         event.preventDefault();
         const firstReading=!document.body.classList.contains("profile-ready");
