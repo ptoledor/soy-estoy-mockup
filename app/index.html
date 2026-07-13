@@ -947,8 +947,8 @@
           <div class="climate-grid ordered-climate">
             <article class="climate-card" data-order="01"><span class="micro-label">Año universal · compartido</span><div class="climate-value" id="universal-year-value">—</div><p id="universal-year-copy">—</p><details><summary>Ver cálculo</summary><p class="calculation" id="universal-year-calc">—</p></details></article>
             <article class="climate-card" data-order="02"><span class="micro-label">Año personal · tuyo</span><div class="climate-value" id="personal-year-value">—</div><p id="personal-year-copy">—</p><details><summary>Ver cálculo</summary><p class="calculation" id="personal-year-calc">—</p></details></article>
-            <article class="climate-card" data-order="03"><span class="micro-label">Año chino · relacional</span><div class="climate-value" id="relation-value">—</div><p id="relation-copy">—</p><details><summary>Ver comparación</summary><p class="calculation" id="relation-calc">—</p></details></article>
-            <article class="climate-card" data-order="04"><span class="micro-label">Temporada solar · mensual</span><div class="climate-value" id="solar-relation-value">—</div><p id="solar-relation-copy">—</p><details><summary>Ver comparación</summary><p class="calculation" id="solar-relation-calc">—</p></details></article>
+            <article class="climate-card" data-order="03"><span class="micro-label">Año chino · anual</span><div class="climate-value" id="relation-value">—</div><p id="relation-copy">—</p><details><summary>Cómo se combina contigo</summary><p class="calculation" id="relation-calc">—</p></details></article>
+            <article class="climate-card" data-order="04"><span class="micro-label">Temporada solar · mensual</span><div class="climate-value" id="solar-relation-value">—</div><p id="solar-relation-copy">—</p><details><summary>Cómo se combina contigo</summary><p class="calculation" id="solar-relation-calc">—</p></details></article>
           </div>
         </section>
 
@@ -1672,11 +1672,11 @@
         $("#personal-year-value").textContent=`${py.number} · ${PERSONAL[py.number][0]}`; $("#personal-year-copy").textContent=PERSONAL[py.number][1]; $("#personal-year-calc").textContent=py.expression;
         $("#universal-year-value").textContent=`${uy.number} · ${PERSONAL[uy.number][0]}`; $("#universal-year-copy").textContent=PERSONAL[uy.number][1]; $("#universal-year-calc").textContent=uy.expression;
         $("#relation-value").textContent=`${currentChinese.animal} de ${currentChinese.element} · ${currentChinese.polarity}`;
-        $("#relation-copy").textContent=`${elementRelation.copy} ${currentChinese.polarity}: ${POLARITY_TONE[currentChinese.polarity]}.`;
-        $("#relation-calc").textContent=`Año actual: ${currentChinese.effective} → ${currentChinese.animal}, ${currentChinese.element}, ${currentChinese.polarity}. Natal: ${natalChinese.effective} → ${natalChinese.animal}, ${natalChinese.element}, ${natalChinese.polarity}. Elementos: ${elementRelation.rule}. Animales: ${relation.copy}`;
-        $("#solar-relation-value").textContent=sunRelation.label;
-        $("#solar-relation-copy").textContent=sunRelation.copy;
-        $("#solar-relation-calc").textContent=`Fecha consultada: ${isoDate(target)} → ${currentSun[0]}, ${currentSun[1]}, ${currentSun[2]}. Fecha natal: ${isoDate(birth)} → ${natalSun[0]}, ${natalSun[1]}, ${natalSun[2]}. ${sunRelation.modality} Comparación tropical por fecha; no calcula grados ni aspectos planetarios.`;
+        $("#relation-copy").textContent=`El fondo del año es ${currentChinese.element}: ${CHINESE_ELEMENT_TONE[currentChinese.element]} como clima compartido. El ${currentChinese.animal} aporta el tema de su trino: ${chineseAnimalTone(currentChinese.animal)}. ${currentChinese.polarity}: ${POLARITY_TONE[currentChinese.polarity]}.`;
+        $("#relation-calc").textContent=`Cómo se combina contigo: ${elementRelation.copy} ${relation.copy} Cálculo — año actual: ${currentChinese.effective} → ${currentChinese.animal}, ${currentChinese.element}, ${currentChinese.polarity}. Natal: ${natalChinese.effective} → ${natalChinese.animal}, ${natalChinese.element}, ${natalChinese.polarity}. Elementos: ${elementRelation.rule}.`;
+        $("#solar-relation-value").textContent=`Sol en ${currentSun[0]} · ${currentSun[1]}`;
+        $("#solar-relation-copy").textContent=`La temporada corre con Sol en ${currentSun[0]}: ${ELEMENT_LANGUAGE[currentSun[1]]} como tono del mes, en modo ${currentSun[2].toLowerCase()}.`;
+        $("#solar-relation-calc").textContent=`Cómo se combina contigo: ${sunRelation.copy} (${sunRelation.label.replace(/^Sol en [^·]+· /,"")}). Cálculo — fecha consultada: ${isoDate(target)} → ${currentSun[0]}, ${currentSun[1]}, ${currentSun[2]}. Fecha natal: ${isoDate(birth)} → ${natalSun[0]}, ${natalSun[1]}, ${natalSun[2]}. ${sunRelation.modality} Comparación tropical por fecha; no calcula grados ni aspectos planetarios.`;
 
         $("#score").textContent="Tema + ritmo";
         $("#score-copy").textContent=`El año personal define el tema “${centralKey}”. La ${phase.name.toLowerCase()} solo modifica cómo trabajarlo durante este período. Las otras capas aportan contexto, no votos.`;
