@@ -1357,32 +1357,70 @@
         const ctx=canvas.getContext("2d"); ctx.scale(ratio,ratio);
         const css=getComputedStyle(document.documentElement);
         const colors={direct:css.getPropertyValue("--matrix-direct").trim(),positive:css.getPropertyValue("--matrix-positive").trim(),negative:css.getPropertyValue("--matrix-negative").trim(),neutral:css.getPropertyValue("--matrix-neutral").trim()};
-        const ink=css.getPropertyValue("--ink").trim(), paper=css.getPropertyValue("--paper-2").trim();
-        const radius=Math.max(28,Math.min(36,size*.085));
-        edges.forEach(edge=>{
-          const a=positions[edge[0]],b=positions[edge[1]],type=edge[2];
-          const ax=a[0]*size,ay=a[1]*size,bx=b[0]*size,by=b[1]*size;
-          const angle=Math.atan2(by-ay,bx-ax),ux=Math.cos(angle),uy=Math.sin(angle);
-          const startX=directed?ax+ux*(radius+11):ax,startY=directed?ay+uy*(radius+11):ay;
-          const endX=directed?bx-ux*(radius+11):bx,endY=directed?by-uy*(radius+11):by;
-          ctx.beginPath(); ctx.moveTo(startX,startY); ctx.lineTo(endX,endY);
-          ctx.strokeStyle=colors[type]; ctx.lineWidth=type==="positive"?3:2;
-          ctx.setLineDash(type==="negative"?[8,6]:type==="neutral"?[2,5]:[]); ctx.stroke();
-          if(directed){
-            const head=10,wing=5;
-            ctx.setLineDash([]); ctx.beginPath(); ctx.moveTo(endX,endY);
-            ctx.lineTo(endX-ux*head-uy*wing,endY-uy*head+ux*wing);
-            ctx.lineTo(endX-ux*head+uy*wing,endY-uy*head-ux*wing);
-            ctx.closePath(); ctx.fillStyle=colors[type]; ctx.fill();
+        const ink=css.getPropertyValue("--ink").trim(), paper=css.getPropertyValue("--paper-2").trim(), guide=css.getPropertyValue("--line").trim();
+        const mono=css.getPropertyValue("--mono").trim()||"monospace";
+        const radius=Math.max(30,Math.min(40,size*.093));
+        const hi=nodes.indexOf(highlightedNode);
+        const pts=positions.map(p=>[p[0]*size,p[1]*size]);
+        let cx=0,cy=0; pts.forEach(p=>{cx+=p[0];cy+=p[1];}); cx/=pts.length; cy/=pts.length;
+        const R=Math.hypot(pts[0][0]-cx,pts[0][1]-cy);
+        const touches=edge=>hi<0||edge[0]===hi||edge[1]===hi;
+        const arrowHead=(x,y,dx,dy,color)=>{
+          const len=Math.hypot(dx,dy)||1,ux=dx/len,uy=dy/len,head=13,wing=6.5;
+          ctx.setLineDash([]); ctx.beginPath(); ctx.moveTo(x,y);
+          ctx.lineTo(x-ux*head-uy*wing,y-uy*head+ux*wing);
+          ctx.lineTo(x-ux*head+uy*wing,y-uy*head-ux*wing);
+          ctx.closePath(); ctx.fillStyle=color; ctx.fill();
+        };
+        if(directed){
+          ctx.globalAlpha=.4; ctx.beginPath(); ctx.arc(cx,cy,R,0,Math.PI*2);
+          ctx.strokeStyle=guide; ctx.lineWidth=1; ctx.setLineDash([]); ctx.stroke(); ctx.globalAlpha=1;
+        }
+        [...edges].sort((a,b)=>Number(touches(a))-Number(touches(b))).forEach(edge=>{
+          const emphasized=touches(edge),type=edge[2],color=colors[type];
+          ctx.globalAlpha=emphasized?1:.16;
+          if(directed&&type==="positive"){
+            const a=Math.atan2(pts[edge[0]][1]-cy,pts[edge[0]][0]-cx);
+            let b=Math.atan2(pts[edge[1]][1]-cy,pts[edge[1]][0]-cx);
+            while(b<=a)b+=Math.PI*2;
+            const gapA=(radius+10)/R,gapB=(radius+16)/R,start=a+gapA,end=b-gapB;
+            ctx.beginPath(); ctx.setLineDash([]);
+            ctx.arc(cx,cy,R,start,end,false);
+            ctx.strokeStyle=color; ctx.lineWidth=emphasized?3:2; ctx.stroke();
+            arrowHead(cx+R*Math.cos(end),cy+R*Math.sin(end),-Math.sin(end),Math.cos(end),color);
+          } else {
+            const [ax,ay]=pts[edge[0]],[bx,by]=pts[edge[1]];
+            const ang=Math.atan2(by-ay,bx-ax),ux=Math.cos(ang),uy=Math.sin(ang);
+            const trim=radius+(directed?14:0);
+            const sx=directed?ax+ux*trim:ax,sy=directed?ay+uy*trim:ay;
+            const ex=directed?bx-ux*trim:bx,ey=directed?by-uy*trim:by;
+            ctx.beginPath(); ctx.moveTo(sx,sy); ctx.lineTo(ex,ey);
+            ctx.strokeStyle=color; ctx.lineWidth=type==="positive"?3:2;
+            ctx.setLineDash(type==="negative"?[8,6]:type==="neutral"?[3,5]:[]); ctx.stroke();
+            if(directed)arrowHead(ex,ey,ux,uy,color);
           }
         });
-        ctx.setLineDash([]);
+        ctx.globalAlpha=1; ctx.setLineDash([]);
+        const GLYPHS={Fuego:"up",Aire:"upbar",Agua:"down",Tierra:"downbar"};
         positions.forEach((position,index)=>{
           const x=position[0]*size,y=position[1]*size;
-          const highlighted=nodes[index]===highlightedNode;
-          if(highlighted){ctx.beginPath();ctx.arc(x,y,radius+7,0,Math.PI*2);ctx.strokeStyle=colors.direct;ctx.lineWidth=4;ctx.stroke();}
-          ctx.beginPath(); ctx.arc(x,y,radius,0,Math.PI*2); ctx.fillStyle=highlighted?colors.direct:paper; ctx.fill(); ctx.strokeStyle=highlighted?colors.direct:ink; ctx.lineWidth=1.5; ctx.stroke();
-          ctx.fillStyle=highlighted?paper:ink; ctx.font=`${highlighted?"700":"500"} ${Math.max(11,Math.min(14,size*.032))}px ${getComputedStyle(document.body).fontFamily}`; ctx.textAlign="center"; ctx.textBaseline="middle"; ctx.fillText(nodes[index],x,y);
+          const highlighted=index===hi;
+          if(highlighted){ctx.beginPath();ctx.arc(x,y,radius+6,0,Math.PI*2);ctx.strokeStyle=colors.direct;ctx.lineWidth=3.5;ctx.stroke();}
+          ctx.beginPath(); ctx.arc(x,y,radius,0,Math.PI*2); ctx.fillStyle=highlighted?ink:paper; ctx.fill(); ctx.strokeStyle=highlighted?colors.direct:ink; ctx.lineWidth=1.5; ctx.stroke();
+          const glyph=!directed?GLYPHS[nodes[index]]:null;
+          const stroke=highlighted?paper:ink;
+          if(glyph){
+            const g=7.5,gy=y-9;
+            ctx.beginPath();
+            if(glyph.startsWith("up")){ctx.moveTo(x,gy-g);ctx.lineTo(x+g,gy+g*.75);ctx.lineTo(x-g,gy+g*.75);}
+            else{ctx.moveTo(x,gy+g);ctx.lineTo(x+g,gy-g*.75);ctx.lineTo(x-g,gy-g*.75);}
+            ctx.closePath(); ctx.strokeStyle=stroke; ctx.lineWidth=1.4; ctx.stroke();
+            if(glyph.endsWith("bar")){ctx.beginPath();ctx.moveTo(x-g*1.1,gy);ctx.lineTo(x+g*1.1,gy);ctx.stroke();}
+          }
+          ctx.fillStyle=stroke;
+          ctx.font=`600 ${Math.max(10,Math.min(12,size*.027))}px ${mono}`;
+          ctx.textAlign="center"; ctx.textBaseline="middle";
+          ctx.fillText(nodes[index].toUpperCase(),x,glyph?y+11:y);
         });
       }
       function drawAffinityMatrices() {

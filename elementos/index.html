@@ -225,6 +225,8 @@
     const RADIUS = 76;
     const edges = [];
 
+    const CENTER=(()=>{const pts=Object.values(POSITIONS);return [pts.reduce((s,p)=>s+p[0],0)/pts.length,pts.reduce((s,p)=>s+p[1],0)/pts.length];})();
+
     function edgePoints(from,to){
       const [x1,y1]=POSITIONS[from], [x2,y2]=POSITIONS[to];
       const dx=x2-x1, dy=y2-y1, length=Math.hypot(dx,dy);
@@ -232,15 +234,32 @@
     }
 
     function addEdge(from,to,type){
-      const [x1,y1,x2,y2]=edgePoints(from,to);
-      const line=document.createElementNS(SVG_NS,"line");
-      line.setAttribute("x1",x1); line.setAttribute("y1",y1);
-      line.setAttribute("x2",x2); line.setAttribute("y2",y2);
-      line.setAttribute("class",`edge ${type}`);
-      line.setAttribute("marker-end",`url(#arrow-${type})`);
-      line.dataset.from=from; line.dataset.to=to; line.dataset.type=type;
-      document.getElementById("edges").appendChild(line);
-      edges.push(line);
+      let shape;
+      if(type==="impulse"){
+        // El ciclo de generación se dibuja como arco exterior: curva la recta
+        // hacia afuera del centro para que el ciclo se lea como círculo.
+        const [ax,ay]=POSITIONS[from],[bx,by]=POSITIONS[to];
+        const mx=(ax+bx)/2,my=(ay+by)/2;
+        const ox=mx-CENTER[0],oy=my-CENTER[1],olen=Math.hypot(ox,oy)||1;
+        const k=64, cx=mx+ox/olen*k, cy=my+oy/olen*k;
+        const sdx=cx-ax,sdy=cy-ay,slen=Math.hypot(sdx,sdy);
+        const edx=cx-bx,edy=cy-by,elen=Math.hypot(edx,edy);
+        const sx=ax+sdx/slen*RADIUS, sy=ay+sdy/slen*RADIUS;
+        const ex=bx+edx/elen*(RADIUS+6), ey=by+edy/elen*(RADIUS+6);
+        shape=document.createElementNS(SVG_NS,"path");
+        shape.setAttribute("d",`M ${sx.toFixed(1)} ${sy.toFixed(1)} Q ${cx.toFixed(1)} ${cy.toFixed(1)} ${ex.toFixed(1)} ${ey.toFixed(1)}`);
+        shape.setAttribute("fill","none");
+      } else {
+        const [x1,y1,x2,y2]=edgePoints(from,to);
+        shape=document.createElementNS(SVG_NS,"line");
+        shape.setAttribute("x1",x1); shape.setAttribute("y1",y1);
+        shape.setAttribute("x2",x2); shape.setAttribute("y2",y2);
+      }
+      shape.setAttribute("class",`edge ${type}`);
+      shape.setAttribute("marker-end",`url(#arrow-${type})`);
+      shape.dataset.from=from; shape.dataset.to=to; shape.dataset.type=type;
+      document.getElementById("edges").appendChild(shape);
+      edges.push(shape);
     }
 
     Object.entries(ELEMENTS).forEach(([name,data])=>{
