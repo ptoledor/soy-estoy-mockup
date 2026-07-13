@@ -605,6 +605,38 @@
     .method-drawer { max-width: var(--max); margin: 0 auto 40px; }
     .method-drawer .method-list { padding: 0 18px 18px; border-top: 0; }
 
+    .circle-hero { padding-bottom: 34px; }
+    .circle-hero h1 { max-width: 18ch; }
+    .circle-hero .circle-privacy { margin-top: 18px; color: var(--green); font-family: var(--mono); font-size: 10px; letter-spacing: .06em; text-transform: uppercase; }
+    .circle-form { display: grid; grid-template-columns: minmax(180px, .7fr) minmax(180px, .7fr) auto; gap: 18px; align-items: end; }
+    .circle-summary { margin-top: 28px; }
+    .circle-empty { padding: 38px; border: 1px dashed var(--line-dark); color: var(--muted); text-align: center; }
+    .member-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; margin-top: 28px; border: 1px solid var(--line-dark); background: var(--line-dark); }
+    .member-card { position: relative; min-width: 0; padding: 24px; background: var(--paper-2); }
+    .member-card.is-primary { background: var(--ink); color: var(--paper-2); }
+    .member-card h3 { margin: 7px 0 4px; font-family: var(--serif); font-size: 28px; font-weight: 500; }
+    .member-card p { margin: 0; color: var(--muted); font-size: 12px; }
+    .member-card.is-primary p { color: #c9c8bf; }
+    .member-signals { margin-top: 20px; border-top: 1px solid var(--line); }
+    .member-card.is-primary .member-signals { border-color: #45463f; }
+    .member-signal { display: flex; justify-content: space-between; gap: 14px; padding: 9px 0; border-bottom: 1px solid var(--line); font-size: 12px; }
+    .member-card.is-primary .member-signal { border-color: #45463f; }
+    .member-signal span { color: var(--muted); font-family: var(--mono); font-size: 9px; text-transform: uppercase; }
+    .member-card.is-primary .member-signal span { color: #aaa99f; }
+    .member-remove { margin-top: 18px; padding: 0; border: 0; border-bottom: 1px solid currentColor; background: transparent; color: var(--muted); cursor: pointer; font-family: var(--mono); font-size: 9px; letter-spacing: .07em; text-transform: uppercase; }
+    .relationship-list { display: grid; gap: 18px; }
+    .relationship-card { border: 1px solid var(--line-dark); background: var(--paper-2); }
+    .relationship-head { display: flex; justify-content: space-between; gap: 24px; padding: 24px; border-bottom: 1px solid var(--line); }
+    .relationship-head h3 { margin: 4px 0 0; font-family: var(--serif); font-size: 30px; font-weight: 500; }
+    .relationship-head p { max-width: 48ch; margin: 0; color: var(--muted); font-size: 13px; }
+    .relationship-lenses { display: grid; grid-template-columns: repeat(3, 1fr); }
+    .relationship-lens { min-width: 0; padding: 22px; border-right: 1px solid var(--line); }
+    .relationship-lens:last-child { border-right: 0; }
+    .relationship-lens strong { display: block; margin: 8px 0; font-family: var(--serif); font-size: 20px; font-weight: 500; }
+    .relationship-lens p { margin: 0; color: var(--muted); font-size: 12px; }
+    .relationship-question { padding: 20px 24px; border-top: 1px solid var(--line); font-family: var(--serif); font-size: 18px; }
+    .relationship-question span { display: block; margin-bottom: 5px; color: var(--brass); font-family: var(--mono); font-size: 9px; letter-spacing: .08em; text-transform: uppercase; }
+
     footer { border-top: 1px solid var(--line); }
     .footer-inner { max-width: var(--max); margin: 0 auto; padding: 28px 24px 96px; display: flex; justify-content: space-between; gap: 24px; color: var(--muted); font-size: 12px; }
 
@@ -664,6 +696,10 @@
       .compact-action, .compact-action + .compact-action { padding: 15px 0; border-left: 0; border-bottom: 1px solid var(--line); }
       .compact-action:last-child { border-bottom: 0; }
       .single-plan .plan-field { grid-template-columns: 1fr; }
+      .circle-form, .member-grid, .relationship-lenses { grid-template-columns: 1fr; }
+      .relationship-lens { border-right: 0; border-bottom: 1px solid var(--line); }
+      .relationship-lens:last-child { border-bottom: 0; }
+      .relationship-head { align-items: flex-start; flex-direction: column; }
       .method-drawer { margin-left: 16px; margin-right: 16px; }
       .footer-inner { flex-direction: column; }
       .mobile-tabs {
@@ -673,7 +709,7 @@
         bottom: 12px;
         z-index: 30;
         display: grid;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: repeat(3, 1fr);
         border: 1px solid var(--ink);
         background: var(--paper-2);
         box-shadow: 0 8px 24px rgba(0, 0, 0, .18);
@@ -693,6 +729,7 @@
         <nav class="main-tabs" role="tablist" aria-label="Secciones del producto" hidden>
           <button class="tab" role="tab" data-view="soy" aria-selected="true">Soy</button>
           <button class="tab" role="tab" data-view="estoy" aria-selected="false">Estoy</button>
+          <button class="tab" role="tab" data-view="circulo" aria-selected="false">Mi círculo</button>
         </nav>
       </div>
     </header>
@@ -749,7 +786,7 @@
             <article class="evidence">
               <div class="evidence-top"><div><span class="micro-label">Numerología: Camino de vida</span><h3 id="life-label">—</h3></div><span class="kind">Regla</span></div>
               <p class="meaning" id="life-meaning">—</p>
-              <details><summary>Ver cuenta y criterio</summary><p class="calculation" id="life-calc">—</p><p>Suma los dígitos de la fecha completa. Conserva 11, 22 y 33 si aparecen al reducir. Otras escuelas pueden usar otra reducción.</p></details>
+              <details><summary>Ver cuenta y criterio</summary><p class="calculation" id="life-calc">—</p><p>Variante de este mockup: suma los dígitos de la fecha completa y conserva 11, 22 y 33. Goodwin reduce mes, día y año por separado y conserva 11 y 22; por eso no presentamos esta regla como universal.</p></details>
             </article>
             <article class="evidence">
               <div class="evidence-top"><div><span class="micro-label">Zodíaco occidental</span><h3 id="sun-label">—</h3></div><span class="kind">Tradición</span></div>
@@ -826,7 +863,7 @@
         <section class="section rule" aria-label="Acceso a Estoy">
           <div class="action-band solo">
             <div><h3>Soy no cambia día a día.</h3><p>Estoy pone estas señales en contexto temporal y propone un foco para el período actual.</p></div>
-            <div class="button-row"><button class="secondary" id="copy-soy" type="button">Copiar mi Soy</button><button class="primary" data-go="estoy" type="button">Accede a Estoy</button></div>
+            <div class="button-row"><button class="secondary" id="copy-soy" type="button">Copiar mi Soy</button><button class="secondary" data-go="circulo" type="button">Abrir Mi círculo</button><button class="primary" data-go="estoy" type="button">Accede a Estoy</button></div>
           </div>
         </section>
       </div>
@@ -931,6 +968,50 @@
           </ul>
         </details>
       </div>
+
+      <div class="view" id="circulo-view" role="tabpanel" hidden>
+        <header class="moment-summary circle-hero">
+          <p class="eyebrow">Mi círculo · vínculos sin veredicto</p>
+          <h1>Entiende qué trae cada persona a la relación.</h1>
+          <p>Agrega a tu pareja, familia, amistades o equipo. Comparamos las mismas señales por separado para mostrar puntos de encuentro, diferencias de ritmo y una pregunta que valga la pena conversar.</p>
+          <p class="circle-privacy">Los datos quedan en este navegador · máximo 6 personas contigo</p>
+        </header>
+
+        <section class="target-control" aria-label="Agregar una persona a Mi círculo">
+          <form class="target-inner circle-form" id="circle-form">
+            <label class="field"><span>Nombre o apodo</span><input id="circle-name" maxlength="40" autocomplete="off" required></label>
+            <label class="field"><span>Fecha de nacimiento</span><input id="circle-birth" type="date" min="1900-01-01" required></label>
+            <button class="recalculate" type="submit">Agregar al círculo</button>
+          </form>
+        </section>
+
+        <section class="section rule" aria-labelledby="circle-members-title">
+          <div class="section-head">
+            <div><p class="section-kicker">01 · El grupo</p><h2 class="section-title" id="circle-members-title">Cada persona primero.</h2></div>
+            <p class="section-intro">Antes de interpretar una relación, mantenemos visible el punto de partida de cada integrante. Nadie se reduce a “compatible” o “incompatible”.</p>
+          </div>
+          <div class="summary-grid circle-summary" id="circle-summary" aria-label="Patrones del grupo"></div>
+          <div class="member-grid" id="circle-members" aria-live="polite"></div>
+        </section>
+
+        <section class="section rule" aria-labelledby="circle-relations-title">
+          <div class="section-head">
+            <div><p class="section-kicker">02 · Lo que ocurre entre ustedes</p><h2 class="section-title" id="circle-relations-title">Tres lentes, ninguna sentencia.</h2></div>
+            <p class="section-intro">Cada integrante se compara contigo. La numerología muestra focos; el signo solar, estilos elementales; el zodíaco chino, relaciones tradicionales entre animales y fases.</p>
+          </div>
+          <div class="relationship-list" id="circle-relations"></div>
+        </section>
+
+        <details class="disclosure method-drawer">
+          <summary>Método, fuentes y límites de Mi círculo</summary>
+          <ul class="method-list">
+            <li><strong>No es sinastría completa</strong><span>Sin hora y lugar comparamos signos solares, no casas, ángulos ni aspectos entre cartas.</span></li>
+            <li><strong>No hay puntaje total</strong><span>Las tradiciones no forman una escala común validada. Mezclarlas en un porcentaje inventaría precisión.</span></li>
+            <li><strong>Fuentes</strong><span>Relaciones elementales occidentales: Forrest, PDF p. 114. Cinco fases chinas: Lau, PDF pp. 27–30. Síntesis cautelosa: Goodwin, PDF pp. 48 y 65–69.</span></li>
+            <li><strong>Interpretación editorial</strong><span>Las preguntas de conversación son redactadas por Soy / Estoy; no diagnostican ni deciden el futuro del vínculo.</span></li>
+          </ul>
+        </details>
+      </div>
     </main>
 
     <footer><div class="footer-inner"><span>Soy / Estoy · mockup de validación</span><span>Esoterismo aterrizado, calculable y honesto.</span></div></footer>
@@ -939,6 +1020,7 @@
   <nav class="mobile-tabs" role="tablist" aria-label="Secciones del producto" hidden>
     <button class="tab" role="tab" data-view="soy" aria-selected="true">Soy</button>
     <button class="tab" role="tab" data-view="estoy" aria-selected="false">Estoy</button>
+    <button class="tab" role="tab" data-view="circulo" aria-selected="false">Mi círculo</button>
   </nav>
   <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 
@@ -951,6 +1033,10 @@
       const $$ = selector => [...document.querySelectorAll(selector)];
       const pad = value => String(value).padStart(2, "0");
       const mod = (value, divisor) => ((value % divisor) + divisor) % divisor;
+      const initialView = ["soy","estoy","circulo"].includes(location.hash.slice(1)) ? location.hash.slice(1) : "soy";
+      const CIRCLE_STORAGE_KEY = "soy-estoy:circle-members:v1";
+      let circleMembers = loadCircleMembers();
+      let currentProfile = null;
 
       const LIFE = {
         1: { key: "inicio", meaning: "liderazgo, independencia e impulso creador", gift: "Abrir camino", giftCopy: "Tu recurso aparece cuando una situación necesita dirección y una primera decisión.", shadow: "No hacerlo todo solo", shadowCopy: "El impulso de liderar puede aislarte o convertir velocidad en impaciencia.", question: "¿Dónde necesitas iniciar y dónde te conviene pedir compañía?" },
@@ -1248,7 +1334,7 @@
           if (boundary) { effective = md >= boundary[0]*100+boundary[1] ? year : year-1; note = `Año Nuevo chino ${year}: ${pad(boundary[1])}/${pad(boundary[0])}.`; }
           else { approximate = true; note = "Fecha entre 21 de enero y 20 de febrero fuera de la tabla disponible; se usa el año gregoriano como aproximación."; }
         }
-        return { effective, animal:ANIMALS[mod(effective-4,12)], element:ELEMENTS[Math.floor(mod(effective-4,10)/2)], polarity:effective%2===0?"Yang":"Yin", approximate, note, shifted: effective !== year, boundaryLabel };
+        return { effective, animal:ANIMALS[mod(effective-4,12)], element:ELEMENTS[Math.floor(mod(effective-4,10)/2)], polarity:effective%2===0?"Yang":"Yin", approximate, note, shifted:effective!==year, boundaryLabel };
       }
       function chineseRelation(natal, current) {
         if (natal.animal === current.animal) return { label:"Año propio", key:"revisión", copy:"El mismo animal reaparece: la tradición lo lee como revisión de identidad, ritmo y decisiones." };
@@ -1317,6 +1403,77 @@
       }
       function personalYear(birth, target) { return traceDigits(`${pad(birth.getUTCDate())}${pad(birth.getUTCMonth()+1)}${target.getUTCFullYear()}`, false); }
       function universalYear(target) { return traceDigits(String(target.getUTCFullYear()), false); }
+
+      function loadCircleMembers() {
+        try {
+          const parsed=JSON.parse(localStorage.getItem(CIRCLE_STORAGE_KEY)||"[]");
+          return Array.isArray(parsed)?parsed.filter(member=>member&&typeof member.name==="string"&&/^\d{4}-\d{2}-\d{2}$/.test(member.birth)).slice(0,5):[];
+        } catch { return []; }
+      }
+      function saveCircleMembers() {
+        try { localStorage.setItem(CIRCLE_STORAGE_KEY,JSON.stringify(circleMembers)); } catch { /* El mockup sigue funcionando sin persistencia. */ }
+      }
+      function escapeHTML(value) {
+        return String(value).replace(/[&<>"']/g,character=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[character]);
+      }
+      function personSnapshot(name,birth,isPrimary=false) {
+        const life=traceDigits(`${pad(birth.getUTCDate())}${pad(birth.getUTCMonth()+1)}${birth.getUTCFullYear()}`,true);
+        return {name,birth,isPrimary,life,profile:LIFE[life.number],sun:western(birth),chin:chinese(birth)};
+      }
+      function repeatedSignal(values,label) {
+        if(values.length<2)return {strong:"Agrega otra persona",note:`Aún no hay grupo para comparar ${label}.`};
+        const counts=values.reduce((map,value)=>map.set(value,(map.get(value)||0)+1),new Map());
+        const max=Math.max(...counts.values()),leaders=[...counts].filter(([,count])=>count===max).map(([value])=>String(value));
+        if(max<2)return {strong:"Sin repetición",note:`Cada persona trae un ${label} distinto. No forzamos un patrón común.`};
+        return {strong:joinSpanish(leaders),note:`${max} de ${values.length} personas comparten este ${label}. Es una repetición descriptiva, no una conclusión sobre el grupo.`};
+      }
+      function westernPair(first,second) {
+        const source=first.sun[1],target=second.sun[1],relations=WESTERN_ELEMENT_RELATIONS[source];
+        if(source===target)return {label:"Afinidad directa",copy:`Comparten ${source}: puede ser más fácil reconocer el estilo del otro, aunque también pueden repetir el mismo punto ciego.`,question:"¿Qué comprenden rápido entre ustedes y qué podrían estar dando por obvio?"};
+        if(relations.complement===target)return {label:"Complementaria",copy:`${source} y ${target} forman una pareja complementaria en esta lente elemental. La diferencia puede aportar algo que al otro le cuesta sostener.`,question:"¿Qué aporta cada persona que la otra necesita sin pedirle que cambie su naturaleza?"};
+        if(relations.adjust===target)return {label:"Requiere ajuste",copy:`${source} y ${target} operan con prioridades distintas. El punto útil no es decidir quién tiene razón, sino traducir ritmo y expectativas.`,question:"¿Qué expectativa necesita volverse explícita para no terminar en malentendido?"};
+        return {label:"Tensión fuerte",copy:`${source} y ${target} parten de instintos elementales muy distintos en esta simplificación solar. La diferencia pide negociación, no corrección mutua.`,question:"¿Qué diferencia de ritmo necesitan negociar en vez de intentar corregir?"};
+      }
+      function chineseAnimalPair(first,second) {
+        if(first.animal===second.animal)return {label:"Mismo animal",copy:`Comparten ${first.animal}; la tradición repite un mismo repertorio simbólico, sin garantizar que actúen igual.`};
+        if(OPPOSITES[first.animal]===second.animal)return {label:"Oposición",copy:`${first.animal} y ${second.animal} se oponen en el ciclo. Lo usamos para observar diferencias de ritmo, no para pronosticar conflicto.`};
+        if(TRINES.some(group=>group.includes(first.animal)&&group.includes(second.animal)))return {label:"Mismo trino",copy:`${first.animal} y ${second.animal} pertenecen al mismo trino; la tradición propone afinidad de impulso y cooperación.`};
+        return {label:"Sin relación marcada",copy:`La tabla no marca mismo animal, oposición ni trino entre ${first.animal} y ${second.animal}. No inventamos una lectura adicional.`};
+      }
+      function chinesePhasePair(first,second) {
+        const a=first.element,b=second.element;
+        if(a===b)return {label:`${a} compartido`,copy:`Ambas personas repiten ${a}; puede intensificarse ${CHINESE_ELEMENT_TONE[a]} y también su exceso: ${CHINESE_ELEMENT_VICE[a]}.`};
+        if(CHINESE_IMPULSE[a]===b)return {label:`${a} impulsa ${b}`,copy:`En el ciclo tradicional, ${a} fomenta ${b}. Esto describe una dirección simbólica entre fases, no quién domina el vínculo.`};
+        if(CHINESE_IMPULSE[b]===a)return {label:`${b} impulsa ${a}`,copy:`En el ciclo tradicional, ${b} fomenta ${a}. Esto describe una dirección simbólica entre fases, no quién domina el vínculo.`};
+        if(CHINESE_REGULATION[a]===b)return {label:`${a} regula ${b}`,copy:`En el ciclo tradicional, ${a} regula ${b}. En lenguaje editorial: una virtud de ${a} puede ayudar a moderar un exceso de ${b}.`};
+        return {label:`${b} regula ${a}`,copy:`En el ciclo tradicional, ${b} regula ${a}. En lenguaje editorial: una virtud de ${b} puede ayudar a moderar un exceso de ${a}.`};
+      }
+      function numerologyPair(first,second) {
+        if(first.life.number===second.life.number)return {label:`Camino ${first.life.number} compartido`,copy:`Ambas lecturas priorizan ${first.profile.meaning}. Eso puede facilitar reconocimiento y también amplificar una tensión parecida: ${first.profile.shadow.toLowerCase()}.`};
+        return {label:`Caminos ${first.life.number} y ${second.life.number}`,copy:`${first.name} aporta “${first.profile.gift.toLowerCase()}”; ${second.name}, “${second.profile.gift.toLowerCase()}”. La diferencia describe focos, no una jerarquía ni un pronóstico.`};
+      }
+      function memberCard(person,index) {
+        const remove=person.isPrimary?"":`<button class="member-remove" type="button" data-circle-remove="${index}">Quitar del círculo</button>`;
+        return `<article class="member-card${person.isPrimary?" is-primary":""}"><span class="micro-label">${person.isPrimary?"Tu perfil":"Integrante"}</span><h3>${escapeHTML(person.name)}</h3><p>${escapeHTML(isoDate(person.birth))}</p><div class="member-signals"><div class="member-signal"><span>Camino</span><strong>${person.life.number} · ${escapeHTML(person.profile.gift)}</strong></div><div class="member-signal"><span>Solar</span><strong>${person.sun[0]} · ${person.sun[1]}</strong></div><div class="member-signal"><span>Chino</span><strong>${person.chin.animal} · ${person.chin.element}</strong></div></div>${remove}</article>`;
+      }
+      function relationshipCard(primary,member) {
+        const westernRelation=westernPair(primary,member),animalRelation=chineseAnimalPair(primary.chin,member.chin),phaseRelation=chinesePhasePair(primary.chin,member.chin),numberRelation=numerologyPair(primary,member);
+        return `<article class="relationship-card"><div class="relationship-head"><div><span class="micro-label">${escapeHTML(primary.name)} + ${escapeHTML(member.name)}</span><h3>Una relación, tres lecturas</h3></div><p>No se promedian. Cada lente responde una pregunta distinta y conserva su límite.</p></div><div class="relationship-lenses"><div class="relationship-lens"><span class="micro-label">Numerología · variante</span><strong>${escapeHTML(numberRelation.label)}</strong><p>${escapeHTML(numberRelation.copy)}</p></div><div class="relationship-lens"><span class="micro-label">Elementos solares</span><strong>${escapeHTML(westernRelation.label)}</strong><p>${escapeHTML(westernRelation.copy)}</p></div><div class="relationship-lens"><span class="micro-label">Tradición china</span><strong>${escapeHTML(animalRelation.label)} · ${escapeHTML(phaseRelation.label)}</strong><p>${escapeHTML(animalRelation.copy)} ${escapeHTML(phaseRelation.copy)}</p></div></div><div class="relationship-question"><span>Para conversar</span>${escapeHTML(westernRelation.question)}</div></article>`;
+      }
+      function renderCircle() {
+        if(!currentProfile)return;
+        const primary=personSnapshot(currentProfile.name,currentProfile.birth,true);
+        const additional=circleMembers.map(member=>personSnapshot(member.name,parseDate(member.birth)));
+        const people=[primary,...additional];
+        const summaries=[
+          ["Elementos solares",repeatedSignal(people.map(person=>person.sun[1]),"elemento solar")],
+          ["Fases chinas",repeatedSignal(people.map(person=>person.chin.element),"fase china")],
+          ["Caminos de vida",repeatedSignal(people.map(person=>person.life.number),"camino de vida")]
+        ];
+        $("#circle-summary").innerHTML=summaries.map(([label,result])=>`<div class="summary-item"><span class="micro-label">${label}</span><strong>${escapeHTML(result.strong)}</strong><span>${escapeHTML(result.note)}</span></div>`).join("");
+        $("#circle-members").innerHTML=people.map((person,index)=>memberCard(person,index-1)).join("");
+        $("#circle-relations").innerHTML=additional.length?additional.map(member=>relationshipCard(primary,member)).join(""):`<div class="circle-empty"><strong>Tu perfil ya es el punto de partida.</strong><br>Agrega a otra persona para abrir una comparación sin puntaje.</div>`;
+      }
 
       function renderSoy(birth, name) {
         const life=traceDigits(`${pad(birth.getUTCDate())}${pad(birth.getUTCMonth()+1)}${birth.getUTCFullYear()}`, true), profile=LIFE[life.number];
@@ -1422,16 +1579,18 @@
       }
 
       function setView(view, scroll=true) {
-        const isSoy=view==="soy"; $("#soy-view").hidden=!isSoy; $("#estoy-view").hidden=isSoy;
+        if(!["soy","estoy","circulo"].includes(view))view="soy";
+        $$(".view").forEach(panel=>panel.hidden=panel.id!==`${view}-view`);
         $$('[data-view]').forEach(button=>button.setAttribute("aria-selected",String(button.dataset.view===view)));
-        if(isSoy)requestAnimationFrame(drawAffinityMatrices);
+        if(view==="soy")requestAnimationFrame(drawAffinityMatrices);
         history.replaceState(null,"",`#${view}`); if(scroll) window.scrollTo({top:0,behavior:"smooth"});
       }
       function toast(message) { const node=$("#toast"); node.textContent=message; node.hidden=false; clearTimeout(toast.timer); toast.timer=setTimeout(()=>node.hidden=true,3200); }
       function renderAll() {
         const birth=parseDate($("#birth").value), target=parseDate($("#target").value), name=$("#name").value.trim()||"Tu lectura";
         if(Number.isNaN(birth.getTime())||Number.isNaN(target.getTime())) return;
-        renderSoy(birth,name); renderEstoy(birth,target,name);
+        currentProfile={birth,name};
+        renderSoy(birth,name); renderEstoy(birth,target,name); renderCircle();
       }
       function revealProduct() {
         document.body.classList.add("profile-ready");
@@ -1444,10 +1603,25 @@
       $("#profile-form").addEventListener("submit",event=>{
         event.preventDefault();
         const firstReading=!document.body.classList.contains("profile-ready");
-        renderAll(); revealProduct(); setView("soy");
+        const selected=$$('[data-view][aria-selected="true"]')[0]?.dataset.view||"soy";
+        renderAll(); revealProduct(); setView(firstReading?initialView:selected);
         toast(firstReading?"Tu Soy está listo.":"Tu Soy fue actualizado.");
       });
       $("#target-form").addEventListener("submit",event=>{event.preventDefault();renderAll();setView("estoy");toast("Estoy actualizado para la fecha elegida.");});
+      $("#circle-form").addEventListener("submit",event=>{
+        event.preventDefault();
+        if(circleMembers.length>=5){toast("Tu círculo ya tiene el máximo de 6 personas contigo.");return;}
+        const name=$("#circle-name").value.trim(),birth=$("#circle-birth").value;
+        if(!name||!/^\d{4}-\d{2}-\d{2}$/.test(birth))return;
+        circleMembers.push({name,birth});saveCircleMembers();renderCircle();
+        event.currentTarget.reset();
+        toast(`${name} fue agregado a tu círculo.`);
+      });
+      $("#circle-members").addEventListener("click",event=>{
+        const button=event.target.closest("[data-circle-remove]");if(!button)return;
+        const index=Number(button.dataset.circleRemove),removed=circleMembers[index];
+        if(!removed)return;circleMembers.splice(index,1);saveCircleMembers();renderCircle();toast(`${removed.name} fue quitado del círculo.`);
+      });
       $$('[data-view]').forEach(button=>button.addEventListener("click",()=>setView(button.dataset.view)));
       $$('[data-go]').forEach(button=>button.addEventListener("click",()=>setView(button.dataset.go)));
       $("#copy-soy").addEventListener("click",async()=>{
