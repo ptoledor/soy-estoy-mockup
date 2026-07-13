@@ -14,6 +14,7 @@
       --line: #c9c5b8;
       --brass: #8d6417;
       --green: #2f6b4f;
+      --neutral: #77776f;
       --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
       --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       --mono: "Cascadia Code", "SFMono-Regular", Consolas, monospace;
@@ -51,8 +52,8 @@
 
     .legend { display: flex; flex-wrap: wrap; gap: 14px 20px; margin: 20px 0 14px; }
     .legend span { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; }
-    .legend i { width: 34px; border-top: 3px solid var(--brass); }
-    .legend .regulation i { border-color: var(--green); border-top-style: dashed; }
+    .legend i { width: 34px; border-top: 3px solid var(--green); }
+    .legend .regulation i { border-color: var(--neutral); }
 
     .selectors {
       display: grid;
@@ -80,8 +81,8 @@
       touch-action: manipulation;
     }
     .edge { transition: opacity .18s ease, stroke-width .18s ease; }
-    .edge.impulse { stroke: var(--brass); stroke-width: 4; }
-    .edge.regulation { stroke: var(--green); stroke-width: 4; stroke-dasharray: 11 9; }
+    .edge.impulse { stroke: var(--green); stroke-width: 4; }
+    .edge.regulation { stroke: var(--neutral); stroke-width: 4; }
     .edge.is-muted { opacity: .13; }
     .edge.is-active { stroke-width: 7; opacity: 1; }
     .node { cursor: pointer; }
@@ -168,10 +169,10 @@
       <desc id="diagram-desc">El pentágono exterior muestra el ciclo de impulso y la estrella interior el ciclo de regulación.</desc>
       <defs>
         <marker id="arrow-impulse" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
-          <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--brass)"></path>
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--green)"></path>
         </marker>
         <marker id="arrow-regulation" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
-          <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--green)"></path>
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--neutral)"></path>
         </marker>
       </defs>
       <g id="edges" aria-hidden="true"></g>
@@ -211,11 +212,11 @@
 
   <script>
     const ELEMENTS = {
-      Madera: {main:"Crecimiento", impulse:"Vitalidad", regulation:"Renovación", vice:"Dispersión", impulseTarget:"Fuego", regulationTarget:"Tierra"},
-      Fuego: {main:"Acción", impulse:"Transformación", regulation:"Dinamismo", vice:"Impulsividad", impulseTarget:"Tierra", regulationTarget:"Metal"},
-      Tierra: {main:"Estabilidad", impulse:"Apoyo", regulation:"Contención", vice:"Inmovilidad", impulseTarget:"Metal", regulationTarget:"Agua"},
-      Metal: {main:"Estructura", impulse:"Criterio", regulation:"Límite", vice:"Rigidez", impulseTarget:"Agua", regulationTarget:"Madera"},
-      Agua: {main:"Adaptación", impulse:"Nutrición", regulation:"Calma", vice:"Sobreadaptación", impulseTarget:"Madera", regulationTarget:"Fuego"}
+      Madera: {main:"Crecimiento", impulse:"Vitalidad", regulation:"Renovación", vice:"Dispersión", impulseTarget:"Fuego", regulationTarget:"Tierra", impulseCopy:"El crecimiento abre posibilidades que el Fuego puede convertir en acción.", regulationCopy:"Cuando la estabilidad se vuelve inmovilidad, la renovación obliga a revisar lo estancado."},
+      Fuego: {main:"Acción", impulse:"Transformación", regulation:"Dinamismo", vice:"Impulsividad", impulseTarget:"Tierra", regulationTarget:"Metal", impulseCopy:"La acción deja experiencia y resultados que pueden volverse una base estable.", regulationCopy:"Cuando la estructura se vuelve rigidez, el dinamismo la pone de nuevo en movimiento."},
+      Tierra: {main:"Estabilidad", impulse:"Apoyo", regulation:"Contención", vice:"Inmovilidad", impulseTarget:"Metal", regulationTarget:"Agua", impulseCopy:"Una base estable da apoyo para ordenar, delimitar y decidir.", regulationCopy:"Cuando adaptarse se vuelve acomodarse a todo, la contención ofrece borde y apoyo."},
+      Metal: {main:"Estructura", impulse:"Criterio", regulation:"Límite", vice:"Rigidez", impulseTarget:"Agua", regulationTarget:"Madera", impulseCopy:"Una estructura clara da criterio para adaptarse sin perder dirección.", regulationCopy:"Cuando crecer se vuelve dispersarse, el límite poda frentes y devuelve dirección."},
+      Agua: {main:"Adaptación", impulse:"Nutrición", regulation:"Calma", vice:"Sobreadaptación", impulseTarget:"Madera", regulationTarget:"Fuego", impulseCopy:"La nutrición sostiene el crecimiento y evita que dependa solo del empuje.", regulationCopy:"Cuando actuar se vuelve impulsividad, la calma baja intensidad sin apagar la acción."}
     };
     const POSITIONS = {
       Madera:[360,82], Fuego:[616,278], Tierra:[518,584], Metal:[202,584], Agua:[104,278]
@@ -270,10 +271,10 @@
       document.getElementById("attr-impulse").textContent=data.impulse;
       document.getElementById("attr-regulation").textContent=data.regulation;
       document.getElementById("attr-vice").textContent=data.vice;
-      document.getElementById("incoming-impulse").innerHTML=`<strong>${impulseSource}</strong> aporta ${lower(ELEMENTS[impulseSource].impulse)} para fomentar tu ${lower(data.main)}.`;
-      document.getElementById("incoming-regulation").innerHTML=`<strong>${regulationSource}</strong> aporta ${lower(ELEMENTS[regulationSource].regulation)} para corregir tu ${lower(data.vice)}.`;
-      document.getElementById("outgoing-impulse").innerHTML=`Tu ${lower(data.impulse)} fomenta la ${lower(ELEMENTS[data.impulseTarget].main)} de <strong>${data.impulseTarget}</strong>.`;
-      document.getElementById("outgoing-regulation").innerHTML=`Tu ${lower(data.regulation)} corrige la ${lower(ELEMENTS[data.regulationTarget].vice)} de <strong>${data.regulationTarget}</strong>.`;
+      document.getElementById("incoming-impulse").innerHTML=`<strong>${impulseSource}</strong>: ${ELEMENTS[impulseSource].impulseCopy}`;
+      document.getElementById("incoming-regulation").innerHTML=`<strong>${regulationSource}</strong>: ${ELEMENTS[regulationSource].regulationCopy}`;
+      document.getElementById("outgoing-impulse").innerHTML=`<strong>${name} → ${data.impulseTarget}</strong>: ${data.impulseCopy}`;
+      document.getElementById("outgoing-regulation").innerHTML=`<strong>${name} → ${data.regulationTarget}</strong>: ${data.regulationCopy}`;
     }
 
     document.querySelectorAll("[data-select]").forEach(button=>button.addEventListener("click",()=>render(button.dataset.select)));
