@@ -98,14 +98,14 @@
     }
     .main-tabs { display: flex; align-self: stretch; }
     .tab {
-      min-width: 112px;
+      min-width: 88px;
       border: 0;
       border-left: 1px solid var(--line);
-      padding: 0 20px;
+      padding: 0 12px;
       background: transparent;
       cursor: pointer;
       font-family: var(--mono);
-      font-size: 12px;
+      font-size: 11px;
       text-transform: uppercase;
       letter-spacing: .12em;
     }
@@ -371,6 +371,11 @@
     .matrix-figure h3 { margin: 0 0 4px; font-family: var(--serif); font-size: 24px; font-weight: 500; }
     .matrix-figure > p { margin: 0; color: var(--muted); font-size: 12px; }
     .matrix-canvas { display: block; max-width: 100%; aspect-ratio: 1; margin: 12px auto; }
+    .matrix-canvas[data-wiki-matrix] { cursor: pointer; touch-action: manipulation; }
+    .matrix-selectors { display: grid; grid-template-columns: repeat(var(--selector-count), minmax(0, 1fr)); gap: 6px; margin: 16px 0 8px; }
+    .matrix-selector { min-height: 36px; border: 1px solid var(--line); padding: 6px 4px; background: var(--paper-2); cursor: pointer; font-family: var(--mono); font-size: 9px; letter-spacing: .04em; text-transform: uppercase; }
+    .matrix-selector[aria-pressed="true"] { border-color: var(--ink); background: var(--ink); color: var(--paper-2); }
+    .matrix-reading { min-height: 54px; margin: 8px 0 18px; padding: 12px 14px; border-left: 2px solid var(--brass); background: var(--paper); color: var(--muted); font-size: 11px; line-height: 1.55; }
     .matrix-caption { display: block; min-height: 38px; }
     .affinity-gloss .trait-list { margin-top: 16px; }
     .affinity-gloss .trait-row { grid-template-columns: 82px 1fr; }
@@ -396,6 +401,7 @@
     }
     .action-band h3 { margin: 0 0 5px; font-family: var(--serif); font-size: 25px; font-weight: 500; }
     .action-band p { margin: 0; color: var(--muted); font-size: 14px; }
+    .action-band .share-note { margin-top: 8px; font-family: var(--mono); font-size: 9px; letter-spacing: .04em; text-transform: uppercase; }
     .action-band.solo { margin-top: 0; }
     .button-row { display: flex; flex-wrap: wrap; gap: 10px; }
     .primary, .secondary {
@@ -667,7 +673,11 @@
     .member-card.is-primary .member-signal { border-color: #45463f; }
     .member-signal span { color: var(--muted); font-family: var(--mono); font-size: 9px; text-transform: uppercase; }
     .member-card.is-primary .member-signal span { color: #aaa99f; }
-    .member-remove { margin-top: 18px; padding: 0; border: 0; border-bottom: 1px solid currentColor; background: transparent; color: var(--muted); cursor: pointer; font-family: var(--mono); font-size: 9px; letter-spacing: .07em; text-transform: uppercase; }
+    .member-actions { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 18px; }
+    .member-share, .member-remove { padding: 0; border: 0; border-bottom: 1px solid currentColor; background: transparent; color: var(--muted); cursor: pointer; font-family: var(--mono); font-size: 9px; letter-spacing: .07em; text-transform: uppercase; }
+    .member-share { color: var(--brass); }
+    .member-card.is-primary .member-share { color: #d7b875; }
+    .member-card.is-primary .member-remove { color: #c9c8bf; }
     .relationship-list { display: grid; gap: 18px; }
     .relationship-card { border: 1px solid var(--line-dark); background: var(--paper-2); }
     .relationship-head { display: flex; justify-content: space-between; gap: 24px; padding: 24px; border-bottom: 1px solid var(--line); }
@@ -697,6 +707,192 @@
       font-size: 13px;
       box-shadow: 0 12px 30px rgba(0, 0, 0, .2);
     }
+    .share-dialog { width: min(620px, calc(100vw - 32px)); padding: 0; border: 1px solid var(--ink); background: var(--paper-2); color: var(--ink); }
+    .share-dialog::backdrop { background: rgba(23, 24, 18, .62); }
+    .share-panel { padding: 28px; }
+    .share-dialog-head { display: flex; justify-content: space-between; gap: 24px; align-items: start; }
+    .share-dialog-head h2 { margin: 4px 0 6px; font-family: var(--serif); font-size: 30px; font-weight: 500; }
+    .share-dialog-head p { margin: 0; color: var(--muted); font-size: 13px; }
+    .share-close { padding: 4px 0; border: 0; border-bottom: 1px solid currentColor; background: transparent; cursor: pointer; font-family: var(--mono); font-size: 9px; text-transform: uppercase; letter-spacing: .07em; }
+    .share-options { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 24px; }
+    .share-option { min-height: 142px; padding: 18px; border: 1px solid var(--line-dark); background: transparent; cursor: pointer; text-align: left; }
+    .share-option:hover { border-color: var(--brass); }
+    .share-option strong { display: block; margin-bottom: 8px; font-family: var(--serif); font-size: 21px; font-weight: 500; }
+    .share-option span { display: block; color: var(--muted); font-size: 12px; line-height: 1.5; }
+    .share-warning { margin: 16px 0 0; color: var(--red); font-family: var(--mono); font-size: 9px; letter-spacing: .04em; text-transform: uppercase; }
+
+    .checkout-dialog { width: min(560px, calc(100vw - 32px)); padding: 0; border: 1px solid var(--ink); background: var(--paper-2); color: var(--ink); }
+    .checkout-dialog::backdrop { background: rgba(23, 24, 18, .62); }
+    .checkout-panel { padding: 28px; }
+    .checkout-head { display: flex; justify-content: space-between; gap: 24px; align-items: start; }
+    .checkout-head h2 { margin: 4px 0 6px; font-family: var(--serif); font-size: 32px; font-weight: 500; }
+    .checkout-head p { margin: 0; color: var(--muted); font-size: 13px; }
+    .checkout-order { margin-top: 24px; padding: 20px 0; border-top: 1px solid var(--ink); border-bottom: 1px solid var(--ink); display: flex; justify-content: space-between; align-items: end; gap: 20px; }
+    .checkout-order span, .checkout-provider span { display: block; margin-bottom: 5px; color: var(--muted); font-family: var(--mono); font-size: 9px; letter-spacing: .07em; text-transform: uppercase; }
+    .checkout-order h3 { margin: 0; font-family: var(--serif); font-size: 23px; font-weight: 500; }
+    .checkout-price { white-space: nowrap; font-family: var(--serif); font-size: 30px; font-weight: 500; }
+    .checkout-facts { margin: 0; padding: 18px 0 18px 18px; border-bottom: 1px solid var(--line); color: var(--muted); font-size: 13px; line-height: 1.7; }
+    .checkout-provider { margin: 0; padding: 18px 0; display: flex; justify-content: space-between; gap: 20px; align-items: center; }
+    .checkout-provider strong { font-size: 13px; font-weight: 600; }
+    .checkout-provider small { display: block; margin-top: 3px; color: var(--muted); font-size: 11px; }
+    .checkout-submit { width: 100%; }
+    .checkout-disclaimer { margin: 12px 0 0; color: var(--red); font-family: var(--mono); font-size: 9px; line-height: 1.5; letter-spacing: .04em; text-transform: uppercase; }
+    .checkout-success { text-align: center; }
+    .checkout-success-mark { width: 48px; height: 48px; margin: 0 auto 18px; border: 1px solid var(--brass); border-radius: 50%; display: grid; place-items: center; color: var(--brass); font-family: var(--serif); font-size: 24px; }
+    .checkout-success h2 { margin: 4px 0 10px; font-family: var(--serif); font-size: 32px; font-weight: 500; }
+    .checkout-success p { margin: 0 auto; max-width: 420px; color: var(--muted); font-size: 13px; line-height: 1.6; }
+    .checkout-access { margin: 22px 0; padding: 16px; border: 1px solid var(--line-dark); }
+    .checkout-access strong { display: block; margin-top: 5px; font-family: var(--serif); font-size: 21px; font-weight: 500; }
+
+    body.learning-mode .profile-bar { display: none; }
+    .wiki-hero { max-width: var(--max); margin: 0 auto; padding: 76px 24px 54px; }
+    .wiki-hero h1 { max-width: 13ch; margin: 10px 0 20px; font-family: var(--serif); font-size: clamp(48px, 7vw, 82px); font-weight: 400; line-height: .98; letter-spacing: -.035em; }
+    .wiki-hero > p:last-of-type { max-width: 68ch; margin: 0; color: var(--muted); font-size: 17px; }
+    .wiki-category-grid { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: 38px; border: 1px solid var(--line-dark); }
+    .wiki-category { min-width: 0; border-right: 1px solid var(--line); }
+    .wiki-category:last-child { border-right: 0; }
+    .wiki-category-head { min-height: 112px; padding: 18px; }
+    .wiki-category-head strong { display: block; margin: 7px 0 4px; font-family: var(--serif); font-size: 24px; font-weight: 500; }
+    .wiki-category-head p { margin: 0; color: var(--muted); font-size: 11px; }
+    .wiki-topic-list { border-top: 1px solid var(--line); }
+    .wiki-topic { width: 100%; min-height: 136px; padding: 18px; border: 0; border-bottom: 1px solid var(--line); background: var(--paper-2); cursor: pointer; text-align: left; }
+    .wiki-topic:last-child { border-bottom: 0; }
+    .wiki-topic:hover { background: transparent; }
+    .wiki-topic strong { display: block; margin: 7px 0; font-family: var(--serif); font-size: 21px; font-weight: 500; }
+    .wiki-topic span:last-child { display: block; color: var(--muted); font-size: 12px; line-height: 1.45; }
+    .wiki-topic span:last-child::after { content: "Abrir módulo →"; display: block; margin-top: 12px; color: var(--brass); font-family: var(--mono); font-size: 9px; letter-spacing: .08em; text-transform: uppercase; }
+    .wiki-module-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: 40px; }
+    .wiki-course { min-width: 0; padding: 0; border: 1px solid var(--line-dark); background: var(--paper-2); cursor: pointer; overflow: hidden; text-align: left; }
+    .wiki-course:hover { border-color: var(--brass); }
+    .wiki-course-art { display: block; height: 220px; overflow: hidden; border-bottom: 1px solid var(--line); background: var(--ink); }
+    .wiki-course-art img { width: 100%; height: 100%; display: block; object-fit: cover; transition: transform .45s ease; }
+    .wiki-course:hover .wiki-course-art img { transform: scale(1.025); }
+    .wiki-course-copy { display: block; padding: 22px; }
+    .wiki-course-copy strong { display: block; margin: 8px 0; font-family: var(--serif); font-size: 29px; font-weight: 500; }
+    .wiki-course-copy span:last-child { display: block; color: var(--muted); font-size: 12px; line-height: 1.5; }
+    .wiki-course-copy span:last-child::after { content: "Abrir módulo →"; display: block; margin-top: 14px; color: var(--brass); font-family: var(--mono); font-size: 9px; letter-spacing: .08em; text-transform: uppercase; }
+    .wiki-module-intro { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(260px, .9fr); gap: 34px; align-items: center; margin-bottom: 42px; }
+    .wiki-module-intro .section-head { display: block; margin: 0; }
+    .wiki-module-art { min-height: 320px; margin: 0; border: 1px solid var(--line-dark); overflow: hidden; background: var(--ink); }
+    .wiki-module-art img { width: 100%; height: 100%; min-height: 320px; display: block; object-fit: cover; }
+    .wiki-chapter { margin-top: 42px; padding-top: 38px; border-top: 1px solid var(--line-dark); }
+    .wiki-chapter:first-of-type { margin-top: 0; }
+    .wiki-chapter-head { display: grid; grid-template-columns: 1fr minmax(260px, .8fr); gap: 28px; align-items: end; margin-bottom: 24px; }
+    .wiki-chapter-head h3 { margin: 6px 0 0; font-family: var(--serif); font-size: clamp(30px, 4vw, 44px); font-weight: 500; line-height: 1.05; }
+    .wiki-chapter-head p { margin: 0; color: var(--muted); font-size: 13px; }
+    .wiki-order-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .wiki-order-card { min-height: 190px; padding: 22px; border: 1px solid var(--line-dark); background: var(--paper-2); }
+    .wiki-order-card strong { display: block; margin: 8px 0; font-family: var(--serif); font-size: 23px; font-weight: 500; }
+    .wiki-order-card p { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.55; }
+    .wiki-symbol-grid { display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid var(--line-dark); }
+    .wiki-symbol { min-height: 116px; padding: 16px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .wiki-symbol:nth-child(4n) { border-right: 0; }
+    .wiki-symbol:nth-last-child(-n+4) { border-bottom: 0; }
+    .wiki-symbol strong { display: block; margin: 6px 0; font-family: var(--serif); font-size: 19px; font-weight: 500; }
+    .wiki-symbol p { margin: 0; color: var(--muted); font-size: 10px; line-height: 1.45; }
+    .wiki-five-grid { display: grid; grid-template-columns: repeat(5, 1fr); border: 1px solid var(--line-dark); }
+    .wiki-five-grid .wiki-symbol { border-bottom: 0; }
+    .wiki-five-grid .wiki-symbol:nth-child(4n) { border-right: 1px solid var(--line); }
+    .wiki-five-grid .wiki-symbol:last-child { border-right: 0; }
+    .wiki-image-pair { display: grid; grid-template-columns: .8fr 1.2fr; gap: 20px; align-items: stretch; }
+    .wiki-image-pair img { width: 100%; height: 100%; min-height: 280px; display: block; border: 1px solid var(--line-dark); object-fit: cover; }
+    .wiki-lunar-grid { display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid var(--line-dark); }
+    .wiki-lunar-card { min-height: 220px; padding: 22px; border-right: 1px solid var(--line); }
+    .wiki-lunar-card:last-child { border-right: 0; }
+    .wiki-lunar-card .moon-token { width: 44px; height: 44px; margin-bottom: 18px; border: 1px solid var(--ink); border-radius: 50%; background: var(--moon-fill, var(--ink)); box-shadow: inset var(--moon-inset, 0 0 0 transparent); }
+    .wiki-lunar-card strong { display: block; margin: 6px 0; font-family: var(--serif); font-size: 22px; font-weight: 500; }
+    .wiki-lunar-card p { margin: 0; color: var(--muted); font-size: 11px; line-height: 1.5; }
+    .wiki-module-toolbar { margin: -24px 0 42px; display: grid; grid-template-columns: auto auto 1fr auto; gap: 14px; align-items: center; }
+    .wiki-module-toolbar button { min-height: 38px; border: 1px solid var(--line-dark); padding: 8px 12px; background: transparent; cursor: pointer; font-family: var(--mono); font-size: 9px; letter-spacing: .07em; text-transform: uppercase; }
+    .wiki-module-toolbar button:hover { border-color: var(--brass); color: var(--brass); }
+    .wiki-module-toolbar button:disabled { opacity: .35; cursor: default; border-color: var(--line); color: var(--muted); }
+    .wiki-module-toolbar button:last-child { justify-self: end; }
+    .wiki-module-position { color: var(--muted); font-family: var(--mono); font-size: 9px; letter-spacing: .08em; text-align: center; text-transform: uppercase; }
+    .wiki-module-position i { display: block; width: 108px; height: 3px; margin: 8px auto 0; background: var(--line); overflow: hidden; }
+    .wiki-module-position i::after { content: ""; display: block; width: var(--module-progress); height: 100%; background: var(--brass); }
+    .wiki-single { grid-template-columns: 1fr; }
+    .wiki-single .wiki-method { border-right: 0; }
+    .wiki-layout { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(320px, .95fr); border: 1px solid var(--line-dark); }
+    .wiki-layout .matrix-figure { border-right: 1px solid var(--line); }
+    .wiki-explanations { display: grid; grid-template-columns: 1fr 1fr; }
+    .wiki-relation { min-height: 180px; padding: 22px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .wiki-relation:nth-child(2n) { border-right: 0; }
+    .wiki-relation:nth-last-child(-n+2) { border-bottom: 0; }
+    .wiki-relation strong { display: block; margin: 7px 0; font-family: var(--serif); font-size: 20px; font-weight: 500; }
+    .wiki-relation p { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.55; }
+    .wiki-meta { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: 18px; border: 1px solid var(--line-dark); }
+    .wiki-meta > div { padding: 18px; border-right: 1px solid var(--line); }
+    .wiki-meta > div:last-child { border-right: 0; }
+    .wiki-meta strong { display: block; margin: 6px 0; font-family: var(--serif); font-size: 18px; font-weight: 500; }
+    .wiki-meta p { margin: 0; color: var(--muted); font-size: 11px; line-height: 1.5; }
+    .wiki-card-grid { display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid var(--line-dark); }
+    .wiki-card { min-height: 186px; padding: 22px; border-right: 1px solid var(--line); }
+    .wiki-card:last-child { border-right: 0; }
+    .wiki-card h3 { margin: 7px 0 9px; font-family: var(--serif); font-size: 22px; font-weight: 500; }
+    .wiki-card p { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.55; }
+    .wiki-card small { display: block; margin-top: 12px; color: var(--brass); font-family: var(--mono); font-size: 9px; line-height: 1.5; text-transform: uppercase; }
+    .wiki-modality-grid { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: 18px; border: 1px solid var(--line-dark); }
+    .wiki-modality { padding: 20px; border-right: 1px solid var(--line); }
+    .wiki-modality:last-child { border-right: 0; }
+    .wiki-modality strong { display: block; margin: 6px 0; font-family: var(--serif); font-size: 21px; font-weight: 500; }
+    .wiki-modality p { margin: 0; color: var(--muted); font-size: 12px; }
+    .wiki-trine-grid { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--line-dark); }
+    .wiki-trine { padding: 24px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .wiki-trine:nth-child(2n) { border-right: 0; }
+    .wiki-trine:nth-last-child(-n+2) { border-bottom: 0; }
+    .wiki-trine h3 { margin: 7px 0; font-family: var(--serif); font-size: 24px; font-weight: 500; }
+    .wiki-trine p { margin: 0; color: var(--muted); font-size: 12px; }
+    .wiki-two-column { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--line-dark); }
+    .wiki-method { padding: 26px; border-right: 1px solid var(--line); }
+    .wiki-method:last-child { border-right: 0; }
+    .wiki-method h3 { margin: 7px 0 12px; font-family: var(--serif); font-size: 26px; font-weight: 500; }
+    .wiki-method p { margin: 0 0 14px; color: var(--muted); font-size: 13px; line-height: 1.6; }
+    .wiki-formula { display: block; padding: 14px; background: var(--ink); color: var(--paper-2); font-family: var(--mono); font-size: 11px; line-height: 1.6; }
+    @media (prefers-reduced-motion: reduce) {
+      .wiki-course-art img { transition: none; }
+      .wiki-course:hover .wiki-course-art img { transform: none; }
+    }
+
+    .soyplus-hero { max-width: var(--max); margin: 0 auto; padding: clamp(58px, 9vw, 100px) 24px 52px; }
+    .soyplus-hero-grid { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(280px, .65fr); gap: clamp(32px, 8vw, 96px); align-items: end; }
+    .soyplus-hero h1 { max-width: 13ch; margin: 10px 0 18px; font-family: var(--serif); font-size: clamp(48px, 7vw, 82px); font-weight: 400; line-height: .98; letter-spacing: -.035em; }
+    .soyplus-hero-copy { max-width: 62ch; margin: 0; color: var(--muted); font-size: 17px; line-height: 1.6; }
+    .soyplus-note { padding: 22px; border: 1px solid var(--line-dark); background: var(--paper-2); }
+    .soyplus-note strong { display: block; margin: 8px 0; font-family: var(--serif); font-size: 22px; font-weight: 500; }
+    .soyplus-note p { margin: 0; color: var(--muted); font-size: 12px; }
+    .archetype-grid { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--line-dark); }
+    .archetype-card { min-width: 0; padding: clamp(24px, 4vw, 42px); border-right: 1px solid var(--line); background: var(--paper-2); }
+    .archetype-card:last-child { border-right: 0; }
+    .archetype-card-head { display: flex; justify-content: space-between; gap: 18px; align-items: start; }
+    .archetype-card h3 { margin: 8px 0 6px; font-family: var(--serif); font-size: clamp(36px, 5vw, 56px); font-weight: 430; line-height: 1; letter-spacing: -.03em; }
+    .archetype-rank { color: var(--brass); font-family: var(--serif); font-size: 46px; line-height: 1; }
+    .archetype-support { margin: 0 0 22px; color: var(--brass); font-family: var(--mono); font-size: 10px; letter-spacing: .06em; text-transform: uppercase; }
+    .archetype-thesis { min-height: 58px; margin: 0 0 24px; font-family: var(--serif); font-size: 21px; line-height: 1.35; }
+    .archetype-pair { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .archetype-pair div { padding: 16px 16px 16px 0; }
+    .archetype-pair div + div { padding-left: 16px; border-left: 1px solid var(--line); }
+    .archetype-pair strong { display: block; margin: 5px 0; font-family: var(--serif); font-size: 18px; font-weight: 500; }
+    .archetype-pair p { margin: 0; color: var(--muted); font-size: 11px; line-height: 1.5; }
+    .archetype-question { margin: 22px 0 0; color: var(--muted); font-size: 13px; }
+    .archetype-question strong { color: var(--ink); }
+    .factor-ledger { border: 1px solid var(--line-dark); }
+    .factor-row { display: grid; grid-template-columns: minmax(180px, .8fr) minmax(220px, 1.4fr) auto; gap: 24px; align-items: center; padding: 16px 20px; border-bottom: 1px solid var(--line); }
+    .factor-row:last-child { border-bottom: 0; }
+    .factor-row strong { font-family: var(--serif); font-size: 19px; font-weight: 500; }
+    .factor-track { height: 5px; background: var(--line); overflow: hidden; }
+    .factor-track i { display: block; width: var(--factor-strength); height: 100%; background: var(--brass); }
+    .factor-meta { color: var(--muted); font-family: var(--mono); font-size: 9px; letter-spacing: .05em; text-transform: uppercase; text-align: right; white-space: nowrap; }
+    .archetype-evidence { margin: 22px 0 0; padding: 0; list-style: none; }
+    .archetype-evidence li { display: grid; grid-template-columns: 1fr auto; gap: 14px; padding: 9px 0; border-bottom: 1px solid var(--line); font-size: 12px; }
+    .archetype-evidence li:last-child { border-bottom: 0; }
+    .archetype-evidence span:last-child { color: var(--muted); font-family: var(--mono); font-size: 9px; text-transform: uppercase; }
+    .soyplus-method { max-width: var(--max); margin: 0 auto 54px; border: 1px solid var(--line-dark); background: var(--paper-2); }
+    .soyplus-method > summary { padding: 18px 22px; }
+    .soyplus-method-body { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--line); }
+    .soyplus-method-body > div { padding: 22px; border-right: 1px solid var(--line); }
+    .soyplus-method-body > div:last-child { border-right: 0; }
+    .soyplus-method-body strong { display: block; margin: 7px 0; font-family: var(--serif); font-size: 19px; font-weight: 500; }
+    .soyplus-method-body p { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.55; }
 
     .mobile-tabs { display: none; }
     @media (max-width: 760px) {
@@ -726,6 +922,7 @@
       .practical-grid, .period-grid, .climate-grid, .planner { grid-template-columns: 1fr; }
       .zodiac-pair { grid-template-columns: 1fr; }
       .zodiac-pair .evidence { border-right: 0; border-bottom: 1px solid var(--line); }
+      .matrix-selectors { grid-template-columns: repeat(3, minmax(0, 1fr)); }
       .practical, .period-card, .climate-card { border-right: 0; border-bottom: 1px solid var(--line); }
       .practical:last-child, .period-card:last-child, .climate-card:last-child { border-bottom: 0; }
       .action-band { align-items: stretch; flex-direction: column; }
@@ -745,10 +942,45 @@
       .compact-action:last-child { border-bottom: 0; }
       .single-plan .plan-field { grid-template-columns: 1fr; }
       .circle-form, .member-grid, .relationship-lenses { grid-template-columns: 1fr; }
+      .share-options { grid-template-columns: 1fr; }
       .relationship-lens { border-right: 0; border-bottom: 1px solid var(--line); }
       .relationship-lens:last-child { border-bottom: 0; }
       .relationship-head { align-items: flex-start; flex-direction: column; }
       .method-drawer { margin-left: 16px; margin-right: 16px; }
+      .wiki-hero, .soyplus-hero { padding: 52px 16px 40px; }
+      .wiki-module-grid, .wiki-module-intro, .wiki-chapter-head, .wiki-order-grid, .wiki-image-pair, .wiki-lunar-grid { grid-template-columns: 1fr; }
+      .wiki-course-art { height: 190px; }
+      .wiki-module-art, .wiki-module-art img { min-height: 260px; }
+      .wiki-symbol-grid { grid-template-columns: 1fr 1fr; }
+      .wiki-five-grid { grid-template-columns: 1fr; }
+      .wiki-five-grid .wiki-symbol, .wiki-five-grid .wiki-symbol:nth-child(4n) { border-right: 0; border-bottom: 1px solid var(--line); }
+      .wiki-five-grid .wiki-symbol:last-child { border-bottom: 0; }
+      .wiki-symbol, .wiki-symbol:nth-child(4n), .wiki-symbol:nth-last-child(-n+4) { border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+      .wiki-symbol:nth-child(2n) { border-right: 0; }
+      .wiki-symbol:nth-last-child(-n+2) { border-bottom: 0; }
+      .wiki-lunar-card { border-right: 0; border-bottom: 1px solid var(--line); }
+      .wiki-lunar-card:last-child { border-bottom: 0; }
+      .wiki-module-toolbar { margin: -18px 0 32px; grid-template-columns: repeat(3, 1fr); }
+      .wiki-module-toolbar button { width: 100%; }
+      .wiki-module-toolbar button:last-child { justify-self: stretch; }
+      .wiki-module-position { grid-column: 1 / -1; grid-row: 1; }
+      .soyplus-hero-grid, .archetype-grid, .soyplus-method-body { grid-template-columns: 1fr; }
+      .archetype-card { border-right: 0; border-bottom: 1px solid var(--line); }
+      .archetype-card:last-child { border-bottom: 0; }
+      .factor-row { grid-template-columns: 1fr auto; gap: 8px 14px; }
+      .factor-track { grid-column: 1 / -1; grid-row: 2; }
+      .soyplus-method { margin-left: 16px; margin-right: 16px; }
+      .soyplus-method-body > div { border-right: 0; border-bottom: 1px solid var(--line); }
+      .soyplus-method-body > div:last-child { border-bottom: 0; }
+      .wiki-category-grid, .wiki-card-grid, .wiki-modality-grid, .wiki-trine-grid, .wiki-two-column, .wiki-meta, .wiki-layout { grid-template-columns: 1fr; }
+      .wiki-category { border-right: 0; border-bottom: 1px solid var(--line); }
+      .wiki-category:last-child { border-bottom: 0; }
+      .wiki-category-head { min-height: 0; }
+      .wiki-card, .wiki-modality, .wiki-trine, .wiki-trine:nth-child(2n), .wiki-trine:nth-last-child(-n+2), .wiki-method, .wiki-meta > div, .wiki-layout .matrix-figure { border-right: 0; border-bottom: 1px solid var(--line); }
+      .wiki-card:last-child, .wiki-modality:last-child, .wiki-trine:last-child, .wiki-method:last-child, .wiki-meta > div:last-child, .wiki-layout > *:last-child { border-bottom: 0; }
+      .wiki-explanations { grid-template-columns: 1fr; }
+      .wiki-relation, .wiki-relation:nth-child(2n), .wiki-relation:nth-last-child(-n+2) { min-height: 0; border-right: 0; border-bottom: 1px solid var(--line); }
+      .wiki-relation:last-child { border-bottom: 0; }
       .footer-inner { flex-direction: column; }
       .mobile-tabs {
         position: fixed;
@@ -757,13 +989,14 @@
         bottom: 12px;
         z-index: 30;
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(5, 1fr);
         border: 1px solid var(--ink);
         background: var(--paper-2);
         box-shadow: 0 8px 24px rgba(0, 0, 0, .18);
       }
       .mobile-tabs .tab { min-height: 48px; border: 0; }
       .mobile-tabs .tab + .tab { border-left: 1px solid var(--ink); }
+      .mobile-tabs .tab { min-width: 0; padding: 5px 3px; font-size: 9px; letter-spacing: .04em; }
       .toast { bottom: 74px; }
     }
   </style>
@@ -776,8 +1009,10 @@
         <div class="brand"><strong>SOY</strong><i>/</i><strong>ESTOY</strong><span class="prototype">prototipo</span></div>
         <nav class="main-tabs" role="tablist" aria-label="Secciones del producto" hidden>
           <button class="tab" role="tab" data-view="soy" aria-selected="true">Soy</button>
+          <button class="tab" role="tab" data-view="soyplus" aria-selected="false">Soy+</button>
           <button class="tab" role="tab" data-view="estoy" aria-selected="false">Estoy</button>
           <button class="tab" role="tab" data-view="circulo" aria-selected="false">Mi círculo</button>
+          <button class="tab" role="tab" data-view="aprende" aria-selected="false">Aprende</button>
         </nav>
       </div>
     </header>
@@ -918,10 +1153,52 @@
 
         <section class="section rule" aria-label="Acceso a Estoy">
           <div class="action-band solo">
-            <div><h3>Soy no cambia día a día.</h3><p>Estoy pone estas señales en contexto temporal y propone un foco para el período actual.</p></div>
-            <div class="button-row"><button class="secondary" id="copy-soy" type="button">Copiar mi Soy</button><button class="secondary" data-go="circulo" type="button">Abrir Mi círculo</button><button class="primary" data-go="estoy" type="button">Accede a Estoy</button></div>
+            <div><h3>Soy no cambia día a día.</h3><p>Estoy pone estas señales en contexto temporal y propone un foco para el período actual.</p><p class="share-note">El enlace abre la lectura completa; la imagen resumen oculta la fecha natal.</p></div>
+            <div class="button-row"><button class="secondary" id="share-soy" type="button">Compartir por WhatsApp</button><button class="secondary" data-go="circulo" type="button">Abrir Mi círculo</button><button class="primary" id="access-estoy" type="button">Accede a Estoy</button></div>
           </div>
         </section>
+      </div>
+
+      <div class="view" id="soyplus-view" role="tabpanel" hidden>
+        <header class="soyplus-hero">
+          <p class="eyebrow">Soy+ · experimento temporal</p>
+          <div class="soyplus-hero-grid">
+            <div>
+              <h1 id="soyplus-title">Dos arquetipos concentran tus señales.</h1>
+              <p class="soyplus-hero-copy">Primero resumimos las coincidencias de Soy en temas ponderados. Luego traducimos esos temas a la taxonomía de doce arquetipos de Carol S. Pearson, inspirada en Jung. Es una hipótesis editorial para contrastar, no un test psicológico ni una identidad fija.</p>
+            </div>
+            <aside class="soyplus-note">
+              <span class="micro-label">La regla en una línea</span>
+              <strong>Señales → temas → arquetipos</strong>
+              <p>Los dos resultados muestran dónde se acumula más fuerza relativa. La fecha no “descubre” un arquetipo.</p>
+            </aside>
+          </div>
+        </header>
+
+        <section class="section rule" aria-labelledby="archetype-title">
+          <div class="section-head">
+            <div><p class="section-kicker">01 · Lectura arquetípica</p><h2 class="section-title" id="archetype-title">Los dos patrones más referenciados.</h2></div>
+            <p class="section-intro" id="archetype-intro">El orden combina la fuerza del resumen numérico y cuántas tradiciones sostienen los temas que llegan a cada arquetipo.</p>
+          </div>
+          <div class="archetype-grid" id="archetype-cards" aria-live="polite"></div>
+        </section>
+
+        <section class="section rule" aria-labelledby="factor-ledger-title">
+          <div class="section-head">
+            <div><p class="section-kicker">02 · Resumen intermedio</p><h2 class="section-title" id="factor-ledger-title">Antes del arquetipo, están estos temas.</h2></div>
+            <p class="section-intro">Es el resumen ponderado del prototipo Streamlit llevado a Soy. Cada barra es relativa al tema más fuerte de esta misma lectura; no mide personalidad.</p>
+          </div>
+          <div class="factor-ledger" id="factor-ledger"></div>
+        </section>
+
+        <details class="soyplus-method">
+          <summary>Ver método, atribución y límites</summary>
+          <div class="soyplus-method-body">
+            <div><span class="micro-label">1 · Resumen</span><strong>Cuatro tradiciones separadas</strong><p>Numerología, zodíaco tropical, zodíaco chino y tarot natal aportan texto por separado. Las coincidencias se agrupan en diez temas editoriales ponderados.</p></div>
+            <div><span class="micro-label">2 · Traducción</span><strong>Una matriz explícita</strong><p>Cada tema reparte fuerza entre arquetipos afines. Por ejemplo, Acción e iniciativa referencia principalmente al Héroe; Transformación y cierre, al Rebelde y al Mago.</p></div>
+            <div><span class="micro-label">3 · Límite</span><strong>Pearson, no una lista canónica de Jung</strong><p>Usamos los doce nombres de Pearson como lenguaje de síntesis. No aplicamos el instrumento PMAI, no diagnosticamos y no afirmamos que Jung definiera esta lista.</p></div>
+          </div>
+        </details>
       </div>
 
       <div class="view" id="estoy-view" role="tabpanel" hidden>
@@ -1008,8 +1285,8 @@
             <div class="plan-field"><label for="plan-priority">Mi decisión para este período</label><div><textarea id="plan-priority" placeholder="Ej. terminar la propuesta antes de abrir otra tarea"></textarea><p class="saved"></p></div></div>
           </div>
           <div class="action-band">
-            <div><h3>La prueba real dura 28 días.</h3><p>Una lectura al inicio de cada período y una sugerencia breve cada día, entregadas por WhatsApp antes de automatizar.</p></div>
-            <div class="button-row"><button class="secondary" data-go="soy" type="button">Volver a Soy</button><button class="primary" id="trial-button" type="button">Accede a Estoy</button></div>
+            <div><h3>La prueba real dura 28 días.</h3><p>Una lectura al inicio de cada período y una sugerencia breve cada día, entregadas por WhatsApp antes de automatizar.</p><p class="share-note">El enlace abre la lectura completa; la imagen fija la fecha consultada y oculta la natal.</p></div>
+            <div class="button-row"><button class="secondary" id="share-estoy" type="button">Compartir mi Estoy</button><button class="secondary" id="trial-button" type="button">Probar 28 días</button><button class="primary" id="checkout-button" type="button">Continuar 30 días · USD 5</button></div>
           </div>
         </section>
 
@@ -1038,7 +1315,7 @@
           <p class="eyebrow">Mi círculo · vínculos sin veredicto</p>
           <h1>Entiende qué trae cada persona a la relación.</h1>
           <p>Agrega a tu pareja, familia, amistades o equipo. Comparamos las mismas señales por separado para mostrar puntos de encuentro, diferencias de ritmo y una pregunta que valga la pena conversar.</p>
-          <p class="circle-privacy">Nada se guarda: el círculo vive solo en esta visita · máximo 6 personas contigo</p>
+          <p class="circle-privacy">Nada se guarda: el círculo vive solo en esta visita · máximo 6 personas contigo · comparte solo con su permiso</p>
           <div class="summary-grid circle-limits" aria-label="Límites de esta comparación">
             <div class="summary-item"><span class="micro-label">Lo que usamos</span><strong>Solo la fecha</strong><span>No inferimos hora, lugar ni historia del vínculo.</span></div>
             <div class="summary-item"><span class="micro-label">Lo que entrega</span><strong>Afinidades generales</strong><span>Tres lentes separadas; ningún puntaje ni pronóstico.</span></div>
@@ -1081,6 +1358,68 @@
           </ul>
         </details>
       </div>
+
+      <div class="view" id="aprende-view" role="tabpanel" hidden>
+        <header class="wiki-hero" id="aprende-hub">
+          <p class="eyebrow">Aprende · wiki simbólica</p>
+          <h1>Elige un módulo para aprender.</h1>
+          <p>Cuatro recorridos separados. Cada uno parte por su regla general, baja a sus símbolos particulares y recién entonces muestra cómo se relacionan.</p>
+          <div class="wiki-module-grid" aria-label="Módulos de Aprende">
+            <button class="wiki-course" data-wiki-target="wiki-numerology" type="button"><span class="wiki-course-art"><img src="assets/aprende/numerologia.webp" alt="Ilustración de una carta simbólica dedicada a la numerología"></span><span class="wiki-course-copy"><span class="micro-label">01 · Regla de cálculo</span><strong>Numerología</strong><span>Camino de vida, reducción y cómo una cifra entra a la síntesis.</span></span></button>
+            <button class="wiki-course" data-wiki-target="wiki-western" type="button"><span class="wiki-course-art"><img src="assets/aprende/zodiaco-occidental.webp" alt="Ilustración tipo tarot del zodíaco occidental y el Sol"></span><span class="wiki-course-copy"><span class="micro-label">02 · Relación solar</span><strong>Zodíaco occidental</strong><span>Modalidad, elemento, signo y relaciones entre elementos.</span></span></button>
+            <button class="wiki-course" data-wiki-target="wiki-chinese" type="button"><span class="wiki-course-art"><img src="assets/aprende/zodiaco-chino.webp" alt="Ilustración tipo tarot del zodíaco chino y el calendario lunisolar"></span><span class="wiki-course-copy"><span class="micro-label">03 · Calendario lunisolar</span><strong>Zodíaco chino</strong><span>Yin/Yang, cinco fases, animal y relaciones tradicionales.</span></span></button>
+            <button class="wiki-course" data-wiki-target="wiki-moon" type="button"><span class="wiki-course-art"><img src="assets/aprende/fases-lunares.webp" alt="Ilustración tipo tarot del ciclo de fases lunares"></span><span class="wiki-course-copy"><span class="micro-label">04 · Ritmo temporal</span><strong>Fases lunares</strong><span>Cuatro cuartos para observar el período sin convertirlo en mandato.</span></span></button>
+          </div>
+        </header>
+
+        <section class="section rule wiki-module" id="wiki-western" aria-labelledby="wiki-western-title" hidden>
+          <div class="wiki-module-intro">
+            <div class="section-head"><p class="section-kicker">02 · Zodíaco occidental</p><h2 class="section-title" id="wiki-western-title">Del movimiento general al signo solar.</h2><p class="section-intro">El zodíaco tropical organiza el recorrido aparente anual del Sol respecto de las estaciones. En Soy usamos únicamente el signo solar por fecha; no fingimos una carta natal completa.</p></div>
+            <figure class="wiki-module-art"><img src="assets/aprende/zodiaco-occidental.webp" alt="Carta ilustrada del Sol rodeado por símbolos del zodíaco occidental"></figure>
+          </div>
+
+          <div class="wiki-order-grid" aria-label="Orden de lectura del zodíaco occidental">
+            <article class="wiki-order-card"><span class="micro-label">Primero · lo general</span><strong>Modalidad</strong><p>Describe el movimiento: iniciar, sostener o adaptar.</p></article>
+            <article class="wiki-order-card"><span class="micro-label">Después · el lenguaje</span><strong>Elemento</strong><p>Describe qué prioriza: acción, forma, ideas o elaboración emocional.</p></article>
+            <article class="wiki-order-card"><span class="micro-label">Finalmente · la combinación</span><strong>Signo</strong><p>Combina una modalidad y un elemento en una figura particular.</p></article>
+          </div>
+
+          <section class="wiki-chapter" aria-labelledby="western-modality-title"><div class="wiki-chapter-head"><div><span class="micro-label">01 · Modalidad</span><h3 id="western-modality-title">Cómo se mueve la energía.</h3></div><p>La modalidad es la capa más general: no dice qué haces, sino si tiendes a iniciar, sostener o adaptar el movimiento.</p></div><div class="wiki-modality-grid"><article class="wiki-modality"><span class="micro-label">Cardinal</span><strong>Inicia</strong><p>Marca dirección y pone algo en movimiento.</p></article><article class="wiki-modality"><span class="micro-label">Fija</span><strong>Sostiene</strong><p>Consolida, profundiza y preserva continuidad.</p></article><article class="wiki-modality"><span class="micro-label">Mutable</span><strong>Adapta</strong><p>Traduce, ajusta y prepara el cierre de un ciclo.</p></article></div></section>
+
+          <section class="wiki-chapter" aria-labelledby="western-element-title"><div class="wiki-chapter-head"><div><span class="micro-label">02 · Elemento</span><h3 id="western-element-title">Qué lenguaje prioriza.</h3></div><p>El elemento aporta un repertorio general. No es una personalidad completa ni una medida de compatibilidad.</p></div><div class="wiki-image-pair"><img src="assets/aprende/elementos-occidentales.webp" alt="Carta ilustrada con Fuego, Tierra, Aire y Agua"><div class="wiki-card-grid"><article class="wiki-card"><span class="micro-label">Fuego</span><h3>Acción e impulso</h3><p>Convierte intención en movimiento.</p><small>Aries · Leo · Sagitario</small></article><article class="wiki-card"><span class="micro-label">Tierra</span><h3>Prueba y forma</h3><p>Busca estabilidad y resultados concretos.</p><small>Capricornio · Tauro · Virgo</small></article><article class="wiki-card"><span class="micro-label">Aire</span><h3>Ideas y conversación</h3><p>Organiza experiencia mediante conceptos y vínculo.</p><small>Libra · Acuario · Géminis</small></article><article class="wiki-card"><span class="micro-label">Agua</span><h3>Emoción y elaboración</h3><p>Procesa matices, memoria y sensibilidad.</p><small>Cáncer · Escorpio · Piscis</small></article></div></div></section>
+
+          <section class="wiki-chapter" aria-labelledby="western-sign-title"><div class="wiki-chapter-head"><div><span class="micro-label">03 · Signo</span><h3 id="western-sign-title">Una modalidad + un elemento.</h3></div><p>El signo solar es la combinación particular. Por ejemplo, Virgo no es solo Tierra: es Tierra mutable, orientada a ajustar y precisar.</p></div><div class="wiki-symbol-grid"><article class="wiki-symbol"><span class="micro-label">Cardinal · Fuego</span><strong>Aries</strong><p>Inicia mediante acción.</p></article><article class="wiki-symbol"><span class="micro-label">Fija · Tierra</span><strong>Tauro</strong><p>Sostiene forma y estabilidad.</p></article><article class="wiki-symbol"><span class="micro-label">Mutable · Aire</span><strong>Géminis</strong><p>Adapta ideas e intercambio.</p></article><article class="wiki-symbol"><span class="micro-label">Cardinal · Agua</span><strong>Cáncer</strong><p>Inicia cuidado y pertenencia.</p></article><article class="wiki-symbol"><span class="micro-label">Fija · Fuego</span><strong>Leo</strong><p>Sostiene expresión y presencia.</p></article><article class="wiki-symbol"><span class="micro-label">Mutable · Tierra</span><strong>Virgo</strong><p>Ajusta forma y método.</p></article><article class="wiki-symbol"><span class="micro-label">Cardinal · Aire</span><strong>Libra</strong><p>Inicia vínculo y acuerdo.</p></article><article class="wiki-symbol"><span class="micro-label">Fija · Agua</span><strong>Escorpio</strong><p>Sostiene profundidad y cambio.</p></article><article class="wiki-symbol"><span class="micro-label">Mutable · Fuego</span><strong>Sagitario</strong><p>Adapta impulso y visión.</p></article><article class="wiki-symbol"><span class="micro-label">Cardinal · Tierra</span><strong>Capricornio</strong><p>Inicia estructura y objetivo.</p></article><article class="wiki-symbol"><span class="micro-label">Fija · Aire</span><strong>Acuario</strong><p>Sostiene ideas y perspectiva.</p></article><article class="wiki-symbol"><span class="micro-label">Mutable · Agua</span><strong>Piscis</strong><p>Adapta sensibilidad e imaginación.</p></article></div></section>
+
+          <section class="wiki-chapter" aria-labelledby="western-interaction-title"><div class="wiki-chapter-head"><div><span class="micro-label">04 · Interacciones</span><h3 id="western-interaction-title">Cómo conversan los elementos.</h3></div><p>Solo después de entender cada capa comparamos lenguajes. El grafo no calcula aspectos ni garantiza compatibilidad.</p></div><div class="wiki-layout"><figure class="matrix-figure"><h3>Interacciones elementales</h3><p>Toca un elemento para animar sus tres relaciones.</p><div class="matrix-selectors" style="--selector-count:4" aria-label="Selecciona un elemento occidental"><button class="matrix-selector" type="button" data-wiki-matrix="western" data-matrix-node="Fuego" aria-pressed="true">Fuego</button><button class="matrix-selector" type="button" data-wiki-matrix="western" data-matrix-node="Tierra" aria-pressed="false">Tierra</button><button class="matrix-selector" type="button" data-wiki-matrix="western" data-matrix-node="Aire" aria-pressed="false">Aire</button><button class="matrix-selector" type="button" data-wiki-matrix="western" data-matrix-node="Agua" aria-pressed="false">Agua</button></div><canvas class="matrix-canvas" id="wiki-western-matrix" data-wiki-matrix="western" width="420" height="420" role="img" aria-label="Relaciones entre Fuego, Tierra, Aire y Agua"></canvas><p class="matrix-reading" id="wiki-western-reading" aria-live="polite"></p><div class="matrix-legend"><span><i class="matrix-loop" aria-hidden="true"></i>Directa</span><span><i class="matrix-line positive" aria-hidden="true"></i>Complementaria</span><span><i class="matrix-line neutral" aria-hidden="true"></i>Ajuste</span><span><i class="matrix-line negative" aria-hidden="true"></i>Diferencia marcada</span></div></figure><div class="wiki-explanations"><article class="wiki-relation"><span class="micro-label">Mismo elemento</span><strong>Afinidad directa</strong><p>Reconocen prioridades y ritmo, pero pueden repetir el mismo punto ciego.</p></article><article class="wiki-relation"><span class="micro-label">Fuego–Aire · Tierra–Agua</span><strong>Complementaria</strong><p>Un lenguaje aporta algo que el otro puede movilizar o sostener.</p></article><article class="wiki-relation"><span class="micro-label">Fuego–Tierra · Aire–Agua</span><strong>Requiere ajuste</strong><p>Operan con prioridades distintas, pero traducibles.</p></article><article class="wiki-relation"><span class="micro-label">Fuego–Agua · Aire–Tierra</span><strong>Diferencia marcada</strong><p>Exige más traducción; no significa conflicto anunciado.</p></article></div></div><div class="wiki-meta"><div><span class="micro-label">Relación con el cielo</span><strong>Solar y estacional</strong><p>El zodíaco tropical sigue el ciclo aparente del Sol respecto de equinoccios y solsticios.</p></div><div><span class="micro-label">Uso en Soy</span><strong>Signo solar</strong><p>Sin hora y lugar no mostramos ascendente, casas ni una sinastría completa.</p></div><div><span class="micro-label">Límite</span><strong>No es un puntaje</strong><p>Una relación real no se reduce al elemento ni a una línea del grafo.</p></div></div></section>
+        </section>
+
+        <section class="section rule wiki-module" id="wiki-chinese" aria-labelledby="wiki-chinese-title" hidden>
+          <div class="wiki-module-intro"><div class="section-head"><p class="section-kicker">03 · Zodíaco chino</p><h2 class="section-title" id="wiki-chinese-title">Del ritmo Yin/Yang al animal del año.</h2><p class="section-intro">El zodíaco anual se organiza mediante un calendario lunisolar. El Año Nuevo se vincula con una Luna nueva, pero el calendario chino también usa términos solares: llamarlo puramente “lunar” sería incompleto.</p></div><figure class="wiki-module-art"><img src="assets/aprende/zodiaco-chino.webp" alt="Carta ilustrada del zodíaco chino con animales y Luna"></figure></div>
+
+          <div class="wiki-order-grid" aria-label="Orden de lectura del zodíaco chino"><article class="wiki-order-card"><span class="micro-label">Primero · el ritmo</span><strong>Yin / Yang</strong><p>Describe una orientación más receptiva y gradual o más activa y exterior.</p></article><article class="wiki-order-card"><span class="micro-label">Después · el proceso</span><strong>Cinco fases</strong><p>Madera, Fuego, Tierra, Metal y Agua describen movimientos, no sustancias fijas.</p></article><article class="wiki-order-card"><span class="micro-label">Finalmente · la figura</span><strong>Animal</strong><p>El animal anual aporta un repertorio simbólico dentro de un ciclo de doce.</p></article></div>
+
+          <section class="wiki-chapter" aria-labelledby="chinese-polarity-title"><div class="wiki-chapter-head"><div><span class="micro-label">01 · Yin / Yang</span><h3 id="chinese-polarity-title">El ritmo más general.</h3></div><p>La polaridad alterna cada año. No equivale a femenino/masculino ni clasifica a una persona como pasiva o dominante.</p></div><div class="wiki-image-pair"><img src="assets/aprende/yin-yang.webp" alt="Carta ilustrada de las polaridades Yin y Yang"><div class="wiki-two-column"><article class="wiki-method"><span class="micro-label">Yin</span><h3>Receptivo y gradual</h3><p>El movimiento se describe como más interior, acumulativo y atento al contexto.</p></article><article class="wiki-method"><span class="micro-label">Yang</span><h3>Activo y exterior</h3><p>El movimiento se describe como más visible, directo y orientado a la acción.</p></article></div></div></section>
+
+          <section class="wiki-chapter" aria-labelledby="chinese-element-title"><div class="wiki-chapter-head"><div><span class="micro-label">02 · Cinco fases</span><h3 id="chinese-element-title">El proceso que toma esa energía.</h3></div><p>Wu Xing describe cinco transformaciones relacionadas. No corresponde uno a uno con los cuatro elementos occidentales.</p></div><div class="wiki-five-grid"><article class="wiki-symbol"><span class="micro-label">Madera</span><strong>Crecimiento</strong><p>Virtud: vitalidad. Exceso: dispersión.</p></article><article class="wiki-symbol"><span class="micro-label">Fuego</span><strong>Acción</strong><p>Virtud: transformación. Exceso: impulsividad.</p></article><article class="wiki-symbol"><span class="micro-label">Tierra</span><strong>Estabilidad</strong><p>Virtud: apoyo. Exceso: inmovilidad.</p></article><article class="wiki-symbol"><span class="micro-label">Metal</span><strong>Estructura</strong><p>Virtud: criterio. Exceso: rigidez.</p></article><article class="wiki-symbol"><span class="micro-label">Agua</span><strong>Adaptación</strong><p>Virtud: nutrición. Exceso: sobreadaptación.</p></article></div></section>
+
+          <section class="wiki-chapter" aria-labelledby="chinese-animal-title"><div class="wiki-chapter-head"><div><span class="micro-label">03 · Animal</span><h3 id="chinese-animal-title">La figura particular del año.</h3></div><p>El animal se determina por el año lunisolar efectivo, no automáticamente por el año gregoriano. Quien nace en enero o febrero debe revisar el límite exacto.</p></div><div class="wiki-symbol-grid"><article class="wiki-symbol"><span class="micro-label">1.ª trina</span><strong>Rata</strong><p>Estrategia y oportunidad.</p></article><article class="wiki-symbol"><span class="micro-label">2.ª trina</span><strong>Buey</strong><p>Constancia y método.</p></article><article class="wiki-symbol"><span class="micro-label">3.ª trina</span><strong>Tigre</strong><p>Acción e idealismo.</p></article><article class="wiki-symbol"><span class="micro-label">4.ª trina</span><strong>Conejo</strong><p>Sensibilidad y diplomacia.</p></article><article class="wiki-symbol"><span class="micro-label">1.ª trina</span><strong>Dragón</strong><p>Impulso y carisma.</p></article><article class="wiki-symbol"><span class="micro-label">2.ª trina</span><strong>Serpiente</strong><p>Observación y precisión.</p></article><article class="wiki-symbol"><span class="micro-label">3.ª trina</span><strong>Caballo</strong><p>Movimiento y autonomía.</p></article><article class="wiki-symbol"><span class="micro-label">4.ª trina</span><strong>Cabra</strong><p>Cuidado y expresión.</p></article><article class="wiki-symbol"><span class="micro-label">1.ª trina</span><strong>Mono</strong><p>Ingenio y adaptación.</p></article><article class="wiki-symbol"><span class="micro-label">2.ª trina</span><strong>Gallo</strong><p>Orden y claridad.</p></article><article class="wiki-symbol"><span class="micro-label">3.ª trina</span><strong>Perro</strong><p>Lealtad y criterio.</p></article><article class="wiki-symbol"><span class="micro-label">4.ª trina</span><strong>Cerdo</strong><p>Apertura y generosidad.</p></article></div></section>
+
+          <section class="wiki-chapter" aria-labelledby="chinese-interaction-title"><div class="wiki-chapter-head"><div><span class="micro-label">04 · Interacciones</span><h3 id="chinese-interaction-title">Primero las fases; luego las familias.</h3></div><p>Las flechas muestran funciones de impulso y regulación. Las trinas agrupan animales por afinidad tradicional; ninguna relación basta para diagnosticar compatibilidad.</p></div><div class="wiki-layout"><figure class="matrix-figure"><h3>Ciclos de las cinco fases</h3><p>Toca una fase para animar qué relaciones entrega y cuáles recibe.</p><div class="matrix-selectors" style="--selector-count:5" aria-label="Selecciona una fase china"><button class="matrix-selector" type="button" data-wiki-matrix="chinese" data-matrix-node="Madera" aria-pressed="false">Madera</button><button class="matrix-selector" type="button" data-wiki-matrix="chinese" data-matrix-node="Fuego" aria-pressed="false">Fuego</button><button class="matrix-selector" type="button" data-wiki-matrix="chinese" data-matrix-node="Tierra" aria-pressed="false">Tierra</button><button class="matrix-selector" type="button" data-wiki-matrix="chinese" data-matrix-node="Metal" aria-pressed="false">Metal</button><button class="matrix-selector" type="button" data-wiki-matrix="chinese" data-matrix-node="Agua" aria-pressed="true">Agua</button></div><canvas class="matrix-canvas" id="wiki-chinese-matrix" data-wiki-matrix="chinese" width="420" height="420" role="img" aria-label="Relaciones de impulso y regulación entre las cinco fases"></canvas><p class="matrix-reading" id="wiki-chinese-reading" aria-live="polite"></p><div class="matrix-legend"><span><i class="matrix-line positive" aria-hidden="true"></i>Impulsa</span><span><i class="matrix-line neutral" aria-hidden="true"></i>Regula</span></div></figure><div class="wiki-explanations"><article class="wiki-relation"><span class="micro-label">Ciclo de impulso</span><strong>Alimenta un proceso</strong><p>Cada fase crea condiciones para que otra pueda desarrollarse.</p></article><article class="wiki-relation"><span class="micro-label">Ciclo de regulación</span><strong>Corrige un exceso</strong><p>Regula es neutral: aporta un límite útil, no daño.</p></article><article class="wiki-relation"><span class="micro-label">Misma fase</span><strong>Refuerza</strong><p>Intensifica tanto el recurso como su posible exceso.</p></article><article class="wiki-relation"><span class="micro-label">Lectura práctica</span><strong>Pregunta por la función</strong><p>Qué proceso necesita impulso y cuál necesita borde.</p></article></div></div><div class="wiki-trine-grid"><article class="wiki-trine"><span class="micro-label">Primera trina</span><h3>Rata · Dragón · Mono</h3><p>Estrategia, carisma social y capacidad de abrir caminos.</p></article><article class="wiki-trine"><span class="micro-label">Segunda trina</span><h3>Buey · Serpiente · Gallo</h3><p>Disciplina, precisión y paciencia para construir resultados.</p></article><article class="wiki-trine"><span class="micro-label">Tercera trina</span><h3>Tigre · Caballo · Perro</h3><p>Acción, lealtad, idealismo y movimiento directo.</p></article><article class="wiki-trine"><span class="micro-label">Cuarta trina</span><h3>Conejo · Cabra · Cerdo</h3><p>Sensibilidad, cuidado, belleza y cooperación afectiva.</p></article></div><div class="wiki-meta"><div><span class="micro-label">Relación con el cielo</span><strong>Lunisolar</strong><p>La Luna ayuda a definir el Año Nuevo; los términos solares también ordenan el calendario.</p></div><div><span class="micro-label">Uso en Soy</span><strong>Año efectivo</strong><p>Corregimos enero y febrero según el inicio lunisolar disponible.</p></div><div><span class="micro-label">Límite</span><strong>No es causalidad</strong><p>Las flechas y trinas son correspondencias tradicionales, no fuerzas comprobadas entre personas.</p></div></div></section>
+        </section>
+
+        <section class="section rule wiki-module" id="wiki-numerology" aria-labelledby="wiki-numerology-title" hidden>
+          <div class="wiki-module-intro"><div class="section-head"><p class="section-kicker">01 · Numerología</p><h2 class="section-title" id="wiki-numerology-title">La cuenta primero; la interpretación después.</h2><p class="section-intro">Una regla puede ser reproducible sin convertirse en una verdad científica. Por eso mostramos la operación, nombramos la variante y separamos el número de su lectura editorial.</p></div><figure class="wiki-module-art"><img src="assets/aprende/numerologia.webp" alt="Carta ilustrada con números, geometría y una balanza simbólica"></figure></div>
+          <section class="wiki-chapter" aria-labelledby="numerology-calc-title"><div class="wiki-chapter-head"><div><span class="micro-label">01 · Regla</span><h3 id="numerology-calc-title">Camino de vida.</h3></div><p>Este mockup suma todos los dígitos de la fecha y conserva 11, 22 y 33. Otras escuelas reducen día, mes y año por separado o conservan menos números maestros.</p></div><div class="wiki-two-column wiki-single"><article class="wiki-method"><span class="micro-label">Ejemplo · 26/08/1992</span><h3>De la fecha al número 1</h3><code class="wiki-formula">2 + 6 + 0 + 8 + 1 + 9 + 9 + 2 = 37<br>3 + 7 = 10 → 1 + 0 = 1</code><p>La cuenta es verificable. El significado atribuido al 1 pertenece a una tradición numerológica, no a una medición psicológica.</p></article></div></section>
+          <section class="wiki-chapter" aria-labelledby="numerology-map-title"><div class="wiki-chapter-head"><div><span class="micro-label">02 · Repertorio</span><h3 id="numerology-map-title">Doce resultados posibles.</h3></div><p>Los números no forman una escala de mejor a peor. Cada uno propone un aprendizaje y un posible exceso.</p></div><div class="wiki-symbol-grid"><article class="wiki-symbol"><span class="micro-label">1</span><strong>Inicio</strong><p>Liderazgo; exceso de autosuficiencia.</p></article><article class="wiki-symbol"><span class="micro-label">2</span><strong>Vínculo</strong><p>Cooperación; exceso de complacencia.</p></article><article class="wiki-symbol"><span class="micro-label">3</span><strong>Expresión</strong><p>Creatividad; exceso de dispersión.</p></article><article class="wiki-symbol"><span class="micro-label">4</span><strong>Estructura</strong><p>Método; exceso de rigidez.</p></article><article class="wiki-symbol"><span class="micro-label">5</span><strong>Cambio</strong><p>Exploración; exceso de evasión.</p></article><article class="wiki-symbol"><span class="micro-label">6</span><strong>Cuidado</strong><p>Responsabilidad; exceso de carga.</p></article><article class="wiki-symbol"><span class="micro-label">7</span><strong>Búsqueda</strong><p>Estudio; exceso de aislamiento.</p></article><article class="wiki-symbol"><span class="micro-label">8</span><strong>Recursos</strong><p>Estrategia; exceso de control.</p></article><article class="wiki-symbol"><span class="micro-label">9</span><strong>Cierre</strong><p>Integración; exceso de sacrificio.</p></article><article class="wiki-symbol"><span class="micro-label">11</span><strong>Inspiración</strong><p>Sensibilidad intensa; riesgo de sobrecarga.</p></article><article class="wiki-symbol"><span class="micro-label">22</span><strong>Construcción</strong><p>Visión práctica; riesgo de perfeccionismo.</p></article><article class="wiki-symbol"><span class="micro-label">33</span><strong>Servicio</strong><p>Cuidado amplio; riesgo de salvacionismo.</p></article></div></section>
+          <section class="wiki-chapter" aria-labelledby="numerology-synthesis-title"><div class="wiki-chapter-head"><div><span class="micro-label">03 · Uso editorial</span><h3 id="numerology-synthesis-title">Una señal dentro del resumen.</h3></div><p>Camino de vida tiene peso alto, pero no define por sí solo a la persona. Se contrasta con las demás fuentes y solo sube un tema cuando otra tradición lo sostiene.</p></div><div class="wiki-two-column wiki-single"><article class="wiki-method"><span class="micro-label">Síntesis</span><h3>Capas, no votos</h3><p>Cada señal conserva su cálculo y su límite. Una coincidencia se formula como hipótesis; si no hay un tema común, la salida correcta es “sin convergencia clara”.</p><code class="wiki-formula">Dato → regla → significado tradicional → tema editorial → contraste</code></article></div></section>
+        </section>
+
+        <section class="section rule wiki-module" id="wiki-moon" aria-labelledby="wiki-moon-title" hidden>
+          <div class="wiki-module-intro"><div class="section-head"><p class="section-kicker">04 · Fases lunares</p><h2 class="section-title" id="wiki-moon-title">Un ritmo del período, no una orden.</h2><p class="section-intro">La fase lunar observa la geometría aparente entre Sol, Tierra y Luna. En Estoy la usamos para modular cómo trabajar el tema del año personal durante varios días; nunca para reemplazarlo.</p></div><figure class="wiki-module-art"><img src="assets/aprende/fases-lunares.webp" alt="Carta ilustrada con las cuatro fases principales de la Luna"></figure></div>
+          <section class="wiki-chapter" aria-labelledby="moon-cycle-title"><div class="wiki-chapter-head"><div><span class="micro-label">01 · Ciclo</span><h3 id="moon-cycle-title">Cuatro cuartos, cerca de siete días cada uno.</h3></div><p>El ciclo completo dura aproximadamente 29,5 días. El mockup lo resume en cuatro períodos para evitar una instrucción distinta cada noche.</p></div><div class="wiki-lunar-grid"><article class="wiki-lunar-card"><span class="moon-token" style="--moon-fill:var(--ink)"></span><span class="micro-label">Luna nueva</span><strong>Elegir</strong><p>Sirve para formular una intención y una primera acción pequeña. No obliga a comenzar algo.</p></article><article class="wiki-lunar-card"><span class="moon-token" style="--moon-fill:var(--paper-2);--moon-inset:-17px 0 0 var(--ink)"></span><span class="micro-label">Creciente</span><strong>Construir</strong><p>Sirve para probar, ajustar y dar soporte a lo ya elegido.</p></article><article class="wiki-lunar-card"><span class="moon-token" style="--moon-fill:var(--paper-2)"></span><span class="micro-label">Luna llena</span><strong>Observar</strong><p>Sirve para mirar qué se volvió visible antes de decidir en caliente.</p></article><article class="wiki-lunar-card"><span class="moon-token" style="--moon-fill:var(--paper-2);--moon-inset:17px 0 0 var(--ink)"></span><span class="micro-label">Menguante</span><strong>Depurar</strong><p>Sirve para terminar, editar o recuperar espacio. No prohíbe abrir algo necesario.</p></article></div></section>
+          <section class="wiki-chapter" aria-labelledby="moon-use-title"><div class="wiki-chapter-head"><div><span class="micro-label">02 · Uso en Estoy</span><h3 id="moon-use-title">Tema estable + ritmo lunar.</h3></div><p>El año personal responde “qué tema estás trabajando”; la Luna responde “con qué ritmo conviene trabajarlo ahora”. Si parecen contradecirse, el tema permanece y la fase modifica la acción.</p></div><div class="wiki-meta"><div><span class="micro-label">Astronomía</span><strong>Geometría observable</strong><p>La fase surge de la porción iluminada visible desde la Tierra.</p></div><div><span class="micro-label">Regla del mockup</span><strong>Aproximación diaria</strong><p>Agrupa el ciclo en cuatro cuartos; no calcula una hora exacta de cambio.</p></div><div><span class="micro-label">Límite</span><strong>No es causalidad</strong><p>La lectura práctica es editorial y simbólica; no prueba que la Luna cause una conducta.</p></div></div></section>
+        </section>
+      </div>
     </main>
 
     <footer><div class="footer-inner"><span>Soy / Estoy · mockup de validación</span><span>Esoterismo aterrizado, calculable y honesto.</span></div></footer>
@@ -1088,11 +1427,60 @@
 
   <nav class="mobile-tabs" role="tablist" aria-label="Secciones del producto" hidden>
     <button class="tab" role="tab" data-view="soy" aria-selected="true">Soy</button>
+    <button class="tab" role="tab" data-view="soyplus" aria-selected="false">Soy+</button>
     <button class="tab" role="tab" data-view="estoy" aria-selected="false">Estoy</button>
     <button class="tab" role="tab" data-view="circulo" aria-selected="false">Mi círculo</button>
+    <button class="tab" role="tab" data-view="aprende" aria-selected="false">Aprende</button>
   </nav>
+  <dialog class="share-dialog" id="share-dialog" aria-labelledby="share-dialog-title">
+    <form class="share-panel" method="dialog">
+      <div class="share-dialog-head">
+        <div><span class="micro-label">Formato para compartir</span><h2 id="share-dialog-title">¿Qué quieres compartir?</h2><p id="share-dialog-context">—</p></div>
+        <button class="share-close" value="cancel" type="submit">Cerrar</button>
+      </div>
+      <div class="share-options">
+        <button class="share-option" data-share-mode="link" type="button"><strong>Compartir enlace</strong><span>Abre esta lectura completa. Incluye nombre y fecha natal; en Estoy también fija la fecha consultada.</span></button>
+        <button class="share-option" data-share-mode="image" type="button"><strong>Compartir imagen resumen</strong><span>Envía una tarjeta sin fecha natal. Su enlace invita a crear una lectura propia.</span></button>
+      </div>
+      <p class="share-warning">El enlace completo incluye datos personales; compártelo solo con quien elijas.</p>
+    </form>
+  </dialog>
+  <dialog class="checkout-dialog" id="checkout-dialog" aria-label="Simulación de pago de Estoy">
+    <div class="checkout-panel" id="checkout-offer">
+      <div class="checkout-head">
+        <div><span class="micro-label">Pago simulado</span><h2 id="checkout-title">Continúa con Estoy</h2><p>Pase único. Sin suscripción ni renovación automática.</p></div>
+        <button class="share-close" id="checkout-close" type="button">Cerrar</button>
+      </div>
+      <div class="checkout-order" aria-label="Resumen del pedido">
+        <div><span>Para <b id="checkout-person">—</b></span><h3>Acceso completo · 30 días</h3></div>
+        <strong class="checkout-price">USD 5</strong>
+      </div>
+      <ul class="checkout-facts">
+        <li>Una lectura al comienzo de cada período.</li>
+        <li>Una sugerencia diaria breve por WhatsApp.</li>
+        <li>Acceso a Mi círculo para comparar tus vínculos.</li>
+        <li>Acceso completo a la wiki Aprende.</li>
+        <li>Acceso inmediato durante 30 días.</li>
+      </ul>
+      <div class="checkout-provider"><div><span>Forma de pago</span><strong>Mercado Pago</strong><small>Tarjeta o saldo disponible</small></div><strong>USD 5 total</strong></div>
+      <form id="checkout-form">
+        <button class="primary checkout-submit" type="submit">Simular pago con Mercado Pago</button>
+      </form>
+      <p class="checkout-disclaimer">Este es un mockup: no se abrirá Mercado Pago, no pediremos datos de tarjeta y no se realizará ningún cobro.</p>
+    </div>
+    <div class="checkout-panel checkout-success" id="checkout-success" aria-live="polite" hidden>
+      <div class="checkout-success-mark" aria-hidden="true">✓</div>
+      <span class="micro-label">Pago simulado</span>
+      <h2>Tu pase estaría activo.</h2>
+      <p>En producción, aquí habilitaríamos Estoy y enviaríamos la confirmación por WhatsApp.</p>
+      <div class="checkout-access"><span class="micro-label">Acceso para <b id="checkout-result-name">—</b></span><strong id="checkout-until">—</strong></div>
+      <button class="primary checkout-submit" id="checkout-done" type="button">Entrar a Estoy</button>
+      <p class="checkout-disclaimer">No hubo un cobro real.</p>
+    </div>
+  </dialog>
   <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 
+  <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
   <script>
     (() => {
       "use strict";
@@ -1102,9 +1490,25 @@
       const $$ = selector => [...document.querySelectorAll(selector)];
       const pad = value => String(value).padStart(2, "0");
       const mod = (value, divisor) => ((value % divisor) + divisor) % divisor;
-      const initialView = ["soy","estoy","circulo"].includes(location.hash.slice(1)) ? location.hash.slice(1) : "soy";
+      const [sharedHashView,sharedHashQuery=""] = location.hash.slice(1).split("?");
+      const initialView = ["soy","soyplus","estoy","circulo","aprende"].includes(sharedHashView) ? sharedHashView : "soy";
+      const sharedFragmentParams = new URLSearchParams(sharedHashQuery);
+      const sharedFragmentQuery = sharedFragmentParams.toString();
+      const SHARE_LANDING_URL = "https://ptoledor.github.io/soy-estoy-mockup/";
+      const SHARE_TRACKED_URL = `${SHARE_LANDING_URL}?utm_source=soy_card&utm_medium=whatsapp&utm_campaign=organic_share`;
+      const SHARE_DISPLAY_URL = "ptoledor.github.io/soy-estoy-mockup";
       let circleMembers = [];
       let currentProfile = null;
+      let pendingShare = null;
+      let pendingPaidView = "estoy";
+      let mockAccessGranted = false;
+      let preserveSharedFragment = Boolean(sharedFragmentQuery);
+      const WIKI_MODULES = [
+        {id:"wiki-numerology",label:"Numerología"},
+        {id:"wiki-western",label:"Zodíaco occidental"},
+        {id:"wiki-chinese",label:"Zodíaco chino"},
+        {id:"wiki-moon",label:"Fases lunares"}
+      ];
 
       const LIFE = {
         1: { key: "inicio", meaning: "liderazgo, independencia e impulso creador", gift: "Abrir camino", giftCopy: "Tu recurso aparece cuando una situación necesita dirección y una primera decisión.", shadow: "No hacerlo todo solo", shadowCopy: "El impulso de liderar puede aislarte o convertir velocidad en impaciencia.", question: "¿Dónde necesitas iniciar y dónde te conviene pedir compañía?" },
@@ -1132,6 +1536,21 @@
         creativity:{label:"Creatividad y expresión",thesis:"dar forma visible a una idea propia",practice:"haz una versión compartible antes de seguir perfeccionando",analysis:"Lo que insiste en ti es la expresión: las ideas te piden forma visible, con sello propio. Cuando le das salida, ordena el resto de tu energía; cuando la pospones, se filtra como inquietud o dispersión. No es un lujo decorativo: observa qué pieza tuya está esperando ser mostrada, aunque no esté perfecta.",keywords:["creatividad","expresión","imaginación","alegría","inspiración","generosidad","presencia","crear","creador","manifestación"]},
         transformation:{label:"Transformación y cierre",thesis:"leer los ciclos, cerrar y renovar",practice:"termina o suelta una cosa concreta antes de abrir la siguiente",analysis:"Tu patrón dominante es el ciclo: detectas cuándo algo ya dio lo que tenía que dar, y tienes capacidad de soltarlo y reconstituirte. Eso te hace fuerte en crisis y transiciones; su sombra es cortar de más, o cerrar por dentro sin avisar. Vale observar qué cierre está pendiente y qué merece, en cambio, una segunda temporada.",keywords:["transformación","cierre","ciclos","renovación","limpieza","soltar","renacimiento","revelación","liberación","revisión","integración","cerrar ciclos"]},
         freedom:{label:"Libertad y cambio",thesis:"adaptarte, explorar y cambiar de rumbo sin perder dirección",practice:"cambia una condición del camino sin abandonar todavía el objetivo",analysis:"Tu señal más consistente es el movimiento: te adaptas rápido, exploras sin miedo y detectas cuándo un plan dejó de tener sentido. Esa flexibilidad es ventaja en entornos que cambian; su exceso es cambiar de rumbo justo antes de cosechar. La pregunta útil: ¿qué necesita de ti permanencia esta vez, no otra salida?",keywords:["libertad","cambio","exploración","adaptación","adaptar","independencia","movimiento","camino abierto","autonomía"]}
+      };
+
+      const PEARSON_ARCHETYPES = {
+        idealist:{label:"Idealista",pearson:"Inocente / Idealista",thesis:"Confiar en que algo puede repararse y orientar la experiencia hacia una posibilidad mejor.",resource:"Esperanza con dirección",risk:"Negar complejidad o conflicto",question:"¿Qué esperanza puedes convertir en una acción verificable?",factors:{expansion:.55,intuition:.2,creativity:.2}},
+        realist:{label:"Realista",pearson:"Huérfano / Realista",thesis:"Reconocer límites, pertenecer y construir desde lo que efectivamente está disponible.",resource:"Pragmatismo y cooperación",risk:"Resignarse o esperar exclusión",question:"¿Qué apoyo real existe hoy, sin idealizarlo ni descartarlo?",factors:{link:.45,structure:.25,care:.25,mind:.15}},
+        hero:{label:"Héroe",pearson:"Guerrero / Héroe",thesis:"Responder a un desafío con decisión, disciplina y capacidad de avanzar.",resource:"Coraje aplicado",risk:"Convertir todo en prueba o combate",question:"¿Qué desafío merece tu esfuerzo y cuál no necesita una batalla?",factors:{action:1,structure:.45}},
+        caregiver:{label:"Cuidador",pearson:"Cuidador",thesis:"Sostener, proteger y hacer que el cuidado se vuelva una ayuda concreta.",resource:"Servicio que da soporte",risk:"Postergarte o generar dependencia",question:"¿Qué cuidado ayuda a crecer y cuál te está reemplazando?",factors:{care:1,link:.35}},
+        explorer:{label:"Explorador",pearson:"Buscador / Explorador",thesis:"Buscar autonomía, ampliar el horizonte y probar caminos con sentido propio.",resource:"Libertad con curiosidad",risk:"Escapar antes de profundizar",question:"¿Qué necesitas explorar y qué necesita que permanezcas?",factors:{freedom:1,expansion:.8}},
+        lover:{label:"Amante",pearson:"Amante",thesis:"Crear valor mediante vínculo, belleza, elección y presencia afectiva.",resource:"Compromiso y sensibilidad",risk:"Perder criterio por agradar",question:"¿Qué vínculo pide más presencia sin pedirte que desaparezcas?",factors:{link:1,care:.25,creativity:.25}},
+        rebel:{label:"Rebelde",pearson:"Destructor / Revolucionario",thesis:"Romper una forma agotada para recuperar libertad y permitir una transformación real.",resource:"Liberación y renovación",risk:"Destruir antes de comprender",question:"¿Qué debe terminar y qué solo necesita una reforma?",factors:{transformation:1,freedom:.55}},
+        creator:{label:"Creador",pearson:"Creador",thesis:"Dar una forma original y compartible a una idea, una visión o una sensibilidad.",resource:"Imaginación que toma forma",risk:"Perfeccionismo o dispersión",question:"¿Qué versión imperfecta ya merece existir?",factors:{creativity:1,mind:.25,structure:.15}},
+        ruler:{label:"Gobernante",pearson:"Gobernante",thesis:"Ordenar recursos, asumir responsabilidad y crear estructuras que puedan sostenerse.",resource:"Dirección y estabilidad",risk:"Rigidez o control excesivo",question:"¿Qué necesita una regla clara y qué necesita más autonomía?",factors:{structure:1,action:.45,link:.15}},
+        magician:{label:"Mago",pearson:"Mago",thesis:"Leer relaciones invisibles, integrar señales y convertir una transición en cambio consciente.",resource:"Transformación e integración",risk:"Confundir intuición con certeza",question:"¿Qué cambio puedes acompañar sin pretender controlarlo por completo?",factors:{intuition:.85,transformation:.65,creativity:.3,expansion:.25}},
+        sage:{label:"Sabio",pearson:"Sabio",thesis:"Buscar claridad mediante observación, conocimiento, contraste y perspectiva.",resource:"Discernimiento",risk:"Analizar para no actuar",question:"¿Qué dato podría corregir la historia que hoy te cuentas?",factors:{mind:1,intuition:.35,expansion:.35}},
+        jester:{label:"Bufón",pearson:"Bufón",thesis:"Recuperar juego, espontaneidad y perspectiva para que la vida no se vuelva una tarea cerrada.",resource:"Ligereza y presencia",risk:"Evitar profundidad mediante distracción",question:"¿Dónde una dosis de juego abriría una posibilidad nueva?",factors:{creativity:.55,freedom:.3,link:.2}}
       };
 
       function normalizeSignalText(text) {
@@ -1162,14 +1581,30 @@
         if(items.length<2)return items[0]||"";
         return `${items.slice(0,-1).join(", ")} y ${items[items.length-1]}`;
       }
-      function buildSoySynthesis(life,profile,sun,chin,tarot) {
-        const signals=[
+      function buildSoySignals(life,profile,sun,chin,tarot) {
+        return [
           {key:"life",label:`Camino de vida ${life.number}`,weight:3,detail:`${profile.meaning}; ${profile.gift}; ${profile.giftCopy}`},
           {key:"western",label:sun[0],weight:2.5,detail:`${sun[0]} ${sun[1]} ${sun[2]}; ${sun[5].join(", ")}; ${ELEMENT_LANGUAGE[sun[1]]}; ${MODALITY_LANGUAGE[sun[2]]}`},
           {key:"chinese",label:`${chin.animal} de ${chin.element} ${chin.polarity}`,weight:1.5,detail:`${chineseAnimalTone(chin.animal)}; ${CHINESE_ELEMENT_TONE[chin.element]}; ${POLARITY_TONE[chin.polarity]}`},
           {key:"tarot",label:tarot[0],weight:2.5,detail:tarot[1]}
         ];
-        const factors=analyzeSoyConvergence(signals),main=factors.find(factor=>factor.sourceCount>=2);
+      }
+      function buildArchetypeAnalysis(factors) {
+        const ranked=Object.entries(PEARSON_ARCHETYPES).map(([key,definition])=>{
+          const contributions=factors.map(factor=>{
+            const coefficient=definition.factors[factor.key]||0;
+            return {...factor,coefficient,contribution:factor.score*coefficient};
+          }).filter(item=>item.contribution>0).sort((a,b)=>b.contribution-a.contribution);
+          const score=contributions.reduce((sum,item)=>sum+item.contribution,0);
+          const evidence=contributions.slice(0,3);
+          const sources=[...new Map(evidence.flatMap(item=>item.sources).map(source=>[source.key,source])).values()];
+          return {key,...definition,score,evidence,sources,sourceCount:sources.length};
+        }).filter(item=>item.score>0).sort((a,b)=>b.score-a.score||b.sourceCount-a.sourceCount||a.label.localeCompare(b.label,"es"));
+        const maxScore=ranked[0]?.score||1;
+        return ranked.map(item=>({...item,strength:Math.max(1,Math.round(item.score/maxScore*100))}));
+      }
+      function buildSoySynthesis(life,profile,sun,chin,tarot,signals,factors) {
+        const main=factors.find(factor=>factor.sourceCount>=2);
         if(!main)return {label:"Sin convergencia clara",title:"Señales distintas",sources:"Las cuatro fuentes apuntan a temas distintos.",copy:"Las cuatro tradiciones apuntan a temas diferentes. No forzamos una conclusión común: revisa cada componente por separado."};
         const definition=SOY_FACTORS[main.key],mainKeys=new Set(main.sources.map(source=>source.key));
         const modifiers=[];
@@ -1183,6 +1618,216 @@
           sources:`Se repite en ${joinSpanish([...new Map(main.sources.map(source=>[source.key,source])).values()].map(source=>source.label))}.`,
           copy:`${definition.analysis} En concreto: ${definition.practice}. ${modifiers.slice(0,1).join(" ")}`
         };
+      }
+
+      function buildSoySnapshot(name,birth) {
+        const source=`${pad(birth.getUTCDate())}${pad(birth.getUTCMonth()+1)}${birth.getUTCFullYear()}`;
+        const life=traceDigits(source,true),profile=LIFE[life.number],sun=western(birth),chin=chinese(birth);
+        let tarotNumber=sumDigits(source),tarotSteps=[tarotNumber];
+        while(tarotNumber>22){tarotNumber=sumDigits(tarotNumber);tarotSteps.push(tarotNumber);}
+        const tarotTrail=tarotSteps.slice(1).map(step=>` → como supera 22, se vuelven a sumar sus dígitos → ${step}`).join("");
+        const tarot=ARCANA[tarotNumber],signals=buildSoySignals(life,profile,sun,chin,tarot),factors=analyzeSoyConvergence(signals),archetypes=buildArchetypeAnalysis(factors),synthesis=buildSoySynthesis(life,profile,sun,chin,tarot,signals,factors);
+        return {name,birth,life,profile,sun,chin,tarot,tarotNumber,tarotSteps,tarotTrail,signals,factors,archetypes,synthesis};
+      }
+      function buildEstoySnapshot(name,birth,target) {
+        const current=periodFor(target),phase=QUARTERS[current.quarter],value=moonPhase(target),weekday=WEEKDAYS[target.getUTCDay()];
+        const py=personalYear(birth,target),uy=universalYear(target),natalChinese=chinese(birth),currentChinese=chinese(target),relation=chineseRelation(natalChinese,currentChinese),elementRelation=chineseElementRelation(natalChinese,currentChinese);
+        const natalSun=western(birth),currentSun=western(target),sunRelation=solarRelation(natalSun,currentSun);
+        const centralKey=PERSONAL[py.number][0],moment=MOMENT[centralKey],synthesis=periodSynthesis(centralKey,current.quarter,currentSun);
+        return {name,birth,target,current,phase,value,weekday,py,uy,natalChinese,currentChinese,relation,elementRelation,natalSun,currentSun,sunRelation,centralKey,moment,synthesis};
+      }
+
+      function fitCanvasFont(ctx,text,maxWidth,maxSize,minSize,family) {
+        let size=maxSize;
+        do { ctx.font=`500 ${size}px ${family}`; size-=2; } while(size>=minSize&&ctx.measureText(text).width>maxWidth);
+      }
+      function ellipsizeCanvasText(ctx,text,maxWidth) {
+        let value=String(text).trim();
+        if(ctx.measureText(value).width<=maxWidth)return value;
+        while(value.length&&ctx.measureText(`${value}…`).width>maxWidth)value=value.slice(0,-1);
+        return `${value.trim()}…`;
+      }
+      function canvasTextLines(ctx,text,maxWidth,maxLines=Infinity) {
+        const words=String(text).trim().split(/\s+/).filter(Boolean),lines=[];
+        let current="";
+        for(let index=0;index<words.length;index++){
+          const candidate=current?`${current} ${words[index]}`:words[index];
+          if(ctx.measureText(candidate).width<=maxWidth){current=candidate;continue;}
+          if(lines.length===maxLines-1){
+            return [...lines,ellipsizeCanvasText(ctx,[current,...words.slice(index)].filter(Boolean).join(" "),maxWidth)];
+          }
+          if(current)lines.push(current);
+          current=words[index];
+        }
+        if(current&&lines.length<maxLines)lines.push(current);
+        return lines;
+      }
+      function drawCanvasParagraph(ctx,text,x,y,maxWidth,lineHeight,maxLines) {
+        const lines=canvasTextLines(ctx,text,maxWidth,maxLines);
+        lines.forEach((line,index)=>ctx.fillText(line,x,y+index*lineHeight));
+        return y+lines.length*lineHeight;
+      }
+      function drawShareSignal(ctx,x,y,width,label,value,detail) {
+        ctx.fillStyle="#8d6417";
+        ctx.font='500 20px "Cascadia Code", Consolas, monospace';
+        ctx.fillText(label.toUpperCase(),x,y);
+        ctx.fillStyle="#171812";
+        fitCanvasFont(ctx,value,width,36,28,'"Iowan Old Style", Georgia, serif');
+        ctx.fillText(ellipsizeCanvasText(ctx,value,width),x,y+52);
+        ctx.fillStyle="#606157";
+        ctx.font='400 22px Inter, "Segoe UI", sans-serif';
+        drawCanvasParagraph(ctx,detail,x,y+92,width,29,2);
+      }
+      function drawShareQr(ctx,text,x,y,maxSize) {
+        if(typeof window.qrcode!=="function")return 0;
+        try {
+          const code=window.qrcode(0,"M");code.addData(text);code.make();
+          const modules=code.getModuleCount(),quiet=4,cell=Math.max(2,Math.floor(maxSize/(modules+quiet*2))),size=cell*(modules+quiet*2);
+          ctx.fillStyle="#f4f1e9";ctx.fillRect(x,y,size,size);
+          ctx.fillStyle="#171812";
+          for(let row=0;row<modules;row++)for(let column=0;column<modules;column++){
+            if(code.isDark(row,column))ctx.fillRect(x+(column+quiet)*cell,y+(row+quiet)*cell,cell,cell);
+          }
+          return size;
+        } catch { return 0; }
+      }
+      function buildSoyShareCanvas(snapshot,shareUrl) {
+        const canvas=document.createElement("canvas");canvas.width=1080;canvas.height=1350;
+        const ctx=canvas.getContext("2d");
+        ctx.fillStyle="#ebe7dc";ctx.fillRect(0,0,canvas.width,canvas.height);
+        ctx.textBaseline="alphabetic";
+
+        ctx.fillStyle="#171812";ctx.font='500 25px "Cascadia Code", Consolas, monospace';ctx.fillText("SOY",72,92);
+        ctx.fillStyle="#8d6417";ctx.fillText("/",142,92);
+        ctx.fillStyle="#171812";ctx.fillText("ESTOY",172,92);
+        ctx.textAlign="right";ctx.fillStyle="#606157";ctx.font='500 17px "Cascadia Code", Consolas, monospace';ctx.fillText("LECTURA SIMBÓLICA",1008,92);ctx.textAlign="left";
+        ctx.strokeStyle="#9c988c";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(72,126);ctx.lineTo(1008,126);ctx.stroke();
+
+        ctx.fillStyle="#606157";ctx.font='500 18px "Cascadia Code", Consolas, monospace';ctx.fillText("TU FECHA EN DISTINTAS TRADICIONES",72,174);
+        ctx.fillStyle="#171812";fitCanvasFont(ctx,snapshot.name,936,64,38,'"Iowan Old Style", Georgia, serif');ctx.fillText(ellipsizeCanvasText(ctx,snapshot.name,936),72,242);
+        ctx.fillStyle="#8d6417";ctx.font='500 18px "Cascadia Code", Consolas, monospace';ctx.fillText(snapshot.synthesis.label.toUpperCase(),72,326);
+        ctx.fillStyle="#171812";ctx.font='500 46px "Iowan Old Style", Georgia, serif';ctx.fillText(snapshot.synthesis.title,72,386);
+        ctx.fillStyle="#35372f";ctx.font='400 28px Inter, "Segoe UI", sans-serif';drawCanvasParagraph(ctx,snapshot.synthesis.copy,72,438,936,38,4);
+
+        ctx.strokeStyle="#9c988c";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(72,640);ctx.lineTo(1008,640);ctx.moveTo(540,640);ctx.lineTo(540,1060);ctx.moveTo(72,850);ctx.lineTo(1008,850);ctx.moveTo(72,1060);ctx.lineTo(1008,1060);ctx.stroke();
+        drawShareSignal(ctx,72,688,410,"Numerología",`Camino de vida ${snapshot.life.number}`,snapshot.profile.gift);
+        drawShareSignal(ctx,580,688,428,"Zodíaco tropical",`${snapshot.sun[0]} · ${snapshot.sun[1]}`,`${snapshot.sun[2]} · ${snapshot.sun[5].slice(0,2).join(", ")}`);
+        drawShareSignal(ctx,72,898,410,"Zodíaco chino",`${snapshot.chin.animal} de ${snapshot.chin.element}`,`${snapshot.chin.polarity} · ${chineseAnimalTone(snapshot.chin.animal)}`);
+        drawShareSignal(ctx,580,898,428,"Tarot de nacimiento",`${snapshot.tarot[0]} · ${snapshot.tarotNumber}`,snapshot.tarot[1]);
+
+        ctx.strokeStyle="#9c988c";ctx.beginPath();ctx.moveTo(72,1110);ctx.lineTo(1008,1110);ctx.stroke();
+        const qrSize=drawShareQr(ctx,shareUrl,72,1128,204),footerX=qrSize?72+qrSize+34:72;
+        ctx.fillStyle="#171812";ctx.font='500 29px "Iowan Old Style", Georgia, serif';ctx.fillText("Crea tu propio Soy",footerX,1182);
+        ctx.fillStyle="#8d6417";ctx.font='500 20px "Cascadia Code", Consolas, monospace';ctx.fillText(SHARE_DISPLAY_URL,footerX,1226);
+        ctx.fillStyle="#606157";ctx.font='400 18px Inter, "Segoe UI", sans-serif';drawCanvasParagraph(ctx,"Lectura simbólica: no define tu personalidad ni predice tu futuro.",footerX,1270,1008-footerX,27,2);
+        return canvas;
+      }
+      function estoyShareUrl(target) {
+        const url=new URL("app/",SHARE_LANDING_URL);
+        url.searchParams.set("fecha",isoDate(target));
+        url.searchParams.set("utm_source","estoy_card");
+        url.searchParams.set("utm_medium","whatsapp");
+        url.searchParams.set("utm_campaign","organic_share");
+        url.hash="estoy";
+        return url.href;
+      }
+      function fullReadingShareUrl(name,birth,target,view) {
+        const url=new URL("app/",SHARE_LANDING_URL);
+        url.searchParams.set("utm_source",`${view}_full_share`);
+        url.searchParams.set("utm_medium","whatsapp");
+        url.searchParams.set("utm_campaign","organic_share");
+        const privateParams=new URLSearchParams();
+        privateParams.set("nombre",String(name).slice(0,40));
+        privateParams.set("nacimiento",isoDate(birth));
+        if(target)privateParams.set("fecha",isoDate(target));
+        url.hash=`${view}?${privateParams.toString()}`;
+        return url.href;
+      }
+      function buildEstoyShareCanvas(snapshot,shareUrl) {
+        const canvas=document.createElement("canvas");canvas.width=1080;canvas.height=1350;
+        const ctx=canvas.getContext("2d");
+        ctx.fillStyle="#ebe7dc";ctx.fillRect(0,0,canvas.width,canvas.height);ctx.textBaseline="alphabetic";
+
+        ctx.fillStyle="#171812";ctx.font='500 25px "Cascadia Code", Consolas, monospace';ctx.fillText("SOY",72,92);
+        ctx.fillStyle="#8d6417";ctx.fillText("/",142,92);
+        ctx.fillStyle="#171812";ctx.fillText("ESTOY",172,92);
+        ctx.textAlign="right";ctx.fillStyle="#606157";ctx.font='500 17px "Cascadia Code", Consolas, monospace';ctx.fillText(`FECHA FIJADA · ${isoDate(snapshot.target)}`,1008,92);ctx.textAlign="left";
+        ctx.strokeStyle="#9c988c";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(72,126);ctx.lineTo(1008,126);ctx.stroke();
+
+        ctx.fillStyle="#606157";ctx.font='500 18px "Cascadia Code", Consolas, monospace';ctx.fillText("TU MOMENTO",72,174);
+        ctx.fillStyle="#171812";fitCanvasFont(ctx,snapshot.name,936,58,38,'"Iowan Old Style", Georgia, serif');ctx.fillText(ellipsizeCanvasText(ctx,snapshot.name,936),72,236);
+        ctx.fillStyle="#8d6417";ctx.font='500 18px "Cascadia Code", Consolas, monospace';ctx.fillText(`AÑO PERSONAL ${snapshot.py.number} · ${snapshot.centralKey.toUpperCase()}`,72,320);
+        ctx.fillStyle="#171812";ctx.font='500 48px "Iowan Old Style", Georgia, serif';ctx.fillText(snapshot.moment[0],72,382);
+        ctx.fillStyle="#35372f";ctx.font='400 28px Inter, "Segoe UI", sans-serif';drawCanvasParagraph(ctx,snapshot.synthesis.explanation,72,434,936,38,4);
+
+        ctx.fillStyle="#171812";ctx.fillRect(72,630,936,164);
+        ctx.fillStyle="#d7b875";ctx.font='500 18px "Cascadia Code", Consolas, monospace';ctx.fillText("PERÍODO FIJADO",106,676);
+        ctx.fillStyle="#f4f1e9";ctx.font='500 36px "Iowan Old Style", Georgia, serif';ctx.fillText(`${formatDate(snapshot.current.start,true)} — ${formatDate(snapshot.current.end,true)}`,106,731);
+        ctx.fillStyle="#c9c8bf";ctx.font='400 21px Inter, "Segoe UI", sans-serif';ctx.fillText(`${snapshot.phase.name} · ${snapshot.current.days} días · consultado para ${formatDate(snapshot.target,true)}`,106,768);
+
+        ctx.strokeStyle="#9c988c";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(72,842);ctx.lineTo(1008,842);ctx.moveTo(384,842);ctx.lineTo(384,1068);ctx.moveTo(696,842);ctx.lineTo(696,1068);ctx.moveTo(72,1068);ctx.lineTo(1008,1068);ctx.stroke();
+        drawShareSignal(ctx,72,884,270,"Prioriza",snapshot.synthesis.title,snapshot.synthesis.copy);
+        drawShareSignal(ctx,414,884,252,"Cuida",snapshot.synthesis.watch,snapshot.synthesis.watchCopy);
+        drawShareSignal(ctx,726,884,282,"Después",snapshot.synthesis.later,snapshot.synthesis.laterCopy);
+
+        ctx.strokeStyle="#9c988c";ctx.beginPath();ctx.moveTo(72,1110);ctx.lineTo(1008,1110);ctx.stroke();
+        const qrSize=drawShareQr(ctx,shareUrl,72,1128,204),footerX=qrSize?72+qrSize+34:72;
+        ctx.fillStyle="#171812";ctx.font='500 28px "Iowan Old Style", Georgia, serif';ctx.fillText("Lee este período con tu propia fecha",footerX,1182);
+        ctx.fillStyle="#8d6417";ctx.font='500 20px "Cascadia Code", Consolas, monospace';ctx.fillText(SHARE_DISPLAY_URL,footerX,1226);
+        ctx.fillStyle="#606157";ctx.font='400 18px Inter, "Segoe UI", sans-serif';drawCanvasParagraph(ctx,"El enlace conserva la fecha consultada, no la fecha de nacimiento.",footerX,1270,1008-footerX,27,2);
+        return canvas;
+      }
+      function canvasPngBlob(canvas) {
+        const base64=canvas.toDataURL("image/png").split(",")[1],binary=atob(base64),bytes=new Uint8Array(binary.length);
+        for(let index=0;index<binary.length;index++)bytes[index]=binary.charCodeAt(index);
+        return new Blob([bytes],{type:"image/png"});
+      }
+      function shareFileSlug(name) {
+        const safe=String(name||"soy").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/(^-|-$)/g,"")||"soy";
+        return safe;
+      }
+      function downloadShareImage(blob,fileName) {
+        const url=URL.createObjectURL(blob),link=document.createElement("a");
+        link.href=url;link.download=fileName;document.body.appendChild(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+      }
+      function openWhatsAppMessage(message) {
+        const link=document.createElement("a");
+        link.href=`https://wa.me/?text=${encodeURIComponent(message)}`;link.target="_blank";link.rel="noopener noreferrer";
+        document.body.appendChild(link);link.click();link.remove();
+      }
+      async function shareCanvasOnWhatsApp(canvas,fileName,title,message) {
+        const blob=canvasPngBlob(canvas);
+        const file=typeof File==="function"?new File([blob],fileName,{type:"image/png"}):null;
+        if(file&&navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){
+          try { await navigator.share({title,text:message,files:[file]});toast("Imagen y enlace listos para compartir.");return; }
+          catch(error){if(error&&error.name==="AbortError")return;}
+        }
+        let copied=false;
+        if(navigator.clipboard&&navigator.clipboard.write&&typeof ClipboardItem==="function"){
+          try { await navigator.clipboard.write([new ClipboardItem({"image/png":blob})]);copied=true; } catch { /* La descarga sigue disponible. */ }
+        }
+        downloadShareImage(blob,fileName);
+        openWhatsAppMessage(message);
+        toast(copied?"Imagen copiada y descargada. Pégala en WhatsApp; el enlace ya está escrito.":"Imagen descargada. WhatsApp se abrió con el enlace; adjunta la imagen.");
+      }
+      function shareReadingLinkOnWhatsApp(payload) {
+        const isEstoy=payload.type==="estoy";
+        const shareUrl=fullReadingShareUrl(payload.name,payload.birth,isEstoy?payload.target:null,payload.type);
+        const message=isEstoy
+          ? `Te comparto el Estoy completo de ${payload.name} para ${formatDate(payload.target,true)}.\n\nAbre la lectura: ${shareUrl}`
+          : `Te comparto el Soy completo de ${payload.name}.\n\nAbre la lectura: ${shareUrl}`;
+        openWhatsAppMessage(message);
+        toast("WhatsApp se abrió con el enlace a la lectura.");
+      }
+      async function shareSoyImage(name,birth) {
+        const snapshot=buildSoySnapshot(name,birth),shareUrl=SHARE_TRACKED_URL;
+        const message=`Te comparto este resumen de Soy de ${snapshot.name}: camino de vida ${snapshot.life.number}, ${snapshot.sun[0]} de ${snapshot.sun[1]}, ${snapshot.chin.animal} de ${snapshot.chin.element} y ${snapshot.tarot[0]}.\n\nCrea el tuyo: ${shareUrl}`;
+        await shareCanvasOnWhatsApp(buildSoyShareCanvas(snapshot,shareUrl),`soy-${shareFileSlug(name)}-resumen.png`,`Soy de ${snapshot.name}`,message);
+      }
+      async function shareEstoyImage(name,birth,target) {
+        const snapshot=buildEstoySnapshot(name,birth,target),shareUrl=estoyShareUrl(target);
+        const message=`Te comparto este resumen de Estoy de ${snapshot.name} para ${formatDate(target,true)}. Tema: ${snapshot.moment[0]}. Período: ${formatDate(snapshot.current.start,true)} — ${formatDate(snapshot.current.end,true)}. Foco: ${snapshot.synthesis.title}.\n\nLee este mismo período con tu propia fecha: ${shareUrl}`;
+        await shareCanvasOnWhatsApp(buildEstoyShareCanvas(snapshot,shareUrl),`estoy-${shareFileSlug(name)}-${isoDate(target)}-resumen.png`,`Estoy de ${snapshot.name} · ${formatDate(target,true)}`,message);
       }
 
       const PERSONAL = {
@@ -1303,6 +1948,7 @@
         return new Date(Date.UTC(year, month - 1, day));
       }
       function isoDate(date) { return `${date.getUTCFullYear()}-${pad(date.getUTCMonth()+1)}-${pad(date.getUTCDate())}`; }
+      function isValidISODate(value) { return /^\d{4}-\d{2}-\d{2}$/.test(value||"")&&isoDate(parseDate(value))===value; }
       function addDays(date, days) { return new Date(date.getTime() + days * DAY); }
       function daysBetween(a, b) { return Math.round((b - a) / DAY); }
       function formatDate(date, year = false) { return new Intl.DateTimeFormat("es-CL", { timeZone:"UTC", day:"numeric", month:"short", ...(year ? {year:"numeric"} : {}) }).format(date); }
@@ -1355,7 +2001,10 @@
         return {...methods[lunarQuarter], explanation:`Tu año personal marca “${themeKey}” como tema. La ${QUARTERS[lunarQuarter].name.toLowerCase()} indica cómo trabajarlo ahora. ${solarNote}`};
       }
       let affinitySelection={western:null,chinese:null};
-      function drawAffinityMatrix(canvas, nodes, positions, edges, directed=false, highlightedNode=null) {
+      const WESTERN_MATRIX={nodes:["Fuego","Aire","Agua","Tierra"],positions:[[.5,.13],[.87,.5],[.5,.87],[.13,.5]],edges:[[0,2,"negative"],[1,3,"negative"],[0,3,"neutral"],[1,2,"neutral"],[0,1,"positive"],[2,3,"positive"]],directed:false};
+      const CHINESE_MATRIX={nodes:["Madera","Fuego","Tierra","Metal","Agua"],positions:[[.5,.1],[.88,.38],[.74,.84],[.26,.84],[.12,.38]],edges:[[0,2,"neutral"],[2,4,"neutral"],[4,1,"neutral"],[1,3,"neutral"],[3,0,"neutral"],[0,1,"positive"],[1,2,"positive"],[2,3,"positive"],[3,4,"positive"],[4,0,"positive"]],directed:true};
+      const wikiMatrixSelection={western:"Fuego",chinese:"Agua"},wikiMatrixFrames={western:null,chinese:null};
+      function drawAffinityMatrix(canvas, nodes, positions, edges, directed=false, highlightedNode=null, transition=null) {
         const parentStyle=getComputedStyle(canvas.parentElement);
         const available=canvas.parentElement.clientWidth-parseFloat(parentStyle.paddingLeft)-parseFloat(parentStyle.paddingRight);
         const size=Math.max(280,Math.min(560,available||420));
@@ -1368,11 +2017,13 @@
         const ink=css.getPropertyValue("--ink").trim(), paper=css.getPropertyValue("--paper-2").trim(), guide=css.getPropertyValue("--line").trim();
         const mono=css.getPropertyValue("--mono").trim()||"monospace";
         const radius=Math.max(30,Math.min(40,size*.093));
-        const hi=nodes.indexOf(highlightedNode);
+        const hi=nodes.indexOf(highlightedNode),fromHi=transition?nodes.indexOf(transition.fromNode):hi,progress=transition?transition.progress:1;
         const pts=positions.map(p=>[p[0]*size,p[1]*size]);
         let cx=0,cy=0; pts.forEach(p=>{cx+=p[0];cy+=p[1];}); cx/=pts.length; cy/=pts.length;
         const R=Math.hypot(pts[0][0]-cx,pts[0][1]-cy);
-        const touches=edge=>hi<0||edge[0]===hi||edge[1]===hi;
+        const touchesAt=(edge,index)=>index<0||edge[0]===index||edge[1]===index;
+        const touches=edge=>touchesAt(edge,hi);
+        const interpolate=(from,to)=>from+(to-from)*progress;
         const arrowHead=(x,y,dx,dy,color)=>{
           const len=Math.hypot(dx,dy)||1,ux=dx/len,uy=dy/len,head=11,wing=5;
           ctx.setLineDash([]); ctx.beginPath(); ctx.moveTo(x,y);
@@ -1386,7 +2037,8 @@
         }
         [...edges].sort((a,b)=>Number(touches(a))-Number(touches(b))).forEach(edge=>{
           const emphasized=touches(edge),type=edge[2],color=colors[type];
-          ctx.globalAlpha=emphasized?1:.14;
+          const emphasis=interpolate(touchesAt(edge,fromHi)?1:0,emphasized?1:0);
+          ctx.globalAlpha=interpolate(touchesAt(edge,fromHi)?1:.14,emphasized?1:.14);
           if(directed&&type==="positive"){
             const a=Math.atan2(pts[edge[0]][1]-cy,pts[edge[0]][0]-cx);
             let b=Math.atan2(pts[edge[1]][1]-cy,pts[edge[1]][0]-cx);
@@ -1394,7 +2046,7 @@
             const gapA=(radius+10)/R,gapB=(radius+16)/R,start=a+gapA,end=b-gapB;
             ctx.beginPath(); ctx.setLineDash([]);
             ctx.arc(cx,cy,R,start,end,false);
-            ctx.strokeStyle=color; ctx.lineWidth=emphasized?2.5:1.75; ctx.stroke();
+            ctx.strokeStyle=color; ctx.lineWidth=1.75+emphasis*1.5; ctx.stroke();
             arrowHead(cx+R*Math.cos(end),cy+R*Math.sin(end),-Math.sin(end),Math.cos(end),color);
           } else {
             const [ax,ay]=pts[edge[0]],[bx,by]=pts[edge[1]];
@@ -1403,7 +2055,7 @@
             const sx=directed?ax+ux*trim:ax,sy=directed?ay+uy*trim:ay;
             const ex=directed?bx-ux*trim:bx,ey=directed?by-uy*trim:by;
             ctx.beginPath(); ctx.moveTo(sx,sy); ctx.lineTo(ex,ey);
-            ctx.strokeStyle=color; ctx.lineWidth=type==="positive"?2.5:1.75;
+            ctx.strokeStyle=color; ctx.lineWidth=(type==="positive"?2.5:1.75)+emphasis*1.25;
             ctx.setLineDash(type==="negative"?[8,6]:type==="neutral"?[3,5]:[]); ctx.stroke();
             if(directed)arrowHead(ex,ey,ux,uy,color);
           }
@@ -1413,14 +2065,13 @@
         const elementColor=name=>css.getPropertyValue(`--el-${name.toLowerCase()}`).trim()||ink;
         positions.forEach((position,index)=>{
           const x=position[0]*size,y=position[1]*size;
-          const highlighted=index===hi;
+          const selectedAmount=interpolate(index===fromHi?1:0,index===hi?1:0),highlighted=selectedAmount>.55;
           const el=elementColor(nodes[index]);
-          if(highlighted){ctx.beginPath();ctx.arc(x,y,radius+6,0,Math.PI*2);ctx.strokeStyle=colors.direct;ctx.lineWidth=3;ctx.stroke();}
+          if(selectedAmount>0){ctx.save();ctx.globalAlpha=selectedAmount;ctx.beginPath();ctx.arc(x,y,radius+6,0,Math.PI*2);ctx.strokeStyle=colors.direct;ctx.lineWidth=3;ctx.stroke();ctx.restore();}
           ctx.beginPath(); ctx.arc(x,y,radius,0,Math.PI*2);
           ctx.fillStyle=paper; ctx.fill();
-          if(highlighted){ctx.fillStyle=el; ctx.fill();}
-          else {ctx.globalAlpha=.1; ctx.fillStyle=el; ctx.fill(); ctx.globalAlpha=1;}
-          ctx.strokeStyle=el; ctx.lineWidth=highlighted?2:1.75; ctx.stroke();
+          ctx.save();ctx.globalAlpha=.1+selectedAmount*.9;ctx.fillStyle=el;ctx.fill();ctx.restore();
+          ctx.strokeStyle=el; ctx.lineWidth=1.75+selectedAmount*.5; ctx.stroke();
           const glyph=!directed?GLYPHS[nodes[index]]:null;
           const han=directed?ELEMENT_HANZI[nodes[index]]:null;
           const stroke=highlighted?paper:ink;
@@ -1444,11 +2095,53 @@
           ctx.fillText(nodes[index].toUpperCase(),x,(glyph||han)?y+(han?14:11):y);
         });
       }
+      function matrixConfig(kind) { return kind==="western"?WESTERN_MATRIX:CHINESE_MATRIX; }
+      function wikiMatrixReading(kind,node) {
+        if(kind==="western"){
+          const relation=WESTERN_ELEMENT_RELATIONS[node];
+          return `${node} se reconoce con ${node}, se complementa con ${relation.complement}, requiere ajuste con ${relation.adjust} y marca una diferencia de lenguaje con ${relation.tension}.`;
+        }
+        const incomingImpulse=Object.keys(CHINESE_IMPULSE).find(source=>CHINESE_IMPULSE[source]===node);
+        const incomingRegulation=Object.keys(CHINESE_REGULATION).find(source=>CHINESE_REGULATION[source]===node);
+        return `${node} impulsa a ${CHINESE_IMPULSE[node]} y regula a ${CHINESE_REGULATION[node]}. Recibe impulso de ${incomingImpulse} y regulación de ${incomingRegulation}.`;
+      }
+      function updateWikiMatrixUI(kind,node) {
+        $$(`[data-wiki-matrix="${kind}"][data-matrix-node]`).forEach(button=>button.setAttribute("aria-pressed",String(button.dataset.matrixNode===node)));
+        const reading=$(`#wiki-${kind}-reading`),canvas=$(`#wiki-${kind}-matrix`),copy=wikiMatrixReading(kind,node);
+        if(reading)reading.textContent=copy;
+        if(canvas)canvas.setAttribute("aria-label",`${node} seleccionado. ${copy} Toca otro nodo o usa los botones para cambiar la selección.`);
+      }
+      function drawWikiMatrix(kind,transition=null) {
+        const canvas=$(`#wiki-${kind}-matrix`),config=matrixConfig(kind);
+        if(canvas)drawAffinityMatrix(canvas,config.nodes,config.positions,config.edges,config.directed,wikiMatrixSelection[kind],transition);
+      }
+      function setWikiMatrixSelection(kind,node,animate=true) {
+        const config=matrixConfig(kind);
+        if(!config.nodes.includes(node))return;
+        const previous=wikiMatrixSelection[kind];wikiMatrixSelection[kind]=node;updateWikiMatrixUI(kind,node);
+        if(wikiMatrixFrames[kind])cancelAnimationFrame(wikiMatrixFrames[kind]);
+        const reduceMotion=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        if(!animate||reduceMotion||previous===node){drawWikiMatrix(kind);return;}
+        const started=performance.now(),duration=260;
+        const tick=now=>{
+          const raw=Math.min(1,(now-started)/duration),eased=1-Math.pow(1-raw,3);
+          drawWikiMatrix(kind,{fromNode:previous,progress:eased});
+          if(raw<1)wikiMatrixFrames[kind]=requestAnimationFrame(tick);else wikiMatrixFrames[kind]=null;
+        };
+        wikiMatrixFrames[kind]=requestAnimationFrame(tick);
+      }
+      function wikiMatrixNodeAtPointer(kind,canvas,event) {
+        const config=matrixConfig(kind),rect=canvas.getBoundingClientRect(),x=event.clientX-rect.left,y=event.clientY-rect.top,threshold=Math.max(34,rect.width*.11);
+        let closest=null,distance=Infinity;
+        config.positions.forEach((position,index)=>{const current=Math.hypot(x-position[0]*rect.width,y-position[1]*rect.height);if(current<distance){distance=current;closest=config.nodes[index];}});
+        return distance<=threshold?closest:null;
+      }
       function drawAffinityMatrices() {
-        const western=$("#western-affinity-matrix"),chinese=$("#chinese-affinity-matrix");
-        if(!western||!chinese)return;
-        drawAffinityMatrix(western,["Fuego","Aire","Agua","Tierra"],[[.5,.13],[.87,.5],[.5,.87],[.13,.5]],[[0,2,"negative"],[1,3,"negative"],[0,3,"neutral"],[1,2,"neutral"],[0,1,"positive"],[2,3,"positive"]],false,affinitySelection.western);
-        drawAffinityMatrix(chinese,["Madera","Fuego","Tierra","Metal","Agua"],[[.5,.1],[.88,.38],[.74,.84],[.26,.84],[.12,.38]],[[0,2,"neutral"],[2,4,"neutral"],[4,1,"neutral"],[1,3,"neutral"],[3,0,"neutral"],[0,1,"positive"],[1,2,"positive"],[2,3,"positive"],[3,4,"positive"],[4,0,"positive"]],true,affinitySelection.chinese);
+        const western=$("#western-affinity-matrix"),chinese=$("#chinese-affinity-matrix"),wikiWestern=$("#wiki-western-matrix"),wikiChinese=$("#wiki-chinese-matrix");
+        if(western)drawAffinityMatrix(western,WESTERN_MATRIX.nodes,WESTERN_MATRIX.positions,WESTERN_MATRIX.edges,false,affinitySelection.western);
+        if(chinese)drawAffinityMatrix(chinese,CHINESE_MATRIX.nodes,CHINESE_MATRIX.positions,CHINESE_MATRIX.edges,true,affinitySelection.chinese);
+        if(wikiWestern)drawWikiMatrix("western");
+        if(wikiChinese)drawWikiMatrix("chinese");
       }
       function chinese(date) {
         const year = date.getUTCFullYear();
@@ -1575,7 +2268,8 @@
       }
       function memberCard(person,index) {
         const remove=person.isPrimary?"":`<button class="member-remove" type="button" data-circle-remove="${index}">Quitar del círculo</button>`;
-        return `<article class="member-card${person.isPrimary?" is-primary":""}"><span class="micro-label">${person.isPrimary?"Tu perfil":"Integrante"}</span><h3>${escapeHTML(person.name)}</h3><p>${escapeHTML(isoDate(person.birth))}</p><div class="member-signals"><div class="member-signal"><span>Camino</span><strong>${person.life.number} · ${escapeHTML(person.profile.gift)}</strong></div><div class="member-signal"><span>Solar</span><strong>${person.sun[0]} · ${person.sun[1]}</strong></div><div class="member-signal"><span>Chino</span><strong>${person.chin.animal} · ${person.chin.element}</strong></div></div>${remove}</article>`;
+        const share=`<button class="member-share" type="button" data-circle-share="${index}" aria-label="Compartir el Soy de ${escapeHTML(person.name)}">Compartir Soy</button>`;
+        return `<article class="member-card${person.isPrimary?" is-primary":""}"><span class="micro-label">${person.isPrimary?"Tu perfil":"Integrante"}</span><h3>${escapeHTML(person.name)}</h3><p>${escapeHTML(isoDate(person.birth))}</p><div class="member-signals"><div class="member-signal"><span>Camino</span><strong>${person.life.number} · ${escapeHTML(person.profile.gift)}</strong></div><div class="member-signal"><span>Solar</span><strong>${person.sun[0]} · ${person.sun[1]}</strong></div><div class="member-signal"><span>Chino</span><strong>${person.chin.animal} · ${person.chin.element}</strong></div></div><div class="member-actions">${share}${remove}</div></article>`;
       }
       function relationshipCard(primary,member) {
         const westernRelation=westernPair(primary,member),animalRelation=chineseAnimalPair(primary.chin,member.chin),phaseRelation=chinesePhasePair(primary.chin,member.chin),numberRelation=numerologyPair(primary,member);
@@ -1596,14 +2290,34 @@
         $("#circle-relations").innerHTML=additional.length?additional.map(member=>relationshipCard(primary,member)).join(""):`<div class="circle-empty"><strong>Tu perfil ya es el punto de partida.</strong><br>Agrega a otra persona para abrir una comparación sin puntaje.</div>`;
       }
 
+      function formatEditorialScore(value) {
+        return value.toLocaleString("es-CL",{minimumFractionDigits:1,maximumFractionDigits:1});
+      }
+      function renderSoyPlus(birth,name) {
+        const snapshot=buildSoySnapshot(name,birth),top=snapshot.archetypes.slice(0,2),maxFactor=snapshot.factors[0]?.score||1;
+        $("#soyplus-title").textContent=`${name}, dos arquetipos concentran tus señales.`;
+        if(top.length<2){
+          $("#archetype-cards").innerHTML='<article class="archetype-card"><p>No hay suficientes coincidencias para proponer dos arquetipos.</p></article>';
+        } else {
+          $("#archetype-intro").textContent=top[0].sourceCount===top[1].sourceCount
+            ? `Ambos reúnen temas respaldados por ${top[0].sourceCount} de 4 tradiciones; el orden se resuelve por la fuerza ponderada del resumen.`
+            : `El primer patrón reúne temas respaldados por ${top[0].sourceCount} de 4 tradiciones; el segundo, por ${top[1].sourceCount}. La fuerza ponderada resuelve los empates.`;
+          $("#archetype-cards").innerHTML=top.map((archetype,index)=>{
+            const evidence=archetype.evidence.map(item=>`<li><span>${escapeHTML(SOY_FACTORS[item.key].label)}</span><span>${formatEditorialScore(item.score)} × ${String(item.coefficient).replace(".",",")}</span></li>`).join("");
+            const sourceNames=joinSpanish(archetype.sources.map(source=>source.label));
+            return `<article class="archetype-card"><div class="archetype-card-head"><div><span class="micro-label">Pearson · ${escapeHTML(archetype.pearson)}</span><h3>${escapeHTML(archetype.label)}</h3></div><span class="archetype-rank">0${index+1}</span></div><p class="archetype-support">${archetype.strength}/100 relativo · ${archetype.sourceCount} de 4 tradiciones</p><p class="archetype-thesis">${escapeHTML(archetype.thesis)}</p><div class="archetype-pair"><div><span class="micro-label">Recurso</span><strong>${escapeHTML(archetype.resource)}</strong></div><div><span class="micro-label">Exceso posible</span><strong>${escapeHTML(archetype.risk)}</strong></div></div><ul class="archetype-evidence" aria-label="Temas que sostienen ${escapeHTML(archetype.label)}">${evidence}</ul><p class="archetype-question"><strong>Para contrastar:</strong> ${escapeHTML(archetype.question)}</p><p class="micro-label">Fuentes: ${escapeHTML(sourceNames||"sin convergencia entre tradiciones")}</p></article>`;
+          }).join("");
+        }
+        const visibleFactors=snapshot.factors.slice(0,6);
+        $("#factor-ledger").innerHTML=visibleFactors.map(factor=>{
+          const strength=Math.max(1,Math.round(factor.score/maxFactor*100));
+          return `<div class="factor-row"><strong>${escapeHTML(SOY_FACTORS[factor.key].label)}</strong><div class="factor-track" aria-label="Fuerza relativa ${strength} de 100"><i style="--factor-strength:${strength}%"></i></div><span class="factor-meta">${formatEditorialScore(factor.score)} puntos · ${factor.sourceCount} ${factor.sourceCount===1?"fuente":"fuentes"}</span></div>`;
+        }).join("");
+      }
+
       function renderSoy(birth, name) {
-        const life=traceDigits(`${pad(birth.getUTCDate())}${pad(birth.getUTCMonth()+1)}${birth.getUTCFullYear()}`, true), profile=LIFE[life.number];
-        const sun=western(birth), chin=chinese(birth), tarotTrace=traceDigits(`${pad(birth.getUTCDate())}${pad(birth.getUTCMonth()+1)}${birth.getUTCFullYear()}`, false);
+        const {life,profile,sun,chin,tarot,tarotNumber,tarotSteps,tarotTrail,synthesis}=buildSoySnapshot(name,birth);
         const tarotDigits=`${pad(birth.getUTCDate())}${pad(birth.getUTCMonth()+1)}${birth.getUTCFullYear()}`;
-        let tarotNumber=sumDigits(tarotDigits), tarotSteps=[tarotNumber];
-        while(tarotNumber>22){tarotNumber=sumDigits(tarotNumber);tarotSteps.push(tarotNumber);} const tarot=ARCANA[tarotNumber];
-        const tarotTrail=tarotSteps.slice(1).map(step=>` → como supera 22, se vuelven a sumar sus dígitos → ${step}`).join("");
-        const synthesis=buildSoySynthesis(life,profile,sun,chin,tarot);
         $("#soy-convergence-label").textContent=synthesis.label;
         $("#identity-title").textContent=synthesis.title;
         $("#soy-sources").textContent=synthesis.sources;
@@ -1654,11 +2368,7 @@
       }
 
       function renderEstoy(birth, target, name) {
-        const current=periodFor(target), phase=QUARTERS[current.quarter], value=moonPhase(target), weekday=WEEKDAYS[target.getUTCDay()];
-        const py=personalYear(birth,target), uy=universalYear(target), natalChinese=chinese(birth), currentChinese=chinese(target), relation=chineseRelation(natalChinese,currentChinese), elementRelation=chineseElementRelation(natalChinese,currentChinese);
-        const natalSun=western(birth), currentSun=western(target), sunRelation=solarRelation(natalSun,currentSun);
-
-        const centralKey=PERSONAL[py.number][0], moment=MOMENT[centralKey], synthesis=periodSynthesis(centralKey,current.quarter,currentSun);
+        const {current,phase,value,weekday,py,uy,natalChinese,currentChinese,relation,elementRelation,natalSun,currentSun,sunRelation,centralKey,moment,synthesis}=buildEstoySnapshot(name,birth,target);
         const signals=[
           {title:"Año personal",value:`${py.number} · ${centralKey}`,role:"tema",emphasis:true,calc:py.expression},
           {title:"Cuarto lunar",value:phase.name,role:"ritmo",emphasis:true,calc:`${value.toFixed(2)} / 7 → cuarto ${current.quarter}`},
@@ -1696,19 +2406,81 @@
         signals.forEach(signal=>{const li=document.createElement("li");li.className=signal.emphasis?"matches":"";li.innerHTML=`<span class="signal-dot"></span><span><strong>${signal.title}: ${signal.value}</strong><small class="calculation">${signal.calc}</small></span><span class="signal-key">${signal.role}</span>`;$("#signal-list").appendChild(li);});
       }
 
+      function mountWikiModules() {
+        WIKI_MODULES.forEach((module,index)=>{
+          const section=document.getElementById(module.id);
+          if(!section||section.querySelector(".wiki-module-toolbar"))return;
+          const previous=index>0?WIKI_MODULES[index-1]:null,next=index<WIKI_MODULES.length-1?WIKI_MODULES[index+1]:null;
+          section.insertAdjacentHTML("afterbegin",`<nav class="wiki-module-toolbar" aria-label="Navegación de Aprende"><button type="button" data-wiki-home>Todos los módulos</button><button type="button" data-wiki-open="${previous?.id||""}" ${previous?"":"disabled"}>← Anterior</button><span class="wiki-module-position">Módulo ${index+1} de ${WIKI_MODULES.length}<i style="--module-progress:${Math.round((index+1)/WIKI_MODULES.length*100)}%"></i></span><button type="button" ${next?`data-wiki-open="${next.id}"`:`data-wiki-home`}>${next?"Siguiente →":"Finalizar →"}</button></nav>`);
+        });
+      }
+      function showWikiHub(scroll=true) {
+        $("#aprende-hub").hidden=false;
+        $$(".wiki-module").forEach(module=>module.hidden=true);
+        if(scroll)$("#aprende-hub").scrollIntoView({behavior:"smooth",block:"start"});
+        const title=$("#aprende-hub h1");title.tabIndex=-1;title.focus({preventScroll:true});
+      }
+      function openWikiModule(id,scroll=true) {
+        const section=document.getElementById(id);
+        if(!section||!section.classList.contains("wiki-module"))return;
+        $("#aprende-hub").hidden=true;
+        $$(".wiki-module").forEach(module=>module.hidden=module!==section);
+        if(id==="wiki-western"||id==="wiki-chinese")requestAnimationFrame(drawAffinityMatrices);
+        if(scroll)section.scrollIntoView({behavior:"smooth",block:"start"});
+        const title=section.querySelector("h2");title.tabIndex=-1;title.focus({preventScroll:true});
+      }
+
       function setView(view, scroll=true) {
-        if(!["soy","estoy","circulo"].includes(view))view="soy";
+        if(!["soy","soyplus","estoy","circulo","aprende"].includes(view))view="soy";
+        if(view==="soy"&&!currentProfile){
+          document.body.classList.remove("learning-mode");$("#content").hidden=true;
+          $$(".main-tabs, .mobile-tabs").forEach(nav=>nav.hidden=true);
+          history.replaceState(null,"",`${location.search}#soy`);if(scroll)window.scrollTo({top:0,behavior:"smooth"});return;
+        }
+        if(["estoy","circulo","aprende"].includes(view)&&!mockAccessGranted){openCheckoutDialog(view);return;}
+        document.body.classList.toggle("learning-mode",view==="aprende");
+        if(view==="aprende"){$("#content").hidden=false;$$(".main-tabs, .mobile-tabs").forEach(nav=>nav.hidden=false);}
         $$(".view").forEach(panel=>panel.hidden=panel.id!==`${view}-view`);
+        if(view==="aprende")showWikiHub(false);
         $$('[data-view]').forEach(button=>button.setAttribute("aria-selected",String(button.dataset.view===view)));
         if(view==="soy")requestAnimationFrame(drawAffinityMatrices);
-        history.replaceState(null,"",`#${view}`); if(scroll) window.scrollTo({top:0,behavior:"smooth"});
+        const privateFragment=preserveSharedFragment&&sharedFragmentQuery?`?${sharedFragmentQuery}`:"";
+        history.replaceState(null,"",`${location.search}#${view}${privateFragment}`); if(scroll) window.scrollTo({top:0,behavior:"smooth"});
       }
       function toast(message) { const node=$("#toast"); node.textContent=message; node.hidden=false; clearTimeout(toast.timer); toast.timer=setTimeout(()=>node.hidden=true,3200); }
+      async function executeShare(payload,mode) {
+        if(mode==="link"){shareReadingLinkOnWhatsApp(payload);return;}
+        if(payload.type==="estoy")await shareEstoyImage(payload.name,payload.birth,payload.target);
+        else await shareSoyImage(payload.name,payload.birth);
+      }
+      async function openShareDialog(payload) {
+        pendingShare=payload;
+        $("#share-dialog-context").textContent=payload.type==="estoy"
+          ? `Estoy de ${payload.name} para ${formatDate(payload.target,true)}.`
+          : `Soy de ${payload.name}.`;
+        const dialog=$("#share-dialog");
+        if(typeof dialog.showModal==="function")dialog.showModal();
+        else {pendingShare=null;await executeShare(payload,"link");}
+      }
+      function openCheckoutDialog(destination="estoy") {
+        if(!currentProfile)return;
+        pendingPaidView=["estoy","circulo","aprende"].includes(destination)?destination:"estoy";
+        const today=parseDate(isoDate(new Date())),until=addDays(today,30);
+        $("#checkout-person").textContent=currentProfile.name;
+        $("#checkout-result-name").textContent=currentProfile.name;
+        $("#checkout-until").textContent=`Hasta ${formatDate(until,true)}`;
+        $("#checkout-title").textContent=pendingPaidView==="aprende"?"Accede a Aprende":"Continúa con Estoy";
+        $("#checkout-done").textContent=pendingPaidView==="circulo"?"Entrar a Mi círculo":pendingPaidView==="aprende"?"Entrar a Aprende":"Entrar a Estoy";
+        $("#checkout-offer").hidden=false;$("#checkout-success").hidden=true;
+        const dialog=$("#checkout-dialog");
+        if(typeof dialog.showModal==="function")dialog.showModal();
+        else toast(`Simulación: pase de 30 días por USD 5 para ${currentProfile.name}. No se realizará ningún cobro.`);
+      }
       function renderAll() {
         const birth=parseDate($("#birth").value), target=parseDate($("#target").value), name=$("#name").value.trim()||"Tu lectura";
         if(Number.isNaN(birth.getTime())||Number.isNaN(target.getTime())) return;
         currentProfile={birth,name};
-        renderSoy(birth,name); renderEstoy(birth,target,name); renderCircle();
+        renderSoy(birth,name); renderSoyPlus(birth,name); renderEstoy(birth,target,name); renderCircle();
       }
       function revealProduct() {
         document.body.classList.add("profile-ready");
@@ -1717,15 +2489,21 @@
         $("#profile-submit").textContent="Actualizar Soy";
       }
 
-      $("#target").value=isoDate(new Date());
+      const sharedParams=new URLSearchParams(location.search),sharedTarget=sharedFragmentParams.get("fecha")||sharedParams.get("fecha"),sharedBirth=sharedFragmentParams.get("nacimiento"),sharedName=(sharedFragmentParams.get("nombre")||"").trim().slice(0,40);
+      $("#target").value=isValidISODate(sharedTarget)?sharedTarget:isoDate(new Date());
+      if(sharedName&&isValidISODate(sharedBirth)){
+        $("#name").value=sharedName;$("#birth").value=sharedBirth;renderAll();revealProduct();setView(initialView,false);
+        toast("Abriste una lectura compartida. La fecha natal estaba incluida en el enlace.");
+      }
       $("#profile-form").addEventListener("submit",event=>{
         event.preventDefault();
+        preserveSharedFragment=false;
         const firstReading=!document.body.classList.contains("profile-ready");
         const selected=$$('[data-view][aria-selected="true"]')[0]?.dataset.view||"soy";
         renderAll(); revealProduct(); setView(firstReading?initialView:selected);
         toast(firstReading?"Tu Soy está listo.":"Tu Soy fue actualizado.");
       });
-      $("#target-form").addEventListener("submit",event=>{event.preventDefault();renderAll();setView("estoy");toast("Estoy actualizado para la fecha elegida.");});
+      $("#target-form").addEventListener("submit",event=>{event.preventDefault();preserveSharedFragment=false;renderAll();setView("estoy");toast("Estoy actualizado para la fecha elegida.");});
       $("#circle-form").addEventListener("submit",event=>{
         event.preventDefault();
         if(circleMembers.length>=5){toast("Tu círculo ya tiene el máximo de 6 personas contigo.");return;}
@@ -1735,18 +2513,55 @@
         event.currentTarget.reset();
         toast(`${name} fue agregado a tu círculo.`);
       });
-      $("#circle-members").addEventListener("click",event=>{
-        const button=event.target.closest("[data-circle-remove]");if(!button)return;
-        const index=Number(button.dataset.circleRemove),removed=circleMembers[index];
+      $("#circle-members").addEventListener("click",async event=>{
+        const shareButton=event.target.closest("[data-circle-share]");
+        if(shareButton){
+          const index=Number(shareButton.dataset.circleShare),person=index<0?currentProfile:circleMembers[index];
+          if(!person)return;
+          const birth=person.birth instanceof Date?person.birth:parseDate(person.birth);
+          await openShareDialog({type:"soy",name:person.name,birth});return;
+        }
+        const removeButton=event.target.closest("[data-circle-remove]");if(!removeButton)return;
+        const index=Number(removeButton.dataset.circleRemove),removed=circleMembers[index];
         if(!removed)return;circleMembers.splice(index,1);renderCircle();toast(`${removed.name} fue quitado del círculo.`);
       });
+      mountWikiModules();
+      updateWikiMatrixUI("western",wikiMatrixSelection.western);
+      updateWikiMatrixUI("chinese",wikiMatrixSelection.chinese);
       $$('[data-view]').forEach(button=>button.addEventListener("click",()=>setView(button.dataset.view)));
       $$('[data-go]').forEach(button=>button.addEventListener("click",()=>setView(button.dataset.go)));
-      $("#copy-soy").addEventListener("click",async()=>{
-        const text=`Mi Soy · Camino de vida: ${$("#life-label").textContent} · ${$("#sun-label").textContent} · ${$("#chinese-label").textContent} · ${$("#tarot-label").textContent}. Lectura simbólica, con cálculos visibles.`;
-        try { await navigator.clipboard.writeText(text); toast("Resumen copiado. Incluye el límite: lectura simbólica."); } catch { toast("Tu navegador no permitió copiar; puedes seleccionar los resultados."); }
+      $("#aprende-view").addEventListener("click",event=>{
+        const matrixSelector=event.target.closest("[data-wiki-matrix][data-matrix-node]"),matrixCanvas=event.target.closest("canvas[data-wiki-matrix]");
+        const topic=event.target.closest("[data-wiki-target]"),moduleButton=event.target.closest("[data-wiki-open]"),home=event.target.closest("[data-wiki-home]");
+        if(matrixSelector){setWikiMatrixSelection(matrixSelector.dataset.wikiMatrix,matrixSelector.dataset.matrixNode);return;}
+        if(matrixCanvas){const node=wikiMatrixNodeAtPointer(matrixCanvas.dataset.wikiMatrix,matrixCanvas,event);if(node)setWikiMatrixSelection(matrixCanvas.dataset.wikiMatrix,node);return;}
+        if(topic){openWikiModule(topic.dataset.wikiTarget);return;}
+        if(moduleButton&&moduleButton.dataset.wikiOpen){openWikiModule(moduleButton.dataset.wikiOpen);return;}
+        if(home)showWikiHub();
       });
+      $("#share-soy").addEventListener("click",async()=>{if(currentProfile)await openShareDialog({type:"soy",name:currentProfile.name,birth:currentProfile.birth});});
+      $("#share-estoy").addEventListener("click",async()=>{
+        if(!currentProfile)return;
+        const target=parseDate($("#target").value);
+        await openShareDialog({type:"estoy",name:currentProfile.name,birth:currentProfile.birth,target});
+      });
+      $("#share-dialog").addEventListener("click",async event=>{
+        const button=event.target.closest("[data-share-mode]");if(!button||!pendingShare)return;
+        const payload=pendingShare,mode=button.dataset.shareMode;pendingShare=null;$("#share-dialog").close();
+        await executeShare(payload,mode);
+      });
+      $("#share-dialog").addEventListener("close",()=>{pendingShare=null;});
       $("#trial-button").addEventListener("click",()=>toast("En la prueba real, este botón abre WhatsApp para coordinar 28 días. Aquí no enviamos datos."));
+      $("#access-estoy").addEventListener("click",()=>openCheckoutDialog("estoy"));
+      $("#checkout-button").addEventListener("click",()=>openCheckoutDialog("estoy"));
+      $("#checkout-close").addEventListener("click",()=>$("#checkout-dialog").close());
+      $("#checkout-done").addEventListener("click",()=>{$("#checkout-dialog").close();setView(pendingPaidView);});
+      $("#checkout-form").addEventListener("submit",event=>{
+        event.preventDefault();
+        mockAccessGranted=true;
+        $("#checkout-offer").hidden=true;$("#checkout-success").hidden=false;
+        $("#checkout-done").focus();
+      });
       $$(".plan-field textarea").forEach(area=>{
         const key=`soy-estoy:${area.id}`; area.value=localStorage.getItem(key)||"";
         area.addEventListener("input",()=>{localStorage.setItem(key,area.value);const note=area.parentElement.querySelector(".saved");note.textContent="Guardado en este navegador";clearTimeout(area.timer);area.timer=setTimeout(()=>note.textContent="",1800);});

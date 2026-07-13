@@ -15,11 +15,6 @@
       --brass: #8d6417;
       --green: #2f6b4f;
       --neutral: #77776f;
-      --el-madera: #4c6b45;
-      --el-fuego: #a5483d;
-      --el-tierra: #8d6417;
-      --el-metal: #6d7178;
-      --el-agua: #3f617a;
       --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
       --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       --mono: "Cascadia Code", "SFMono-Regular", Consolas, monospace;
@@ -93,15 +88,7 @@
     .node { cursor: pointer; }
     .node circle { fill: var(--paper-2); stroke: var(--line); stroke-width: 3; transition: fill .18s ease, stroke .18s ease; }
     .node text { fill: var(--ink); font-family: var(--mono); font-size: 25px; font-weight: 500; letter-spacing: .05em; text-anchor: middle; pointer-events: none; }
-    .node .hanzi { font-family: var(--serif), "Noto Serif CJK SC", "Songti SC", "SimSun", serif; font-size: 44px; font-weight: 400; letter-spacing: 0; }
-    .node .node-label { font-size: 19px; }
-    .node[data-node="Madera"] circle { --el: var(--el-madera); }
-    .node[data-node="Fuego"] circle { --el: var(--el-fuego); }
-    .node[data-node="Tierra"] circle { --el: var(--el-tierra); }
-    .node[data-node="Metal"] circle { --el: var(--el-metal); }
-    .node[data-node="Agua"] circle { --el: var(--el-agua); }
-    .node circle { stroke: var(--el, var(--line)); fill: color-mix(in srgb, var(--el, var(--paper-2)) 10%, var(--paper-2)); }
-    .node.is-selected circle { fill: var(--el, var(--ink)); stroke: var(--brass); stroke-width: 7; }
+    .node.is-selected circle { fill: var(--ink); stroke: var(--brass); stroke-width: 7; }
     .node.is-selected text { fill: var(--paper-2); }
 
     .selected {
@@ -141,6 +128,18 @@
     }
     .relation strong { font-weight: 500; }
 
+    .trines { margin-top: 54px; padding-top: 34px; border-top: 1px solid var(--line); }
+    .trines header { margin-bottom: 24px; }
+    .trines h2 { margin: 0; font-family: var(--serif); font-size: clamp(30px, 6vw, 46px); font-weight: 400; line-height: 1; letter-spacing: -.025em; }
+    .trine-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; }
+    .trine { min-width: 0; margin: 0; }
+    .trine svg { display: block; width: 100%; aspect-ratio: 1; overflow: visible; }
+    .trine polygon { fill: none; stroke: var(--brass); stroke-width: 3; }
+    .trine circle { fill: var(--paper-2); stroke: var(--line); stroke-width: 2; }
+    .trine text { fill: var(--ink); font-family: var(--mono); font-size: 10px; font-weight: 500; letter-spacing: .03em; text-anchor: middle; }
+    .trine figcaption { margin-top: 7px; color: var(--muted); font-family: var(--mono); font-size: 10px; line-height: 1.45; text-align: center; text-transform: uppercase; letter-spacing: .06em; }
+    .trine-note { max-width: 68ch; margin: 24px 0 0; color: var(--muted); font-size: 13px; }
+
     @media (max-width: 620px) {
       main { padding: 22px 14px 40px; }
       .selectors { grid-template-columns: repeat(3, minmax(0, 1fr)); }
@@ -149,6 +148,7 @@
       .attributes { grid-template-columns: 1fr 1fr; }
       .relations { grid-template-columns: 1fr; gap: 0; }
       .relation { padding: 13px 0; }
+      .trine-grid { grid-template-columns: 1fr 1fr; gap: 18px 12px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -190,19 +190,19 @@
       </defs>
       <g id="edges" aria-hidden="true"></g>
       <g class="node" data-node="Madera" transform="translate(360 82)">
-        <circle r="67"></circle><text class="hanzi" y="-2">木</text><text class="node-label" y="34">MADERA</text>
+        <circle r="67"></circle><text y="9">MADERA</text>
       </g>
       <g class="node" data-node="Fuego" transform="translate(616 278)">
-        <circle r="67"></circle><text class="hanzi" y="-2">火</text><text class="node-label" y="34">FUEGO</text>
+        <circle r="67"></circle><text y="9">FUEGO</text>
       </g>
       <g class="node" data-node="Tierra" transform="translate(518 584)">
-        <circle r="67"></circle><text class="hanzi" y="-2">土</text><text class="node-label" y="34">TIERRA</text>
+        <circle r="67"></circle><text y="9">TIERRA</text>
       </g>
       <g class="node" data-node="Metal" transform="translate(202 584)">
-        <circle r="67"></circle><text class="hanzi" y="-2">金</text><text class="node-label" y="34">METAL</text>
+        <circle r="67"></circle><text y="9">METAL</text>
       </g>
       <g class="node" data-node="Agua" transform="translate(104 278)">
-        <circle r="67"></circle><text class="hanzi" y="-2">水</text><text class="node-label" y="34">AGUA</text>
+        <circle r="67"></circle><text y="9">AGUA</text>
       </g>
     </svg>
 
@@ -221,6 +221,53 @@
         <div class="relation"><small>Entrega regulación</small><div id="outgoing-regulation"></div></div>
       </div>
     </section>
+
+    <section class="trines" aria-labelledby="trines-title">
+      <header>
+        <p class="eyebrow">Animales · San He (三合)</p>
+        <h2 id="trines-title">Cuatro trinos</h2>
+        <p class="intro">Los doce animales se agrupan en cuatro tríos de afinidad tradicional.</p>
+      </header>
+      <div class="trine-grid">
+        <figure class="trine">
+          <svg viewBox="0 0 180 180" role="img" aria-label="Primer trino: Rata, Dragón y Mono">
+            <polygon points="90,25 150,132 30,132"></polygon>
+            <circle cx="90" cy="25" r="24"></circle><text x="90" y="29">RATA</text>
+            <circle cx="150" cy="132" r="24"></circle><text x="150" y="136">DRAGÓN</text>
+            <circle cx="30" cy="132" r="24"></circle><text x="30" y="136">MONO</text>
+          </svg>
+          <figcaption>Rata · Dragón · Mono</figcaption>
+        </figure>
+        <figure class="trine">
+          <svg viewBox="0 0 180 180" role="img" aria-label="Segundo trino: Buey, Serpiente y Gallo">
+            <polygon points="90,25 150,132 30,132"></polygon>
+            <circle cx="90" cy="25" r="24"></circle><text x="90" y="29">BUEY</text>
+            <circle cx="150" cy="132" r="24"></circle><text x="150" y="136">SERPIENTE</text>
+            <circle cx="30" cy="132" r="24"></circle><text x="30" y="136">GALLO</text>
+          </svg>
+          <figcaption>Buey · Serpiente · Gallo</figcaption>
+        </figure>
+        <figure class="trine">
+          <svg viewBox="0 0 180 180" role="img" aria-label="Tercer trino: Tigre, Caballo y Perro">
+            <polygon points="90,25 150,132 30,132"></polygon>
+            <circle cx="90" cy="25" r="24"></circle><text x="90" y="29">TIGRE</text>
+            <circle cx="150" cy="132" r="24"></circle><text x="150" y="136">CABALLO</text>
+            <circle cx="30" cy="132" r="24"></circle><text x="30" y="136">PERRO</text>
+          </svg>
+          <figcaption>Tigre · Caballo · Perro</figcaption>
+        </figure>
+        <figure class="trine">
+          <svg viewBox="0 0 180 180" role="img" aria-label="Cuarto trino: Conejo, Cabra y Cerdo">
+            <polygon points="90,25 150,132 30,132"></polygon>
+            <circle cx="90" cy="25" r="24"></circle><text x="90" y="29">CONEJO</text>
+            <circle cx="150" cy="132" r="24"></circle><text x="150" y="136">CABRA</text>
+            <circle cx="30" cy="132" r="24"></circle><text x="30" y="136">CERDO</text>
+          </svg>
+          <figcaption>Conejo · Cabra · Cerdo</figcaption>
+        </figure>
+      </div>
+      <p class="trine-note">Compartir trino indica una afinidad dentro de esta correspondencia anual. No basta para afirmar compatibilidad completa entre dos personas.</p>
+    </section>
   </main>
 
   <script>
@@ -238,8 +285,6 @@
     const RADIUS = 76;
     const edges = [];
 
-    const CENTER=(()=>{const pts=Object.values(POSITIONS);return [pts.reduce((s,p)=>s+p[0],0)/pts.length,pts.reduce((s,p)=>s+p[1],0)/pts.length];})();
-
     function edgePoints(from,to){
       const [x1,y1]=POSITIONS[from], [x2,y2]=POSITIONS[to];
       const dx=x2-x1, dy=y2-y1, length=Math.hypot(dx,dy);
@@ -247,32 +292,15 @@
     }
 
     function addEdge(from,to,type){
-      let shape;
-      if(type==="impulse"){
-        // El ciclo de generación se dibuja como arco exterior: curva la recta
-        // hacia afuera del centro para que el ciclo se lea como círculo.
-        const [ax,ay]=POSITIONS[from],[bx,by]=POSITIONS[to];
-        const mx=(ax+bx)/2,my=(ay+by)/2;
-        const ox=mx-CENTER[0],oy=my-CENTER[1],olen=Math.hypot(ox,oy)||1;
-        const k=64, cx=mx+ox/olen*k, cy=my+oy/olen*k;
-        const sdx=cx-ax,sdy=cy-ay,slen=Math.hypot(sdx,sdy);
-        const edx=cx-bx,edy=cy-by,elen=Math.hypot(edx,edy);
-        const sx=ax+sdx/slen*RADIUS, sy=ay+sdy/slen*RADIUS;
-        const ex=bx+edx/elen*(RADIUS+6), ey=by+edy/elen*(RADIUS+6);
-        shape=document.createElementNS(SVG_NS,"path");
-        shape.setAttribute("d",`M ${sx.toFixed(1)} ${sy.toFixed(1)} Q ${cx.toFixed(1)} ${cy.toFixed(1)} ${ex.toFixed(1)} ${ey.toFixed(1)}`);
-        shape.setAttribute("fill","none");
-      } else {
-        const [x1,y1,x2,y2]=edgePoints(from,to);
-        shape=document.createElementNS(SVG_NS,"line");
-        shape.setAttribute("x1",x1); shape.setAttribute("y1",y1);
-        shape.setAttribute("x2",x2); shape.setAttribute("y2",y2);
-      }
-      shape.setAttribute("class",`edge ${type}`);
-      shape.setAttribute("marker-end",`url(#arrow-${type})`);
-      shape.dataset.from=from; shape.dataset.to=to; shape.dataset.type=type;
-      document.getElementById("edges").appendChild(shape);
-      edges.push(shape);
+      const [x1,y1,x2,y2]=edgePoints(from,to);
+      const line=document.createElementNS(SVG_NS,"line");
+      line.setAttribute("x1",x1); line.setAttribute("y1",y1);
+      line.setAttribute("x2",x2); line.setAttribute("y2",y2);
+      line.setAttribute("class",`edge ${type}`);
+      line.setAttribute("marker-end",`url(#arrow-${type})`);
+      line.dataset.from=from; line.dataset.to=to; line.dataset.type=type;
+      document.getElementById("edges").appendChild(line);
+      edges.push(line);
     }
 
     Object.entries(ELEMENTS).forEach(([name,data])=>{
