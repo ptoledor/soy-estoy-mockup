@@ -1242,6 +1242,7 @@
       };
 
       const ANIMALS = ["Rata","Buey","Tigre","Conejo","Dragón","Serpiente","Caballo","Cabra","Mono","Gallo","Perro","Cerdo"];
+      const ELEMENT_HANZI = {Madera:"木",Fuego:"火",Tierra:"土",Metal:"金",Agua:"水"};
       const ELEMENTS = ["Madera","Fuego","Tierra","Metal","Agua"];
       const CHINESE_ELEMENT_TONE = {Madera:"crecimiento",Fuego:"acción",Tierra:"estabilidad",Metal:"estructura",Agua:"adaptación"};
       const CHINESE_ELEMENT_IMPULSE_ATTRIBUTE = {Madera:"vitalidad",Fuego:"transformación",Tierra:"apoyo",Metal:"criterio",Agua:"nutrición"};
@@ -1421,7 +1422,14 @@
           else {ctx.globalAlpha=.1; ctx.fillStyle=el; ctx.fill(); ctx.globalAlpha=1;}
           ctx.strokeStyle=el; ctx.lineWidth=highlighted?2:1.75; ctx.stroke();
           const glyph=!directed?GLYPHS[nodes[index]]:null;
+          const han=directed?ELEMENT_HANZI[nodes[index]]:null;
           const stroke=highlighted?paper:ink;
+          if(han){
+            ctx.fillStyle=stroke;
+            ctx.font=`400 ${Math.round(radius*.62)}px ${css.getPropertyValue("--serif").trim()}, "Noto Serif CJK SC", "Songti SC", "SimSun", serif`;
+            ctx.textAlign="center"; ctx.textBaseline="middle";
+            ctx.fillText(han,x,y-8);
+          }
           if(glyph){
             const g=7.5,gy=y-9;
             ctx.beginPath();
@@ -1433,7 +1441,7 @@
           ctx.fillStyle=stroke;
           ctx.font=`600 ${Math.max(10,Math.min(12,size*.027))}px ${mono}`;
           ctx.textAlign="center"; ctx.textBaseline="middle";
-          ctx.fillText(nodes[index].toUpperCase(),x,glyph?y+11:y);
+          ctx.fillText(nodes[index].toUpperCase(),x,(glyph||han)?y+(han?14:11):y);
         });
       }
       function drawAffinityMatrices() {
@@ -1606,7 +1614,7 @@
         $("#sun-element-traits").textContent=`${sun[1]}: ${ELEMENT_LANGUAGE[sun[1]]}`;
         $("#sun-modality-traits").textContent=`${sun[2]}: ${MODALITY_LANGUAGE[sun[2]]}`;
         $("#sun-calc").textContent=`${pad(birth.getUTCDate())}/${pad(birth.getUTCMonth()+1)} cae entre ${pad(sun[3][1])}/${pad(sun[3][0])} y ${pad(sun[4][1])}/${pad(sun[4][0])}.`;
-        $("#chinese-label").textContent=`${chin.animal} de ${chin.element}`;
+        $("#chinese-label").textContent=`${chin.animal} de ${chin.element} ${ELEMENT_HANZI[chin.element]}`;
         $("#chinese-animal-traits").textContent=`${chin.animal}: ${chineseAnimalTone(chin.animal)} (tema de su trino)`;
         $("#chinese-element-traits").textContent=`${chin.element} · Principal: ${CHINESE_ELEMENT_TONE[chin.element]} · Virtud de impulso: ${CHINESE_ELEMENT_IMPULSE_ATTRIBUTE[chin.element]} · Virtud de regulación: ${CHINESE_ELEMENT_REGULATION_ATTRIBUTE[chin.element]} · Vicio: ${CHINESE_ELEMENT_VICE[chin.element]}`;
         $("#chinese-polarity-traits").textContent=`${chin.polarity}: ${POLARITY_TONE[chin.polarity]}`;
@@ -1675,7 +1683,7 @@
         renderTimeline(nearbyPeriods(target),target);
         $("#personal-year-value").textContent=`${py.number} · ${PERSONAL[py.number][0]}`; $("#personal-year-copy").textContent=PERSONAL[py.number][1]; $("#personal-year-calc").textContent=py.expression;
         $("#universal-year-value").textContent=`${uy.number} · ${PERSONAL[uy.number][0]}`; $("#universal-year-copy").textContent=PERSONAL[uy.number][1]; $("#universal-year-calc").textContent=uy.expression;
-        $("#relation-value").textContent=`${currentChinese.animal} de ${currentChinese.element} · ${currentChinese.polarity}`;
+        $("#relation-value").textContent=`${currentChinese.animal} de ${currentChinese.element} ${ELEMENT_HANZI[currentChinese.element]} · ${currentChinese.polarity}`;
         $("#relation-copy").textContent=`El fondo del año es ${currentChinese.element}: ${CHINESE_ELEMENT_TONE[currentChinese.element]} como clima compartido. El ${currentChinese.animal} aporta el tema de su trino: ${chineseAnimalTone(currentChinese.animal)}. ${currentChinese.polarity}: ${POLARITY_TONE[currentChinese.polarity]}.`;
         $("#relation-calc").textContent=`Cómo se combina contigo: ${elementRelation.copy} ${relation.copy} Cálculo — año actual: ${currentChinese.effective} → ${currentChinese.animal}, ${currentChinese.element}, ${currentChinese.polarity}. Natal: ${natalChinese.effective} → ${natalChinese.animal}, ${natalChinese.element}, ${natalChinese.polarity}. Elementos: ${elementRelation.rule}.`;
         $("#solar-relation-value").textContent=`Sol en ${currentSun[0]} · ${currentSun[1]}`;

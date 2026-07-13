@@ -93,6 +93,8 @@
     .node { cursor: pointer; }
     .node circle { fill: var(--paper-2); stroke: var(--line); stroke-width: 3; transition: fill .18s ease, stroke .18s ease; }
     .node text { fill: var(--ink); font-family: var(--mono); font-size: 25px; font-weight: 500; letter-spacing: .05em; text-anchor: middle; pointer-events: none; }
+    .node .hanzi { font-family: var(--serif), "Noto Serif CJK SC", "Songti SC", "SimSun", serif; font-size: 44px; font-weight: 400; letter-spacing: 0; }
+    .node .node-label { font-size: 19px; }
     .node[data-node="Madera"] circle { --el: var(--el-madera); }
     .node[data-node="Fuego"] circle { --el: var(--el-fuego); }
     .node[data-node="Tierra"] circle { --el: var(--el-tierra); }
@@ -188,19 +190,19 @@
       </defs>
       <g id="edges" aria-hidden="true"></g>
       <g class="node" data-node="Madera" transform="translate(360 82)">
-        <circle r="67"></circle><text y="9">MADERA</text>
+        <circle r="67"></circle><text class="hanzi" y="-2">木</text><text class="node-label" y="34">MADERA</text>
       </g>
       <g class="node" data-node="Fuego" transform="translate(616 278)">
-        <circle r="67"></circle><text y="9">FUEGO</text>
+        <circle r="67"></circle><text class="hanzi" y="-2">火</text><text class="node-label" y="34">FUEGO</text>
       </g>
       <g class="node" data-node="Tierra" transform="translate(518 584)">
-        <circle r="67"></circle><text y="9">TIERRA</text>
+        <circle r="67"></circle><text class="hanzi" y="-2">土</text><text class="node-label" y="34">TIERRA</text>
       </g>
       <g class="node" data-node="Metal" transform="translate(202 584)">
-        <circle r="67"></circle><text y="9">METAL</text>
+        <circle r="67"></circle><text class="hanzi" y="-2">金</text><text class="node-label" y="34">METAL</text>
       </g>
       <g class="node" data-node="Agua" transform="translate(104 278)">
-        <circle r="67"></circle><text y="9">AGUA</text>
+        <circle r="67"></circle><text class="hanzi" y="-2">水</text><text class="node-label" y="34">AGUA</text>
       </g>
     </svg>
 
