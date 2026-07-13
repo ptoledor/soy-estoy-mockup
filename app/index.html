@@ -20,6 +20,12 @@
       --green: #234b3d;
       --red: #8b3f32;
       --matrix-direct: #8d6417;
+      --el-madera: #4c6b45;
+      --el-fuego: #a5483d;
+      --el-tierra: #8d6417;
+      --el-metal: #6d7178;
+      --el-agua: #3f617a;
+      --el-aire: #7e90a3;
       --matrix-positive: #2f6b4f;
       --matrix-negative: #a5483d;
       --matrix-neutral: #77776f;
@@ -1403,11 +1409,17 @@
         });
         ctx.globalAlpha=1; ctx.setLineDash([]);
         const GLYPHS={Fuego:"up",Aire:"upbar",Agua:"down",Tierra:"downbar"};
+        const elementColor=name=>css.getPropertyValue(`--el-${name.toLowerCase()}`).trim()||ink;
         positions.forEach((position,index)=>{
           const x=position[0]*size,y=position[1]*size;
           const highlighted=index===hi;
+          const el=elementColor(nodes[index]);
           if(highlighted){ctx.beginPath();ctx.arc(x,y,radius+6,0,Math.PI*2);ctx.strokeStyle=colors.direct;ctx.lineWidth=3;ctx.stroke();}
-          ctx.beginPath(); ctx.arc(x,y,radius,0,Math.PI*2); ctx.fillStyle=highlighted?ink:paper; ctx.fill(); ctx.strokeStyle=highlighted?colors.direct:ink; ctx.lineWidth=1.5; ctx.stroke();
+          ctx.beginPath(); ctx.arc(x,y,radius,0,Math.PI*2);
+          ctx.fillStyle=paper; ctx.fill();
+          if(highlighted){ctx.fillStyle=el; ctx.fill();}
+          else {ctx.globalAlpha=.1; ctx.fillStyle=el; ctx.fill(); ctx.globalAlpha=1;}
+          ctx.strokeStyle=el; ctx.lineWidth=highlighted?2:1.75; ctx.stroke();
           const glyph=!directed?GLYPHS[nodes[index]]:null;
           const stroke=highlighted?paper:ink;
           if(glyph){
