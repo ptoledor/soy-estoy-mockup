@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#ebe7dc">
   <title>Soy / Estoy — mockup completo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..620;1,9..144,300..620&display=swap" rel="stylesheet">
   <style>
     :root {
       --paper: #ebe7dc;
@@ -20,7 +23,7 @@
       --matrix-positive: #2f6b4f;
       --matrix-negative: #a5483d;
       --matrix-neutral: #77776f;
-      --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+      --serif: "Fraunces", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
       --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       --mono: "Cascadia Code", "SFMono-Regular", Consolas, monospace;
       --max: 1120px;
@@ -188,6 +191,9 @@
       align-items: end;
     }
     .eyebrow, .section-kicker {
+      display: flex;
+      align-items: center;
+      gap: 10px;
       margin: 0 0 16px;
       color: var(--brass);
       font-family: var(--mono);
@@ -195,15 +201,29 @@
       text-transform: uppercase;
       letter-spacing: .2em;
     }
+    .eyebrow::before, .section-kicker::before { content: ""; width: 26px; height: 1px; background: var(--brass); flex: none; }
+    ::selection { background: var(--brass); color: var(--paper-2); }
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: 998;
+      pointer-events: none;
+      opacity: .05;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 180px 180px;
+      mix-blend-mode: multiply;
+    }
     h1, h2, h3, p { text-wrap: pretty; }
     h1 {
       max-width: 13ch;
       margin: 0;
       font-family: var(--serif);
-      font-weight: 500;
+      font-weight: 430;
       font-size: clamp(48px, 8vw, 94px);
-      line-height: .94;
+      line-height: .96;
       letter-spacing: -.035em;
+      font-variation-settings: "opsz" 120;
     }
     .hero-copy {
       margin: 24px 0 0;
@@ -222,6 +242,12 @@
     .hero.copy-only { grid-template-columns: 1fr; }
     .hero.copy-only h1 { max-width: 16ch; }
     .hero.copy-only .hero-copy { max-width: 66ch; }
+    .hero.soy-hero { grid-template-columns: minmax(0, 1.25fr) minmax(180px, .55fr); align-items: center; }
+    .hero-wheel { width: min(100%, 300px); justify-self: end; aspect-ratio: 1; color: var(--line-dark); }
+    .wheel-spin { animation: wheel-spin 220s linear infinite; transform-origin: 300px 300px; }
+    .wheel-spin-rev { animation: wheel-spin 160s linear infinite reverse; transform-origin: 300px 300px; }
+    @keyframes wheel-spin { to { transform: rotate(360deg); } }
+    @media (prefers-reduced-motion: reduce) { .wheel-spin, .wheel-spin-rev { animation: none; } }
 
     .section {
       max-width: var(--max);
@@ -239,10 +265,10 @@
     .section-title {
       margin: 0;
       font-family: var(--serif);
-      font-weight: 500;
+      font-weight: 430;
       font-size: clamp(34px, 5vw, 56px);
-      line-height: 1;
-      letter-spacing: -.025em;
+      line-height: 1.02;
+      letter-spacing: -.028em;
     }
     .section-intro { margin: 0; color: var(--muted); font-size: 15px; }
 
@@ -269,7 +295,7 @@
       line-height: .72;
       letter-spacing: -.08em;
     }
-    .signature h2 { margin: 0; font-family: var(--serif); font-size: 25px; font-weight: 500; }
+    .signature h2 { margin: 0; font-family: var(--serif); font-size: clamp(28px, 3.4vw, 38px); font-weight: 430; line-height: 1.05; letter-spacing: -.02em; }
     .signature p { margin: 8px 0 0; color: var(--muted); font-size: 14px; }
     .summary-signature { min-height: 260px; align-content: center; }
     .identity-copy {
@@ -280,8 +306,8 @@
     .identity-copy .lead {
       margin: 0;
       font-family: var(--serif);
-      font-size: clamp(27px, 4vw, 43px);
-      line-height: 1.15;
+      font-size: clamp(19px, 2.3vw, 24px);
+      line-height: 1.5;
     }
     .identity-copy .caveat { margin: 24px 0 0; max-width: 60ch; color: var(--muted); font-size: 14px; }
 
@@ -328,8 +354,14 @@
     .practical b { display: block; margin: 7px 0 10px; font-family: var(--serif); font-size: 23px; font-weight: 500; }
     .practical p { margin: 0; color: var(--muted); font-size: 14px; }
 
-    .matrix-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 36px; }
-    .matrix-figure { margin: 0; min-width: 0; border-top: 1px solid var(--line-dark); padding-top: 18px; }
+    .zodiac-pair {
+      display: grid;
+      grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr);
+      border: 1px solid var(--line-dark);
+      border-top: 0;
+    }
+    .zodiac-pair .evidence { border-right: 1px solid var(--line); border-bottom: 0; }
+    .matrix-figure { margin: 0; min-width: 0; padding: 26px; background: var(--paper-2); }
     .matrix-figure h3 { margin: 0 0 4px; font-family: var(--serif); font-size: 24px; font-weight: 500; }
     .matrix-figure > p { margin: 0; color: var(--muted); font-size: 12px; }
     .matrix-canvas { display: block; width: 100%; aspect-ratio: 1; margin: 12px 0; }
@@ -658,6 +690,8 @@
     .mobile-tabs { display: none; }
     @media (max-width: 760px) {
       .topbar-inner { min-height: 58px; padding: 0 16px; }
+      .hero.soy-hero { grid-template-columns: 1fr; }
+      .hero-wheel { display: none; }
       .prototype, .main-tabs { display: none; }
       .profile-inner { padding: 14px 16px; grid-template-columns: 1fr 1fr; }
       body:not(.profile-ready) .profile-bar { min-height: calc(100vh - 58px); }
@@ -679,7 +713,8 @@
       .evidence, .evidence:nth-child(2n), .evidence:nth-last-child(-n+2) { border-right: 0; border-bottom: 1px solid var(--line); }
       .evidence:last-child { border-bottom: 0; }
       .practical-grid, .period-grid, .climate-grid, .planner { grid-template-columns: 1fr; }
-      .matrix-grid { grid-template-columns: 1fr; gap: 30px; }
+      .zodiac-pair { grid-template-columns: 1fr; }
+      .zodiac-pair .evidence { border-right: 0; border-bottom: 1px solid var(--line); }
       .practical, .period-card, .climate-card { border-right: 0; border-bottom: 1px solid var(--line); }
       .practical:last-child, .period-card:last-child, .climate-card:last-child { border-bottom: 0; }
       .action-band { align-items: stretch; flex-direction: column; }
@@ -752,20 +787,35 @@
 
     <main id="content" hidden>
       <div class="view" id="soy-view" role="tabpanel">
-        <header class="hero copy-only">
+        <header class="hero soy-hero">
           <div>
             <p class="eyebrow">Soy · tu síntesis base</p>
             <h1>Tu fecha, leída desde distintas tradiciones.</h1>
             <p class="hero-copy">Reunimos numerología, zodíaco tropical, zodíaco chino y tarot para observar coincidencias y diferencias. No define tu personalidad; ofrece hipótesis concretas para contrastar con tu experiencia.</p>
           </div>
+          <svg class="hero-wheel" viewBox="0 0 600 600" aria-hidden="true" focusable="false">
+            <circle cx="300" cy="300" r="292" fill="none" stroke="currentColor" stroke-width="1.5"/>
+            <g class="wheel-spin">
+              <circle cx="300" cy="300" r="282" fill="none" stroke="currentColor" stroke-width="14" stroke-dasharray="1.6 17.07" opacity=".75"/>
+              <circle cx="300" cy="300" r="268" fill="none" stroke="currentColor" stroke-width="20" stroke-dasharray="2 138.34"/>
+            </g>
+            <circle cx="300" cy="300" r="254" fill="none" stroke="currentColor" stroke-width="1.5"/>
+            <g class="wheel-spin-rev" stroke="currentColor" stroke-width="1.5" opacity=".6" fill="none">
+              <polygon points="351.3,159.1 396.4,414.9 152.3,326.1"/>
+              <line x1="449.4" y1="313.1" x2="150.6" y2="313.1"/>
+            </g>
+            <circle cx="300" cy="300" r="64" fill="none" stroke="currentColor" stroke-width="1.5"/>
+            <circle cx="300" cy="300" r="14" fill="none" stroke="var(--brass)" stroke-width="2"/>
+            <circle cx="300" cy="300" r="4" fill="var(--brass)"/>
+          </svg>
         </header>
 
         <section class="section rule" aria-labelledby="identity-title">
-          <p class="section-kicker">01 · Resumen</p>
+          <p class="section-kicker">01 · Señales de convergencia</p>
           <div class="identity">
             <div class="signature summary-signature">
               <div><span class="micro-label" id="soy-convergence-label">Convergencia</span></div>
-              <div><h2 id="identity-title">En pocas palabras</h2><p>Una lectura breve antes de revisar cómo se calculó.</p></div>
+              <div><h2 id="identity-title">En pocas palabras</h2><p id="soy-sources">Una lectura breve antes de revisar cómo se calculó.</p></div>
             </div>
             <div class="identity-copy">
               <p class="lead" id="soy-synthesis">—</p>
@@ -782,7 +832,7 @@
         <section class="section rule" aria-labelledby="components-title">
           <div class="section-head">
             <div><p class="section-kicker">02 · Cómo se compone</p><h2 class="section-title" id="components-title">Las tradiciones, por separado.</h2></div>
-            <p class="section-intro">Puedes abrir cada parte para ver la cuenta, el criterio y sus límites. Si una tradición tiene variantes, lo decimos.</p>
+            <p class="section-intro">Puedes abrir cada parte para ver la cuenta, el criterio y sus límites. Junto a cada zodíaco, cómo se relaciona tu elemento con los demás.</p>
           </div>
           <div class="evidence-grid">
             <article class="evidence">
@@ -790,6 +840,14 @@
               <p class="meaning" id="life-meaning">—</p>
               <details><summary>Ver cuenta y criterio</summary><p class="calculation" id="life-calc">—</p><p>Variante de este mockup: suma los dígitos de la fecha completa y conserva 11, 22 y 33. Goodwin reduce mes, día y año por separado y conserva 11 y 22; por eso no presentamos esta regla como universal.</p></details>
             </article>
+            <article class="evidence">
+              <div class="evidence-top"><div><span class="micro-label">Tarot de nacimiento</span><h3 id="tarot-label">—</h3></div><span class="kind">Regla</span></div>
+              <p class="meaning" id="tarot-meaning">—</p>
+              <details><summary>Ver cuenta y criterio</summary><p class="calculation" id="tarot-calc">—</p><p>Asocia la suma reducida con un arcano mayor. Es una correspondencia simbólica; no una tirada ni una predicción.</p></details>
+            </article>
+          </div>
+
+          <div class="zodiac-pair">
             <article class="evidence">
               <div class="evidence-top"><div><span class="micro-label">Zodíaco occidental</span><h3 id="sun-label">—</h3></div><span class="kind">Tradición</span></div>
               <div class="trait-list" aria-label="Características del zodíaco occidental">
@@ -799,38 +857,12 @@
               </div>
               <details><summary>Ver cuenta y criterio</summary><p class="calculation" id="sun-calc">—</p><p>Correspondencia del zodíaco tropical por fecha. Esto es signo solar, no una carta natal completa.</p></details>
             </article>
-            <article class="evidence">
-              <div class="evidence-top"><div><span class="micro-label">Zodíaco chino</span><h3 id="chinese-label">—</h3></div><span class="kind" id="chinese-kind">Tradición</span></div>
-              <div class="trait-list" aria-label="Características del zodíaco chino">
-                <div class="trait-row"><span>Animal</span><p id="chinese-animal-traits">—</p></div>
-                <div class="trait-row"><span>Elemento</span><p id="chinese-element-traits">—</p></div>
-                <div class="trait-row"><span>Polaridad</span><p id="chinese-polarity-traits">—</p></div>
-              </div>
-              <p class="evidence-note" id="chinese-shift-note">—</p>
-              <details><summary>Ver cuenta y criterio</summary><p class="calculation" id="chinese-calc">—</p><p id="chinese-note">El animal cambia en el Año Nuevo lunisolar, no el 1 de enero.</p></details>
-            </article>
-            <article class="evidence">
-              <div class="evidence-top"><div><span class="micro-label">Tarot de nacimiento</span><h3 id="tarot-label">—</h3></div><span class="kind">Regla</span></div>
-              <p class="meaning" id="tarot-meaning">—</p>
-              <details><summary>Ver cuenta y criterio</summary><p class="calculation" id="tarot-calc">—</p><p>Asocia la suma reducida con un arcano mayor. Es una correspondencia simbólica; no una tirada ni una predicción.</p></details>
-            </article>
-          </div>
-        </section>
-
-        <section class="section rule" aria-labelledby="affinities-title">
-          <div class="section-head">
-            <div><p class="section-kicker">03 · Afinidades elementales</p><h2 class="section-title" id="affinities-title">Cómo se relacionan los elementos.</h2></div>
-            <p class="section-intro">Cada tradición usa relaciones distintas. En el zodíaco occidental mostramos afinidad y diferencias de lenguaje; no son aspectos calculados. En el chino, el impulso fomenta una virtud y la regulación limita un exceso.</p>
-          </div>
-          <div class="matrix-grid">
             <figure class="matrix-figure">
-              <h3 id="western-affinity-title">Zodíaco occidental</h3>
-              <p>Tu signo solar ubica el punto de partida.</p>
+              <h3 id="western-affinity-title">Cómo se relaciona tu elemento</h3>
+              <p>Afinidad, ajuste y diferencias de lenguaje entre los cuatro elementos; no son aspectos calculados. Tu signo solar ubica el punto de partida.</p>
               <canvas class="matrix-canvas" id="western-affinity-matrix" width="420" height="420" role="img" aria-label="Matriz occidental: el aro ocre indica afinidad directa de cada elemento consigo mismo; Fuego y Aire, y Tierra y Agua, tienen afinidad complementaria; Fuego y Tierra, y Aire y Agua, requieren ajuste; Fuego y Agua, y Aire y Tierra, muestran una diferencia marcada de lenguaje."></canvas>
               <figcaption class="matrix-caption affinity-gloss">
                 <div class="trait-list" aria-label="Afinidades del signo solar">
-                  <div class="trait-row"><span>Signo</span><p id="western-affinity-sign">—</p></div>
-                  <div class="trait-row"><span>Elemento</span><p id="western-affinity-element">—</p></div>
                   <div class="trait-row"><span>Relaciones</span><p id="western-affinity-copy">—</p></div>
                 </div>
               </figcaption>
@@ -841,14 +873,25 @@
                 <span><i class="matrix-line negative" aria-hidden="true"></i>Diferencia marcada</span>
               </div>
             </figure>
+          </div>
+
+          <div class="zodiac-pair">
+            <article class="evidence">
+              <div class="evidence-top"><div><span class="micro-label">Zodíaco chino</span><h3 id="chinese-label">—</h3></div><span class="kind" id="chinese-kind">Tradición</span></div>
+              <div class="trait-list" aria-label="Características del zodíaco chino">
+                <div class="trait-row"><span>Animal</span><p id="chinese-animal-traits">—</p></div>
+                <div class="trait-row"><span>Elemento</span><p id="chinese-element-traits">—</p></div>
+                <div class="trait-row"><span>Polaridad</span><p id="chinese-polarity-traits">—</p></div>
+              </div>
+              <p class="evidence-note" id="chinese-shift-note">—</p>
+              <details><summary>Ver cuenta y criterio</summary><p class="calculation" id="chinese-calc">—</p><p id="chinese-note">El animal cambia en el Año Nuevo lunisolar, no el 1 de enero.</p></details>
+            </article>
             <figure class="matrix-figure">
-              <h3 id="chinese-affinity-title">Zodíaco chino</h3>
-              <p>Tu animal y elemento natal ubican el punto de partida.</p>
+              <h3 id="chinese-affinity-title">Cómo circula tu elemento</h3>
+              <p>Relaciones de impulso y regulación entre las cinco fases; tu animal y elemento natal ubican el punto de partida.</p>
               <canvas class="matrix-canvas" id="chinese-affinity-matrix" width="420" height="420" role="img" aria-label="Matriz china dirigida: el aro ocre indica que un elemento se refuerza a sí mismo; las flechas verdes muestran qué elemento impulsa a otro; las grises, qué elemento lo regula."></canvas>
               <figcaption class="matrix-caption affinity-gloss">
                 <div class="trait-list" aria-label="Afinidades del zodíaco chino natal">
-                  <div class="trait-row"><span>Animal</span><p id="chinese-affinity-animal">—</p></div>
-                  <div class="trait-row"><span>Elemento</span><p id="chinese-affinity-element">—</p></div>
                   <div class="trait-row"><span>Actúas</span><p id="chinese-affinity-copy">—</p></div>
                   <div class="trait-row"><span>Recibes</span><p id="chinese-affinity-incoming">—</p></div>
                 </div>
@@ -1061,16 +1104,16 @@
       };
 
       const SOY_FACTORS = {
-        action:{label:"Acción e iniciativa",thesis:"abrir camino, decidir y dar movimiento",practice:"elige un frente y da un primer paso visible",keywords:["acción","iniciativa","coraje","impulso","liderazgo","voluntad","decisión","dirección","vitalidad","visibilidad","activo","exterior","abrir camino","abrir caminos"]},
-        structure:{label:"Estructura y logro",thesis:"construir con método, criterio y continuidad",practice:"define una regla simple que puedas sostener esta semana",keywords:["estructura","orden","disciplina","constancia","estabilidad","trabajo","construcción","método","estrategia","precisión","foco","forma concreta","realización","recursos"]},
-        link:{label:"Vínculo y armonía",thesis:"leer vínculos, cooperar y construir acuerdos",practice:"vuelve explícito un acuerdo que hoy depende de supuestos",keywords:["vínculo","cooperación","armonía","belleza","diplomacia","afecto","acuerdos","placer","carisma social"]},
-        care:{label:"Cuidado y servicio",thesis:"sostener, acompañar y hacer algo útil para otros",practice:"separa qué cuidado te corresponde y cuál debes devolver",keywords:["cuidado","servicio","protección","acompañar","guía","lealtad","responsabilidad"]},
-        intuition:{label:"Intuición y sensibilidad",thesis:"observar lo interno antes de convertirlo en certeza",practice:"anota la intuición y busca una evidencia que pueda corregirla",keywords:["intuición","sensibilidad","emoción","memoria","compasión","misterio","introspección","percepción"]},
-        mind:{label:"Mente y comunicación",thesis:"analizar, comprender y comunicar con claridad",practice:"explica la idea en una frase y comprueba qué entiende la otra persona",keywords:["mente","comunicación","ideas","intercambio","curiosidad","aprendizaje","estudio","análisis","discernimiento","precisión"]},
-        expansion:{label:"Expansión y visión",thesis:"ampliar perspectiva, buscar sentido y mirar más lejos",practice:"abre una opción nueva sin comprometerte todavía con ella",keywords:["expansión","búsqueda","visión","sentido","optimismo","confianza","originalidad","amplitud"]},
-        creativity:{label:"Creatividad y expresión",thesis:"dar forma visible a una idea propia",practice:"haz una versión compartible antes de seguir perfeccionando",keywords:["creatividad","expresión","imaginación","alegría","inspiración","generosidad","presencia","crear","creador","manifestación"]},
-        transformation:{label:"Transformación y cierre",thesis:"leer los ciclos, cerrar y renovar",practice:"termina o suelta una cosa concreta antes de abrir la siguiente",keywords:["transformación","cierre","ciclos","renovación","limpieza","soltar","renacimiento","revelación","liberación","revisión","integración","cerrar ciclos"]},
-        freedom:{label:"Libertad y cambio",thesis:"adaptarte, explorar y cambiar de rumbo sin perder dirección",practice:"cambia una condición del camino sin abandonar todavía el objetivo",keywords:["libertad","cambio","exploración","adaptación","adaptar","independencia","movimiento","camino abierto","autonomía"]}
+        action:{label:"Acción e iniciativa",thesis:"abrir camino, decidir y dar movimiento",practice:"elige un frente y da un primer paso visible",analysis:"La iniciativa aparece como tu recurso más consistente: tiendes a arrancar antes de que el mapa esté completo, y eso destraba lo que para otros se queda en idea. Bien usada se ve como decisión y dirección; forzada, como impulsos que deciden por cansancio o por urgencia ajena. La pregunta útil no es si actuar, sino qué merece tu arranque.",keywords:["acción","iniciativa","coraje","impulso","liderazgo","voluntad","decisión","dirección","vitalidad","visibilidad","activo","exterior","abrir camino","abrir caminos"]},
+        structure:{label:"Estructura y logro",thesis:"construir con método, criterio y continuidad",practice:"define una regla simple que puedas sostener esta semana",analysis:"Lo tuyo es dar forma: convertir intenciones en método, y método en resultados que se sostienen. Esa constancia es la que otros notan cuando algo tuyo simplemente funciona; su exceso es rigidez, o seguir sosteniendo estructuras que ya cumplieron. Vale la pena observar qué estás construyendo por convicción y qué por inercia.",keywords:["estructura","orden","disciplina","constancia","estabilidad","trabajo","construcción","método","estrategia","precisión","foco","forma concreta","realización","recursos"]},
+        link:{label:"Vínculo y armonía",thesis:"leer vínculos, cooperar y construir acuerdos",practice:"vuelve explícito un acuerdo que hoy depende de supuestos",analysis:"Tu señal dominante es relacional: lees el clima entre personas antes de que se diga en voz alta, y tiendes a construir puentes donde otros ven bandos. Esa sensibilidad crea acuerdos que duran; su sombra es ceder tu posición para conservar la armonía. La pregunta útil: ¿qué acuerdo necesita tu voz, no solo tu mediación?",keywords:["vínculo","cooperación","armonía","belleza","diplomacia","afecto","acuerdos","placer","carisma social"]},
+        care:{label:"Cuidado y servicio",thesis:"sostener, acompañar y hacer algo útil para otros",practice:"separa qué cuidado te corresponde y cuál debes devolver",analysis:"Lo que se repite en ti es el sostén: estar disponible, resolver lo concreto y hacer que otros puedan apoyarse. Es un recurso silencioso que rara vez pide crédito; su desgaste aparece cuando cuidar reemplaza tus propios frentes. Observa dónde tu ayuda construye autonomía y dónde solo acumula dependencia.",keywords:["cuidado","servicio","protección","acompañar","guía","lealtad","responsabilidad"]},
+        intuition:{label:"Intuición y sensibilidad",thesis:"observar lo interno antes de convertirlo en certeza",practice:"anota la intuición y busca una evidencia que pueda corregirla",analysis:"Tu señal más repetida es interior: percibes matices, estados y trasfondos antes de poder explicarlos. Esa lectura fina orienta bien cuando le das tiempo; se vuelve ruido cuando la conviertes en certeza inmediata o la usas para anticipar rechazos. El trabajo está en distinguir percepción de interpretación.",keywords:["intuición","sensibilidad","emoción","memoria","compasión","misterio","introspección","percepción"]},
+        mind:{label:"Mente y comunicación",thesis:"analizar, comprender y comunicar con claridad",practice:"explica la idea en una frase y comprueba qué entiende la otra persona",analysis:"Converge en ti la claridad: entender rápido, ordenar ideas y traducirlas para que otros las usen. Ese filo mental abre puertas; su exceso es analizar en lugar de decidir, o ganar la discusión y perder la conversación. Observa qué idea tuya necesita menos pulido y más publicación.",keywords:["mente","comunicación","ideas","intercambio","curiosidad","aprendizaje","estudio","análisis","discernimiento","precisión"]},
+        expansion:{label:"Expansión y visión",thesis:"ampliar perspectiva, buscar sentido y mirar más lejos",practice:"abre una opción nueva sin comprometerte todavía con ella",analysis:"Tu constante es el horizonte: buscar sentido, ampliar el marco y detectar la versión más grande de cada situación. Esa visión contagia dirección; su riesgo es vivir en el siguiente paso y desatender el actual. La pregunta útil: ¿qué parte de tu visión ya puede aterrizar esta semana?",keywords:["expansión","búsqueda","visión","sentido","optimismo","confianza","originalidad","amplitud"]},
+        creativity:{label:"Creatividad y expresión",thesis:"dar forma visible a una idea propia",practice:"haz una versión compartible antes de seguir perfeccionando",analysis:"Lo que insiste en ti es la expresión: las ideas te piden forma visible, con sello propio. Cuando le das salida, ordena el resto de tu energía; cuando la pospones, se filtra como inquietud o dispersión. No es un lujo decorativo: observa qué pieza tuya está esperando ser mostrada, aunque no esté perfecta.",keywords:["creatividad","expresión","imaginación","alegría","inspiración","generosidad","presencia","crear","creador","manifestación"]},
+        transformation:{label:"Transformación y cierre",thesis:"leer los ciclos, cerrar y renovar",practice:"termina o suelta una cosa concreta antes de abrir la siguiente",analysis:"Tu patrón dominante es el ciclo: detectas cuándo algo ya dio lo que tenía que dar, y tienes capacidad de soltarlo y reconstituirte. Eso te hace fuerte en crisis y transiciones; su sombra es cortar de más, o cerrar por dentro sin avisar. Vale observar qué cierre está pendiente y qué merece, en cambio, una segunda temporada.",keywords:["transformación","cierre","ciclos","renovación","limpieza","soltar","renacimiento","revelación","liberación","revisión","integración","cerrar ciclos"]},
+        freedom:{label:"Libertad y cambio",thesis:"adaptarte, explorar y cambiar de rumbo sin perder dirección",practice:"cambia una condición del camino sin abandonar todavía el objetivo",analysis:"Tu señal más consistente es el movimiento: te adaptas rápido, exploras sin miedo y detectas cuándo un plan dejó de tener sentido. Esa flexibilidad es ventaja en entornos que cambian; su exceso es cambiar de rumbo justo antes de cosechar. La pregunta útil: ¿qué necesita de ti permanencia esta vez, no otra salida?",keywords:["libertad","cambio","exploración","adaptación","adaptar","independencia","movimiento","camino abierto","autonomía"]}
       };
 
       function normalizeSignalText(text) {
@@ -1109,17 +1152,18 @@
           {key:"tarot",label:tarot[0],weight:2.5,detail:tarot[1]}
         ];
         const factors=analyzeSoyConvergence(signals),main=factors.find(factor=>factor.sourceCount>=2);
-        if(!main)return {label:"Sin convergencia clara",title:"Señales distintas",copy:"Las cuatro tradiciones apuntan a temas diferentes. No forzamos una conclusión común: revisa cada componente por separado."};
+        if(!main)return {label:"Sin convergencia clara",title:"Señales distintas",sources:"Las cuatro fuentes apuntan a temas distintos.",copy:"Las cuatro tradiciones apuntan a temas diferentes. No forzamos una conclusión común: revisa cada componente por separado."};
         const definition=SOY_FACTORS[main.key],mainKeys=new Set(main.sources.map(source=>source.key));
         const modifiers=[];
-        if(!mainKeys.has("western"))modifiers.push(`${sun[0]} pone la condición: hacerlo con ${sun[5][0]} y ${sun[5][1]}.`);
-        if(!mainKeys.has("tarot"))modifiers.push(`${tarot[0]} añade ${tarot[1]} como matiz.`);
-        if(!mainKeys.has("life")&&modifiers.length<2)modifiers.push(`El camino de vida ${life.number} orienta el recurso hacia ${profile.gift.toLowerCase()}.`);
-        if(!mainKeys.has("chinese")&&modifiers.length<2)modifiers.push(`${chin.animal} de ${chin.element} agrega ${CHINESE_ELEMENT_TONE[chin.element]}.`);
+        if(!mainKeys.has("western"))modifiers.push(`La condición que la acompaña: hacerlo con ${sun[5][0]} y ${sun[5][1]}.`);
+        if(!mainKeys.has("tarot"))modifiers.push(`Como matiz aparece ${tarot[1]}.`);
+        if(!mainKeys.has("life")&&modifiers.length<2)modifiers.push(`El recurso de fondo apunta a ${profile.gift.toLowerCase()}.`);
+        if(!mainKeys.has("chinese")&&modifiers.length<2)modifiers.push(`Se templa con ${CHINESE_ELEMENT_TONE[chin.element]}.`);
         return {
-          label:`Convergencia · ${main.sourceCount} de ${signals.length}`,
+          label:`Convergencia · ${main.sourceCount} de ${signals.length} señales`,
           title:definition.label,
-          copy:`La señal que más se repite es ${definition.label.toLowerCase()}: ${joinSpanish([...new Map(main.sources.map(source=>[source.key,source])).values()].map(source=>source.label))} coinciden en ${definition.thesis}. En concreto: ${definition.practice}. ${modifiers.slice(0,1).join(" ")}`
+          sources:`Se repite en ${joinSpanish([...new Map(main.sources.map(source=>[source.key,source])).values()].map(source=>source.label))}.`,
+          copy:`${definition.analysis} En concreto: ${definition.practice}. ${modifiers.slice(0,1).join(" ")}`
         };
       }
 
@@ -1492,11 +1536,14 @@
       function renderSoy(birth, name) {
         const life=traceDigits(`${pad(birth.getUTCDate())}${pad(birth.getUTCMonth()+1)}${birth.getUTCFullYear()}`, true), profile=LIFE[life.number];
         const sun=western(birth), chin=chinese(birth), tarotTrace=traceDigits(`${pad(birth.getUTCDate())}${pad(birth.getUTCMonth()+1)}${birth.getUTCFullYear()}`, false);
-        let tarotNumber=sumDigits(`${pad(birth.getUTCDate())}${pad(birth.getUTCMonth()+1)}${birth.getUTCFullYear()}`), tarotSteps=[tarotNumber];
+        const tarotDigits=`${pad(birth.getUTCDate())}${pad(birth.getUTCMonth()+1)}${birth.getUTCFullYear()}`;
+        let tarotNumber=sumDigits(tarotDigits), tarotSteps=[tarotNumber];
         while(tarotNumber>22){tarotNumber=sumDigits(tarotNumber);tarotSteps.push(tarotNumber);} const tarot=ARCANA[tarotNumber];
+        const tarotTrail=tarotSteps.slice(1).map(step=>` → como supera 22, se vuelven a sumar sus dígitos → ${step}`).join("");
         const synthesis=buildSoySynthesis(life,profile,sun,chin,tarot);
         $("#soy-convergence-label").textContent=synthesis.label;
         $("#identity-title").textContent=synthesis.title;
+        $("#soy-sources").textContent=synthesis.sources;
         $("#soy-synthesis").textContent=synthesis.copy;
         $("#life-label").textContent=`Número ${life.number}`; $("#life-meaning").textContent=profile.meaning; $("#life-calc").textContent=life.expression;
         $("#sun-label").textContent=`${sun[0]} · ${sun[1]}`;
@@ -1510,19 +1557,15 @@
         $("#chinese-polarity-traits").textContent=`${chin.polarity}: ${POLARITY_TONE[chin.polarity]}`;
         const westernRelations=WESTERN_ELEMENT_RELATIONS[sun[1]];
         affinitySelection={western:sun[1],chinese:chin.element};
-        $("#western-affinity-title").textContent=`Zodíaco occidental · ${sun[0]}`;
-        $("#western-affinity-sign").textContent=`${sun[0]}: ${sun[5].join(", ")}`;
-        $("#western-affinity-element").innerHTML=`<strong>${sun[1]}</strong>: ${ELEMENT_LANGUAGE[sun[1]]}`;
+        $("#western-affinity-title").textContent=`Cómo se relaciona tu ${sun[1]}`;
         $("#western-affinity-copy").textContent=`Como ${sun[0]}, tu ${sun[1]} reconoce con facilidad a ${sun[1]}, se complementa con ${westernRelations.complement}, requiere traducción con ${westernRelations.adjust} y marca una diferencia de lenguaje con ${westernRelations.tension}. Esto compara elementos solares; no calcula aspectos.`;
-        $("#chinese-affinity-title").textContent=`Zodíaco chino · ${chin.animal}`;
-        $("#chinese-affinity-animal").textContent=`${chin.animal}: ${chineseAnimalTone(chin.animal)} (tema de su trino)`;
-        $("#chinese-affinity-element").innerHTML=`<strong>${chin.element}</strong> · Principal: ${CHINESE_ELEMENT_TONE[chin.element]} · Virtud de impulso: ${CHINESE_ELEMENT_IMPULSE_ATTRIBUTE[chin.element]} · Virtud de regulación: ${CHINESE_ELEMENT_REGULATION_ATTRIBUTE[chin.element]} · Vicio: ${CHINESE_ELEMENT_VICE[chin.element]}`;
-        $("#chinese-affinity-copy").textContent=`Como ${chin.animal} de ${chin.element}, tu fase se refuerza con ${chin.element}, impulsa ${CHINESE_IMPULSE[chin.element]} y regula ${CHINESE_REGULATION[chin.element]}. ${CHINESE_IMPULSE_PRACTICE[chin.element]} ${CHINESE_REGULATION_PRACTICE[chin.element]}`;
+        $("#chinese-affinity-title").textContent=`Cómo circula tu ${chin.element}`;
+        $("#chinese-affinity-copy").textContent=`Actúas desde ${chin.element}: tu movimiento natural es ${CHINESE_ELEMENT_ACTION[chin.element]}. Hacia afuera, alimentas a ${CHINESE_IMPULSE[chin.element]} —${CHINESE_IMPULSE_PRACTICE[chin.element].toLowerCase().replace(/\.$/,"")}— y regulas a ${CHINESE_REGULATION[chin.element]} —${CHINESE_REGULATION_PRACTICE[chin.element].toLowerCase().replace(/\.$/,"")}—.`;
         $("#chinese-affinity-incoming").textContent=CHINESE_INCOMING_PRACTICE[chin.element];
         $("#western-affinity-matrix").setAttribute("aria-label",`Matriz occidental para ${sun[0]}. ${sun[1]} es tu elemento y está marcado en dorado. Las líneas muestran complementariedad, ajuste y diferencias de lenguaje; no son aspectos calculados.`);
         $("#chinese-affinity-matrix").setAttribute("aria-label",`Matriz china para ${chin.animal} de ${chin.element}. ${chin.element} es tu elemento y está marcado en dorado. Las flechas muestran qué fases impulsa y regula.`);
         requestAnimationFrame(drawAffinityMatrices);
-        $("#chinese-calc").textContent=`${isoDate(birth)} → año ${chin.effective} → posición ${mod(chin.effective-4,12)+1}/12 y tronco ${mod(chin.effective-4,10)+1}/10.`; $("#chinese-note").textContent=chin.note; $("#chinese-kind").textContent=chin.approximate?"Aproximación":"Tradición";
+        $("#chinese-calc").textContent=`Tu año chino efectivo es ${chin.effective}. Animal: el ciclo repite 12 animales y se cuenta desde Rata; (${chin.effective} − 4) deja resto ${mod(chin.effective-4,12)} al dividir por 12 → ${ANIMALS[mod(chin.effective-4,12)]}, el animal ${mod(chin.effective-4,12)+1} de 12. Elemento: cada elemento gobierna 2 años seguidos en un ciclo de 10; (${chin.effective} − 4) deja resto ${mod(chin.effective-4,10)} al dividir por 10 → ${ELEMENTS[Math.floor(mod(chin.effective-4,10)/2)]}. Polaridad: año ${chin.effective%2===0?"par":"impar"} → ${chin.polarity}.`; $("#chinese-note").textContent=chin.note; $("#chinese-kind").textContent=chin.approximate?"Aproximación":"Tradición";
         const shiftNote=$("#chinese-shift-note");
         if(chin.shifted){
           shiftNote.innerHTML=chin.boundaryLabel
@@ -1531,7 +1574,7 @@
         } else {
           shiftNote.textContent="El año chino cambia con el Año Nuevo lunisolar —entre el 21 de enero y el 20 de febrero según el año—, no el 1 de enero.";
         }
-        $("#tarot-label").textContent=`${tarot[0]} · ${tarotNumber}`; $("#tarot-meaning").textContent=tarot[1]; $("#tarot-calc").textContent=`Suma inicial ${tarotSteps.join(" → ")} (se reduce hasta 1–22).`;
+        $("#tarot-label").textContent=`${tarot[0]} · ${tarotNumber}`; $("#tarot-meaning").textContent=tarot[1]; $("#tarot-calc").textContent=`Se suman todos los dígitos de tu fecha (día, mes y año): ${tarotDigits.split("").join("+")} = ${tarotSteps[0]}${tarotTrail}. El ${tarotNumber} corresponde a ${tarot[0]} entre los 22 arcanos mayores.`;
         $("#gift-title").textContent=profile.gift; $("#gift-copy").textContent=profile.giftCopy; $("#shadow-title").textContent=profile.shadow; $("#shadow-copy").textContent=profile.shadowCopy; $("#soy-question").textContent=profile.question;
         return { life, profile, sun, chin, tarot };
       }
