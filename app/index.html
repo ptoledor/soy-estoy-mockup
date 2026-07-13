@@ -364,7 +364,7 @@
     .matrix-figure { margin: 0; min-width: 0; padding: 26px; background: var(--paper-2); }
     .matrix-figure h3 { margin: 0 0 4px; font-family: var(--serif); font-size: 24px; font-weight: 500; }
     .matrix-figure > p { margin: 0; color: var(--muted); font-size: 12px; }
-    .matrix-canvas { display: block; width: 100%; aspect-ratio: 1; margin: 12px 0; }
+    .matrix-canvas { display: block; max-width: 100%; aspect-ratio: 1; margin: 12px auto; }
     .matrix-caption { display: block; min-height: 38px; }
     .affinity-gloss .trait-list { margin-top: 16px; }
     .affinity-gloss .trait-row { grid-template-columns: 82px 1fr; }
@@ -1032,7 +1032,7 @@
           <p class="eyebrow">Mi círculo · vínculos sin veredicto</p>
           <h1>Entiende qué trae cada persona a la relación.</h1>
           <p>Agrega a tu pareja, familia, amistades o equipo. Comparamos las mismas señales por separado para mostrar puntos de encuentro, diferencias de ritmo y una pregunta que valga la pena conversar.</p>
-          <p class="circle-privacy">Los datos quedan en este navegador · máximo 6 personas contigo</p>
+          <p class="circle-privacy">Nada se guarda: el círculo vive solo en esta visita · máximo 6 personas contigo</p>
           <div class="summary-grid circle-limits" aria-label="Límites de esta comparación">
             <div class="summary-item"><span class="micro-label">Lo que usamos</span><strong>Solo la fecha</strong><span>No inferimos hora, lugar ni historia del vínculo.</span></div>
             <div class="summary-item"><span class="micro-label">Lo que entrega</span><strong>Afinidades generales</strong><span>Tres lentes separadas; ningún puntaje ni pronóstico.</span></div>
@@ -1097,8 +1097,7 @@
       const pad = value => String(value).padStart(2, "0");
       const mod = (value, divisor) => ((value % divisor) + divisor) % divisor;
       const initialView = ["soy","estoy","circulo"].includes(location.hash.slice(1)) ? location.hash.slice(1) : "soy";
-      const CIRCLE_STORAGE_KEY = "soy-estoy:circle-members:v1";
-      let circleMembers = loadCircleMembers();
+      let circleMembers = [];
       let currentProfile = null;
 
       const LIFE = {
@@ -1350,10 +1349,12 @@
       }
       let affinitySelection={western:null,chinese:null};
       function drawAffinityMatrix(canvas, nodes, positions, edges, directed=false, highlightedNode=null) {
-        const size=Math.max(280,Math.min(460,canvas.parentElement.clientWidth||420));
-        const ratio=Math.min(window.devicePixelRatio||1,2);
+        const parentStyle=getComputedStyle(canvas.parentElement);
+        const available=canvas.parentElement.clientWidth-parseFloat(parentStyle.paddingLeft)-parseFloat(parentStyle.paddingRight);
+        const size=Math.max(280,Math.min(560,available||420));
+        const ratio=Math.min(window.devicePixelRatio||1,3);
         canvas.width=Math.round(size*ratio); canvas.height=Math.round(size*ratio);
-        canvas.style.height=`${size}px`;
+        canvas.style.width=`${size}px`; canvas.style.height=`${size}px`;
         const ctx=canvas.getContext("2d"); ctx.scale(ratio,ratio);
         const css=getComputedStyle(document.documentElement);
         const colors={direct:css.getPropertyValue("--matrix-direct").trim(),positive:css.getPropertyValue("--matrix-positive").trim(),negative:css.getPropertyValue("--matrix-negative").trim(),neutral:css.getPropertyValue("--matrix-neutral").trim()};
@@ -1366,7 +1367,7 @@
         const R=Math.hypot(pts[0][0]-cx,pts[0][1]-cy);
         const touches=edge=>hi<0||edge[0]===hi||edge[1]===hi;
         const arrowHead=(x,y,dx,dy,color)=>{
-          const len=Math.hypot(dx,dy)||1,ux=dx/len,uy=dy/len,head=13,wing=6.5;
+          const len=Math.hypot(dx,dy)||1,ux=dx/len,uy=dy/len,head=11,wing=5;
           ctx.setLineDash([]); ctx.beginPath(); ctx.moveTo(x,y);
           ctx.lineTo(x-ux*head-uy*wing,y-uy*head+ux*wing);
           ctx.lineTo(x-ux*head+uy*wing,y-uy*head-ux*wing);
@@ -1378,7 +1379,7 @@
         }
         [...edges].sort((a,b)=>Number(touches(a))-Number(touches(b))).forEach(edge=>{
           const emphasized=touches(edge),type=edge[2],color=colors[type];
-          ctx.globalAlpha=emphasized?1:.16;
+          ctx.globalAlpha=emphasized?1:.14;
           if(directed&&type==="positive"){
             const a=Math.atan2(pts[edge[0]][1]-cy,pts[edge[0]][0]-cx);
             let b=Math.atan2(pts[edge[1]][1]-cy,pts[edge[1]][0]-cx);
@@ -1386,7 +1387,7 @@
             const gapA=(radius+10)/R,gapB=(radius+16)/R,start=a+gapA,end=b-gapB;
             ctx.beginPath(); ctx.setLineDash([]);
             ctx.arc(cx,cy,R,start,end,false);
-            ctx.strokeStyle=color; ctx.lineWidth=emphasized?3:2; ctx.stroke();
+            ctx.strokeStyle=color; ctx.lineWidth=emphasized?2.5:1.75; ctx.stroke();
             arrowHead(cx+R*Math.cos(end),cy+R*Math.sin(end),-Math.sin(end),Math.cos(end),color);
           } else {
             const [ax,ay]=pts[edge[0]],[bx,by]=pts[edge[1]];
@@ -1395,7 +1396,7 @@
             const sx=directed?ax+ux*trim:ax,sy=directed?ay+uy*trim:ay;
             const ex=directed?bx-ux*trim:bx,ey=directed?by-uy*trim:by;
             ctx.beginPath(); ctx.moveTo(sx,sy); ctx.lineTo(ex,ey);
-            ctx.strokeStyle=color; ctx.lineWidth=type==="positive"?3:2;
+            ctx.strokeStyle=color; ctx.lineWidth=type==="positive"?2.5:1.75;
             ctx.setLineDash(type==="negative"?[8,6]:type==="neutral"?[3,5]:[]); ctx.stroke();
             if(directed)arrowHead(ex,ey,ux,uy,color);
           }
@@ -1405,7 +1406,7 @@
         positions.forEach((position,index)=>{
           const x=position[0]*size,y=position[1]*size;
           const highlighted=index===hi;
-          if(highlighted){ctx.beginPath();ctx.arc(x,y,radius+6,0,Math.PI*2);ctx.strokeStyle=colors.direct;ctx.lineWidth=3.5;ctx.stroke();}
+          if(highlighted){ctx.beginPath();ctx.arc(x,y,radius+6,0,Math.PI*2);ctx.strokeStyle=colors.direct;ctx.lineWidth=3;ctx.stroke();}
           ctx.beginPath(); ctx.arc(x,y,radius,0,Math.PI*2); ctx.fillStyle=highlighted?ink:paper; ctx.fill(); ctx.strokeStyle=highlighted?colors.direct:ink; ctx.lineWidth=1.5; ctx.stroke();
           const glyph=!directed?GLYPHS[nodes[index]]:null;
           const stroke=highlighted?paper:ink;
@@ -1513,15 +1514,6 @@
       function personalYear(birth, target) { return traceDigits(`${pad(birth.getUTCDate())}${pad(birth.getUTCMonth()+1)}${target.getUTCFullYear()}`, false); }
       function universalYear(target) { return traceDigits(String(target.getUTCFullYear()), false); }
 
-      function loadCircleMembers() {
-        try {
-          const parsed=JSON.parse(localStorage.getItem(CIRCLE_STORAGE_KEY)||"[]");
-          return Array.isArray(parsed)?parsed.filter(member=>member&&typeof member.name==="string"&&/^\d{4}-\d{2}-\d{2}$/.test(member.birth)).slice(0,5):[];
-        } catch { return []; }
-      }
-      function saveCircleMembers() {
-        try { localStorage.setItem(CIRCLE_STORAGE_KEY,JSON.stringify(circleMembers)); } catch { /* El mockup sigue funcionando sin persistencia. */ }
-      }
       function escapeHTML(value) {
         return String(value).replace(/[&<>"']/g,character=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[character]);
       }
@@ -1719,14 +1711,14 @@
         if(circleMembers.length>=5){toast("Tu círculo ya tiene el máximo de 6 personas contigo.");return;}
         const name=$("#circle-name").value.trim(),birth=$("#circle-birth").value;
         if(!name||!/^\d{4}-\d{2}-\d{2}$/.test(birth))return;
-        circleMembers.push({name,birth});saveCircleMembers();renderCircle();
+        circleMembers.push({name,birth});renderCircle();
         event.currentTarget.reset();
         toast(`${name} fue agregado a tu círculo.`);
       });
       $("#circle-members").addEventListener("click",event=>{
         const button=event.target.closest("[data-circle-remove]");if(!button)return;
         const index=Number(button.dataset.circleRemove),removed=circleMembers[index];
-        if(!removed)return;circleMembers.splice(index,1);saveCircleMembers();renderCircle();toast(`${removed.name} fue quitado del círculo.`);
+        if(!removed)return;circleMembers.splice(index,1);renderCircle();toast(`${removed.name} fue quitado del círculo.`);
       });
       $$('[data-view]').forEach(button=>button.addEventListener("click",()=>setView(button.dataset.view)));
       $$('[data-go]').forEach(button=>button.addEventListener("click",()=>setView(button.dataset.go)));
