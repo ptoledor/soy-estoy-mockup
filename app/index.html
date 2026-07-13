@@ -637,15 +637,20 @@
     .method-drawer { max-width: var(--max); margin: 0 auto 40px; }
     .method-drawer .method-list { padding: 0 18px 18px; border-top: 0; }
 
-    .circle-hero { padding-bottom: 34px; }
+    .circle-hero { position: relative; padding-bottom: 34px; }
     .circle-hero h1 { max-width: 18ch; }
-    .circle-hero .circle-privacy { margin-top: 18px; color: var(--green); font-family: var(--mono); font-size: 10px; letter-spacing: .06em; text-transform: uppercase; }
+    .circle-ornament { position: absolute; top: 30px; right: 24px; width: min(30vw, 360px); color: var(--line-dark); opacity: .7; pointer-events: none; }
+    .circle-ornament g { animation: ornament-drift 26s ease-in-out infinite alternate; transform-origin: 210px 160px; }
+    @keyframes ornament-drift { to { transform: rotate(8deg); } }
+    @media (prefers-reduced-motion: reduce) { .circle-ornament g { animation: none; } }
+    @media (max-width: 960px) { .circle-ornament { display: none; } }
+    .circle-hero p.circle-privacy { margin-top: 18px; color: var(--green); font-family: var(--mono); font-size: 10px; letter-spacing: .06em; text-transform: uppercase; }
     .circle-limits { margin-top: 30px; }
     .circle-form { display: grid; grid-template-columns: minmax(180px, .7fr) minmax(180px, .7fr) auto; gap: 18px; align-items: end; }
     .circle-summary { margin-top: 28px; }
     .circle-empty { padding: 38px; border: 1px dashed var(--line-dark); color: var(--muted); text-align: center; }
-    .member-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; margin-top: 28px; border: 1px solid var(--line-dark); background: var(--line-dark); }
-    .member-card { position: relative; min-width: 0; padding: 24px; background: var(--paper-2); }
+    .member-grid { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: 28px; border-top: 1px solid var(--line-dark); border-left: 1px solid var(--line-dark); }
+    .member-card { position: relative; min-width: 0; padding: 24px; border-right: 1px solid var(--line-dark); border-bottom: 1px solid var(--line-dark); background: var(--paper-2); }
     .member-card.is-primary { background: var(--ink); color: var(--paper-2); }
     .member-card h3 { margin: 7px 0 4px; font-family: var(--serif); font-size: 28px; font-weight: 500; }
     .member-card p { margin: 0; color: var(--muted); font-size: 12px; }
@@ -1016,6 +1021,14 @@
 
       <div class="view" id="circulo-view" role="tabpanel" hidden>
         <header class="moment-summary circle-hero">
+          <svg class="circle-ornament" viewBox="0 0 420 340" fill="none" aria-hidden="true" focusable="false">
+            <g stroke="currentColor" stroke-width="1.5">
+              <circle cx="150" cy="130" r="85"/>
+              <circle cx="270" cy="130" r="85"/>
+              <circle cx="210" cy="225" r="85"/>
+            </g>
+            <circle cx="210" cy="160" r="5" fill="var(--brass)" stroke="none"/>
+          </svg>
           <p class="eyebrow">Mi círculo · vínculos sin veredicto</p>
           <h1>Entiende qué trae cada persona a la relación.</h1>
           <p>Agrega a tu pareja, familia, amistades o equipo. Comparamos las mismas señales por separado para mostrar puntos de encuentro, diferencias de ritmo y una pregunta que valga la pena conversar.</p>
