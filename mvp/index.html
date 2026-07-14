@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#ebe7dc">
+  <meta name="description" content="Soy / Estoy reúne numerología, zodíaco occidental, zodíaco chino, tarot y ciclos temporales en una lectura simbólica clara y honesta.">
+  <title>Soy / Estoy · Lectura simbólica personal</title>
+  <style>
+    html, body { width: 100%; min-height: 100%; margin: 0; background: #ebe7dc; }
+    body { overflow: hidden; }
+    #app { display: block; width: 100%; height: 100vh; border: 0; background: #ebe7dc; }
+    .loading { position: fixed; inset: 0; z-index: 2; display: grid; place-items: center; background: #ebe7dc; color: #171812; font: 12px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; letter-spacing: .14em; text-transform: uppercase; transition: opacity .25s ease; }
+    .loading[hidden] { display: none; }
+  </style>
+</head>
+<body>
+  <div class="loading" id="loading">Preparando tu lectura…</div>
+  <iframe id="app" title="Aplicación Soy / Estoy"></iframe>
+  <script>
+    (() => {
+      const frame = document.getElementById('app');
+      const loading = document.getElementById('loading');
+      frame.src = `../app/${location.search}${location.hash}`;
+
+      const replacements = [
+        [/Soy \/ Estoy — mockup completo/gi, 'Soy / Estoy · Lectura simbólica personal'],
+        [/Este mockup no calcula ascendente ni casas; mostrarlos sin hora exacta sería inventar precisión\./gi, 'No calculamos ascendente ni casas porque requieren hora y lugar exactos; mostrarlos sin esos datos sería inventar precisión.'],
+        [/Variante de este mockup:/gi, 'Método utilizado:'],
+        [/Numerología · variante del mockup/gi, 'Numerología · método de cálculo'],
+        [/La fase lunar de este mockup se estima por fecha y con resolución diaria\. El producto final usará el motor Python como fuente única\./gi, 'La fase lunar se estima por fecha y con resolución diaria. Se presenta como una aproximación claramente etiquetada.'],
+        [/En la prueba real, este botón abre WhatsApp para coordinar 28 días\. Aquí no enviamos datos\./gi, 'WhatsApp se abrirá para solicitar acceso inicial. Tus datos no se envían sin tu confirmación.'],
+        [/Simulación:\s*/gi, ''],
+        [/\bmockup\b/gi, 'versión actual'],
+        [/\bprototipo\b/gi, ''],
+        [/\s{2,}/g, ' ']
+      ];
+
+      function clean(value) {
+        let next = String(value || '');
+        for (const [pattern, replacement] of replacements) next = next.replace(pattern, replacement);
+        return next;
+      }
+
+      function cleanNode(root) {
+        const doc = root.ownerDocument || root;
+        const walker = doc.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+        const nodes = [];
+        while (walker.nextNode()) nodes.push(walker.currentNode);
+        for (const node of nodes) {
+          const next = clean(node.nodeValue);
+          if (next !== node.nodeValue) node.nodeValue = next;
+        }
+        if (root.querySelectorAll) {
+          root.querySelectorAll('[title],[aria-label]').forEach(node => {
+            for (const attr of ['title', 'aria-label']) {
+              if (!node.hasAttribute(attr)) continue;
+              const current = node.getAttribute(attr);
+              const next = clean(current);
+              if (next !== current) node.setAttribute(attr, next);
+            }
+          });
+        }
+      }
+
+      function configureProduct(doc, win) {
+        doc.title = 'Soy / Estoy · Lectura simbólica personal';
+        doc.querySelectorAll('.prototype').forEach(node => node.remove());
+
+        const privacy = doc.querySelector('.privacy-note');
+        if (privacy) privacy.innerHTML = '<strong>No pedimos hora ni lugar.</strong> Calculamos solo lo que puede obtenerse honestamente desde tu fecha. El ascendente y las casas requieren datos exactos adicionales.';
+
+        const checkoutForm = doc.getElementById('checkout-form');
+        if (checkoutForm && !checkoutForm.dataset.mvpReady) {
+          checkoutForm.dataset.mvpReady = 'true';
+          checkoutForm.innerHTML = '<p style="margin:0 0 18px;color:var(--muted);font-size:14px;line-height:1.55">Estás entrando al acceso inicial de Soy / Estoy. Durante esta etapa puedes explorar todas las secciones sin realizar un pago.</p><button class="recalculate" type="submit">Activar acceso inicial</button>';
+        }
+
+        const trialButton = doc.getElementById('trial-button');
+        if (trialButton && !trialButton.dataset.mvpReady) {
+          const replacement = trialButton.cloneNode(true);
+          replacement.dataset.mvpReady = 'true';
+          replacement.textContent = 'Solicitar acceso';
+          replacement.addEventListener('click', () => {
+            const message = encodeURIComponent('Hola, quiero solicitar acceso inicial a Soy / Estoy.');
+            win.open(`https://wa.me/?text=${message}`, '_blank', 'noopener,noreferrer');
+          });
+          trialButton.replaceWith(replacement);
+        }
+
+        cleanNode(doc.body);
+
+        const observer = new win.MutationObserver(records => {
+          for (const record of records) {
+            if (record.type === 'characterData') {
+              const next = clean(record.target.nodeValue);
+              if (next !== record.target.nodeValue) record.target.nodeValue = next;
+            }
+            for (const node of record.addedNodes) {
+              if (node.nodeType === Node.TEXT_NODE) {
+                const next = clean(node.nodeValue);
+                if (next !== node.nodeValue) node.nodeValue = next;
+              } else if (node.nodeType === Node.ELEMENT_NODE) {
+                cleanNode(node);
+              }
+            }
+          }
+        });
+        observer.observe(doc.body, { subtree: true, childList: true, characterData: true });
+      }
+
+      frame.addEventListener('load', () => {
+        try {
+          configureProduct(frame.contentDocument, frame.contentWindow);
+          loading.hidden = true;
+        } catch (error) {
+          loading.textContent = 'No fue posible abrir la lectura';
+          console.error(error);
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
