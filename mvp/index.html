@@ -67,6 +67,39 @@
         doc.title = 'Soy / Estoy · Lectura simbólica personal';
         doc.querySelectorAll('.prototype').forEach(node => node.remove());
 
+        const responsiveFixes = doc.createElement('style');
+        responsiveFixes.dataset.mvpResponsiveFixes = 'true';
+        responsiveFixes.textContent = `
+          @media (max-width: 760px) {
+            .checkout-dialog {
+              width: calc(100vw - 16px);
+              max-height: calc(100dvh - 16px);
+              overflow: auto;
+            }
+            .checkout-panel { padding: 20px; }
+            .checkout-intro-grid {
+              grid-template-columns: 1fr;
+              gap: 18px;
+            }
+            .checkout-art {
+              width: 100%;
+              max-width: none;
+              height: clamp(250px, 42dvh, 360px);
+              max-height: none;
+              aspect-ratio: auto;
+              justify-self: stretch;
+            }
+            .checkout-art img {
+              width: 100%;
+              height: 100%;
+              display: block;
+              object-fit: cover;
+              object-position: center;
+            }
+          }
+        `;
+        doc.head.appendChild(responsiveFixes);
+
         const privacy = doc.querySelector('.privacy-note');
         if (privacy) privacy.innerHTML = '<strong>No pedimos hora ni lugar.</strong> Calculamos solo lo que puede obtenerse honestamente desde tu fecha. El ascendente y las casas requieren datos exactos adicionales.';
 
