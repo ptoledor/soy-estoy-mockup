@@ -404,6 +404,13 @@
     .affinity-gloss .trait-row { grid-template-columns: 82px 1fr; }
     .affinity-gloss .trait-row p { font-size: 13px; }
     .affinity-gloss strong { color: var(--brass); font-weight: 600; }
+    .affinity-box { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 18px; border: 1px solid var(--line-dark); }
+    .affinity-item { min-width: 0; padding: 18px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .affinity-item:nth-child(2n) { border-right: 0; }
+    .affinity-item:nth-last-child(-n+2) { border-bottom: 0; }
+    .affinity-item span { display: block; margin-bottom: 7px; color: var(--muted); font-family: var(--mono); font-size: 9px; letter-spacing: .08em; text-transform: uppercase; }
+    .affinity-item strong { display: block; font-family: var(--serif); font-size: 20px; font-weight: 500; }
+    .affinity-note { margin-top: 14px !important; }
     .matrix-legend { display: flex; flex-wrap: wrap; gap: 18px; margin-top: 20px; font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: .06em; }
     .matrix-legend span { display: inline-flex; align-items: center; gap: 8px; }
     .matrix-line { width: 28px; height: 0; border-top: 3px solid; }
@@ -953,6 +960,9 @@
       .practical-grid, .period-grid, .climate-grid, .planner { grid-template-columns: 1fr; }
       .zodiac-pair { grid-template-columns: 1fr; }
       .zodiac-pair .evidence { border-right: 0; border-bottom: 1px solid var(--line); }
+      .affinity-box { grid-template-columns: 1fr; }
+      .affinity-item, .affinity-item:nth-child(2n), .affinity-item:nth-last-child(-n+2) { border-right: 0; border-bottom: 1px solid var(--line); }
+      .affinity-item:last-child { border-bottom: 0; }
       .matrix-selectors { grid-template-columns: repeat(3, minmax(0, 1fr)); }
       .practical, .period-card, .climate-card { border-right: 0; border-bottom: 1px solid var(--line); }
       .practical:last-child, .period-card:last-child, .climate-card:last-child { border-bottom: 0; }
@@ -1144,23 +1154,18 @@
                 <div class="trait-row"><span>Elemento</span><p id="sun-element-traits">—</p></div>
                 <div class="trait-row"><span>Modalidad</span><p id="sun-modality-traits">—</p></div>
               </div>
-              <details><summary>Ver cuenta y criterio</summary><p class="calculation" id="sun-calc">—</p><p>Correspondencia del zodíaco tropical por fecha. Esto es signo solar, no una carta natal completa.</p></details>
+              <details><summary>Ver cuenta y criterio</summary><p class="calculation" id="sun-calc">—</p><p>Correspondencia del zodíaco tropical por fecha. Esto es signo solar, no una carta natal completa. Próximamente podrás desbloquear tu carta natal en Soy+.</p></details>
             </article>
             <figure class="matrix-figure">
-              <h3 id="western-affinity-title">Cómo se relaciona tu elemento</h3>
-              <p>Afinidad, ajuste y diferencias de lenguaje entre los cuatro elementos; no son aspectos calculados. Tu signo solar ubica el punto de partida.</p>
-              <canvas class="matrix-canvas" id="western-affinity-matrix" width="420" height="420" role="img" aria-label="Matriz occidental: el aro ocre indica afinidad directa de cada elemento consigo mismo; Fuego y Aire, y Tierra y Agua, tienen afinidad complementaria; Fuego y Tierra, y Aire y Agua, requieren ajuste; Fuego y Agua, y Aire y Tierra, muestran una diferencia marcada de lenguaje."></canvas>
-              <figcaption class="matrix-caption affinity-gloss">
-                <div class="trait-list" aria-label="Afinidades del signo solar">
-                  <div class="trait-row"><span>Relaciones</span><p id="western-affinity-copy">—</p></div>
-                </div>
-              </figcaption>
-              <div class="matrix-legend" aria-label="Leyenda del zodíaco occidental">
-                <span><i class="matrix-loop" aria-hidden="true"></i>Tu elemento</span>
-                <span><i class="matrix-line positive" aria-hidden="true"></i>Complementaria</span>
-                <span><i class="matrix-line neutral" aria-hidden="true"></i>Ajuste</span>
-                <span><i class="matrix-line negative" aria-hidden="true"></i>Diferencia marcada</span>
+              <h3 id="western-affinity-title">Afinidades de tu signo</h3>
+              <p>Un cuadro simple de afinidades elementales. No calcula aspectos ni define una relación completa.</p>
+              <div class="affinity-box" aria-label="Cuadro de afinidades del signo solar">
+                <div class="affinity-item"><span>Afinidad directa</span><strong id="western-affinity-direct">—</strong></div>
+                <div class="affinity-item"><span>Complementaria</span><strong id="western-affinity-complement">—</strong></div>
+                <div class="affinity-item"><span>Requiere ajuste</span><strong id="western-affinity-adjust">—</strong></div>
+                <div class="affinity-item"><span>Diferencia marcada</span><strong id="western-affinity-tension">—</strong></div>
               </div>
+              <p class="affinity-note">Describe lenguajes generales entre elementos solares; no anuncia compatibilidad ni conflicto.</p>
             </figure>
           </div>
 
@@ -1456,11 +1461,11 @@
         <section class="section rule wiki-module" id="wiki-chinese" aria-labelledby="wiki-chinese-title" hidden>
           <div class="wiki-module-intro"><div class="section-head"><p class="section-kicker">03 · Zodíaco chino</p><h2 class="section-title" id="wiki-chinese-title">Del ritmo Yin/Yang al animal del año.</h2><p class="section-intro">El zodíaco anual se organiza mediante un calendario lunisolar. El Año Nuevo se vincula con una Luna nueva, pero el calendario chino también usa términos solares: llamarlo puramente “lunar” sería incompleto.</p></div><figure class="wiki-module-art"><img src="assets/aprende/zodiaco-chino.webp" alt="Carta ilustrada del zodíaco chino con animales y Luna" width="768" height="1152" loading="lazy" decoding="async"></figure></div>
 
-          <div class="wiki-order-grid" aria-label="Orden de lectura del zodíaco chino"><article class="wiki-order-card"><span class="micro-label">Primero · el ritmo</span><strong>Yin / Yang</strong><p>Describe una orientación más receptiva y gradual o más activa y exterior.</p></article><article class="wiki-order-card"><span class="micro-label">Después · el proceso</span><strong>Cinco fases</strong><p>Madera, Fuego, Tierra, Metal y Agua describen movimientos, no sustancias fijas.</p></article><article class="wiki-order-card"><span class="micro-label">Finalmente · la figura</span><strong>Animal</strong><p>El animal anual aporta un repertorio simbólico dentro de un ciclo de doce.</p></article></div>
+          <div class="wiki-order-grid" aria-label="Orden de lectura del zodíaco chino"><article class="wiki-order-card"><span class="micro-label">Primero · el ritmo</span><strong>Yin / Yang</strong><p>Describe una orientación receptiva y gradual o activa y exterior.</p></article><article class="wiki-order-card"><span class="micro-label">Después · el proceso</span><strong>Cinco fases</strong><p>Madera, Fuego, Tierra, Metal y Agua describen movimientos, no sustancias fijas.</p></article><article class="wiki-order-card"><span class="micro-label">Finalmente · la figura</span><strong>Animal</strong><p>El animal anual aporta un repertorio simbólico dentro de un ciclo de doce.</p></article></div>
 
-          <section class="wiki-chapter" aria-labelledby="chinese-polarity-title"><div class="wiki-chapter-head"><div><span class="micro-label">01 · Yin / Yang</span><h3 id="chinese-polarity-title">El ritmo más general.</h3></div><p>La polaridad alterna cada año. No equivale a femenino/masculino ni clasifica a una persona como pasiva o dominante.</p></div><div class="wiki-image-pair"><img src="assets/aprende/yin-yang.webp" alt="Carta ilustrada de las polaridades Yin y Yang" width="768" height="1152" loading="lazy" decoding="async"><div class="wiki-two-column"><article class="wiki-method"><span class="micro-label">Yin</span><h3>Receptivo y gradual</h3><p>El movimiento se describe como más interior, acumulativo y atento al contexto.</p></article><article class="wiki-method"><span class="micro-label">Yang</span><h3>Activo y exterior</h3><p>El movimiento se describe como más visible, directo y orientado a la acción.</p></article></div></div></section>
+          <section class="wiki-chapter" aria-labelledby="chinese-polarity-title"><div class="wiki-chapter-head"><div><span class="micro-label">01 · Yin / Yang</span><h3 id="chinese-polarity-title">El ritmo más general.</h3></div><p>La polaridad alterna cada año. No equivale a femenino/masculino ni clasifica a una persona como pasiva o dominante.</p></div><div class="wiki-image-pair"><img src="assets/aprende/yin-yang.webp" alt="Carta ilustrada de las polaridades Yin y Yang" width="768" height="1152" loading="lazy" decoding="async"><div class="wiki-two-column"><article class="wiki-method"><span class="micro-label">Yin</span><h3>Receptivo y gradual</h3><p>El movimiento se describe como interior, acumulativo y atento al contexto.</p></article><article class="wiki-method"><span class="micro-label">Yang</span><h3>Activo y exterior</h3><p>El movimiento se describe como visible, directo y orientado a la acción.</p></article></div></div></section>
 
-          <section class="wiki-chapter" aria-labelledby="chinese-element-title"><div class="wiki-chapter-head"><div><span class="micro-label">02 · Cinco fases</span><h3 id="chinese-element-title">El proceso que toma esa energía.</h3></div><p>Wu Xing describe cinco transformaciones relacionadas. No corresponde uno a uno con los cuatro elementos occidentales.</p></div><div class="wiki-five-grid"><article class="wiki-symbol"><span class="micro-label">Madera</span><strong>Crecimiento</strong><p>Virtud: vitalidad. Exceso: dispersión.</p></article><article class="wiki-symbol"><span class="micro-label">Fuego</span><strong>Acción</strong><p>Virtud: transformación. Exceso: impulsividad.</p></article><article class="wiki-symbol"><span class="micro-label">Tierra</span><strong>Estabilidad</strong><p>Virtud: apoyo. Exceso: inmovilidad.</p></article><article class="wiki-symbol"><span class="micro-label">Metal</span><strong>Estructura</strong><p>Virtud: criterio. Exceso: rigidez.</p></article><article class="wiki-symbol"><span class="micro-label">Agua</span><strong>Adaptación</strong><p>Virtud: nutrición. Exceso: sobreadaptación.</p></article></div></section>
+          <section class="wiki-chapter" aria-labelledby="chinese-element-title"><div class="wiki-chapter-head"><div><span class="micro-label">02 · Cinco fases</span><h3 id="chinese-element-title">El proceso que toma esa energía.</h3></div><p>Wu Xing describe cinco transformaciones relacionadas. No corresponde uno a uno con los cuatro elementos occidentales.</p></div><div class="wiki-five-grid"><article class="wiki-symbol"><span class="micro-label">Madera</span><strong>Crecimiento</strong><p>Atributos principales: crecimiento, vitalidad y renovación.</p></article><article class="wiki-symbol"><span class="micro-label">Fuego</span><strong>Acción</strong><p>Atributos principales: acción, transformación y dinamismo.</p></article><article class="wiki-symbol"><span class="micro-label">Tierra</span><strong>Estabilidad</strong><p>Atributos principales: estabilidad, apoyo y contención.</p></article><article class="wiki-symbol"><span class="micro-label">Metal</span><strong>Estructura</strong><p>Atributos principales: estructura, criterio y límite.</p></article><article class="wiki-symbol"><span class="micro-label">Agua</span><strong>Adaptación</strong><p>Atributos principales: adaptación, nutrición y calma.</p></article></div></section>
 
           <section class="wiki-chapter" aria-labelledby="chinese-animal-title"><div class="wiki-chapter-head"><div><span class="micro-label">03 · Animal</span><h3 id="chinese-animal-title">La figura particular del año.</h3></div><p>El animal se determina por el año lunisolar efectivo, no automáticamente por el año gregoriano. Quien nace en enero o febrero debe revisar el límite exacto.</p></div><div class="wiki-symbol-grid"><article class="wiki-symbol"><span class="micro-label">1.ª trina</span><strong>Rata</strong><p>Estrategia y oportunidad.</p></article><article class="wiki-symbol"><span class="micro-label">2.ª trina</span><strong>Buey</strong><p>Constancia y método.</p></article><article class="wiki-symbol"><span class="micro-label">3.ª trina</span><strong>Tigre</strong><p>Acción e idealismo.</p></article><article class="wiki-symbol"><span class="micro-label">4.ª trina</span><strong>Conejo</strong><p>Sensibilidad y diplomacia.</p></article><article class="wiki-symbol"><span class="micro-label">1.ª trina</span><strong>Dragón</strong><p>Impulso y carisma.</p></article><article class="wiki-symbol"><span class="micro-label">2.ª trina</span><strong>Serpiente</strong><p>Observación y precisión.</p></article><article class="wiki-symbol"><span class="micro-label">3.ª trina</span><strong>Caballo</strong><p>Movimiento y autonomía.</p></article><article class="wiki-symbol"><span class="micro-label">4.ª trina</span><strong>Cabra</strong><p>Cuidado y expresión.</p></article><article class="wiki-symbol"><span class="micro-label">1.ª trina</span><strong>Mono</strong><p>Ingenio y adaptación.</p></article><article class="wiki-symbol"><span class="micro-label">2.ª trina</span><strong>Gallo</strong><p>Orden y claridad.</p></article><article class="wiki-symbol"><span class="micro-label">3.ª trina</span><strong>Perro</strong><p>Lealtad y criterio.</p></article><article class="wiki-symbol"><span class="micro-label">4.ª trina</span><strong>Cerdo</strong><p>Apertura y generosidad.</p></article></div></section>
 
@@ -1777,8 +1782,8 @@
 
         ctx.strokeStyle="#9c988c";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(72,640);ctx.lineTo(1008,640);ctx.moveTo(540,640);ctx.lineTo(540,1060);ctx.moveTo(72,850);ctx.lineTo(1008,850);ctx.moveTo(72,1060);ctx.lineTo(1008,1060);ctx.stroke();
         drawShareSignal(ctx,72,688,410,"Numerología",`Camino de vida ${snapshot.life.number}`,snapshot.profile.gift);
-        drawShareSignal(ctx,580,688,428,"Zodíaco tropical",`${snapshot.sun[0]} · ${snapshot.sun[1]}`,`${snapshot.sun[2]} · ${snapshot.sun[5].slice(0,2).join(", ")}`);
-        drawShareSignal(ctx,72,898,410,"Zodíaco chino",`${snapshot.chin.animal} de ${snapshot.chin.element}`,`${snapshot.chin.polarity} · ${chineseAnimalTone(snapshot.chin.animal)}`);
+        drawShareSignal(ctx,580,688,428,"Zodíaco tropical",`${snapshot.sun[0]} · ${snapshot.sun[1]} · ${snapshot.sun[2]}`,snapshot.sun[5].slice(0,2).join(", "));
+        drawShareSignal(ctx,72,898,410,"Zodíaco chino",`${snapshot.chin.animal} de ${snapshot.chin.element} · ${snapshot.chin.polarity}`,chineseAnimalTone(snapshot.chin.animal));
         drawShareSignal(ctx,580,898,428,"Tarot de nacimiento",`${snapshot.tarot[0]} · ${snapshot.tarotNumber}`,snapshot.tarot[1]);
 
         ctx.strokeStyle="#9c988c";ctx.beginPath();ctx.moveTo(72,1110);ctx.lineTo(1008,1110);ctx.stroke();
@@ -1959,7 +1964,7 @@
       const CHINESE_ELEMENT_IMPULSE_ATTRIBUTE = {Madera:"vitalidad",Fuego:"transformación",Tierra:"apoyo",Metal:"criterio",Agua:"nutrición"};
       const CHINESE_ELEMENT_REGULATION_ATTRIBUTE = {Madera:"renovación",Fuego:"dinamismo",Tierra:"contención",Metal:"límite",Agua:"calma"};
       const CHINESE_ELEMENT_VICE = {Madera:"dispersión",Fuego:"impulsividad",Tierra:"inmovilidad",Metal:"rigidez",Agua:"sobreadaptación"};
-      const CHINESE_ELEMENT_ACTION = {Madera:"hacer crecer una posibilidad concreta",Fuego:"pasar a la acción y transformar",Tierra:"sostener, enfocar y dar continuidad",Metal:"ordenar, delimitar y definir",Agua:"adaptarte, cambiar el recorrido y nutrir"};
+      const CHINESE_ELEMENT_ACTION = {Madera:"hacer crecer una posibilidad concreta",Fuego:"pasar a la acción y transformar",Tierra:"sostener, enfocar y dar continuidad",Metal:"ordenar, delimitar y definir",Agua:"adaptarte y nutrir. Sin cambiar el recorrido"};
       const CHINESE_ELEMENT_EXCESS = {Madera:"la dispersión de crecer en demasiadas direcciones",Fuego:"actuar sin calibrar",Tierra:"la inmovilidad de aferrarte a lo estable",Metal:"la rigidez de estructurar en exceso",Agua:"la sobreadaptación de acomodarte a todo"};
       const CHINESE_IMPULSE = {Madera:"Fuego",Fuego:"Tierra",Tierra:"Metal",Metal:"Agua",Agua:"Madera"};
       const CHINESE_REGULATION = {Madera:"Tierra",Tierra:"Agua",Agua:"Fuego",Fuego:"Metal",Metal:"Madera"};
@@ -1984,7 +1989,7 @@
         Metal:"Cuando crecer se vuelve dispersarse, el límite poda frentes y devuelve dirección.",
         Agua:"Cuando actuar se vuelve impulsividad, la calma baja intensidad sin apagar la acción."
       };
-      const POLARITY_TONE = {Yang:"un movimiento más activo y exterior",Yin:"un movimiento más receptivo y gradual"};
+      const POLARITY_TONE = {Yang:"un movimiento activo y exterior",Yin:"un movimiento receptivo y gradual"};
       const TRINES = [["Rata","Dragón","Mono"],["Buey","Serpiente","Gallo"],["Tigre","Caballo","Perro"],["Conejo","Cabra","Cerdo"]];
       const TRINE_TONES = [
         "estrategia, carisma social y capacidad de abrir caminos",
@@ -2389,23 +2394,25 @@
         $("#soy-sources").textContent=synthesis.sources;
         $("#soy-synthesis").textContent=synthesis.copy;
         $("#life-label").textContent=`Número ${life.number}`; $("#life-meaning").textContent=profile.meaning; $("#life-calc").textContent=life.expression;
-        $("#sun-label").textContent=`${sun[0]} · ${sun[1]}`;
-        $("#sun-sign-traits").textContent=sun[5].join(", ");
+        $("#sun-label").textContent=`${sun[0]} · ${sun[1]} · ${sun[2]}`;
+        $("#sun-sign-traits").textContent=`${sun[0]}: ${sun[5].join(", ")}`;
         $("#sun-element-traits").textContent=`${sun[1]}: ${ELEMENT_LANGUAGE[sun[1]]}`;
         $("#sun-modality-traits").textContent=`${sun[2]}: ${MODALITY_LANGUAGE[sun[2]]}`;
         $("#sun-calc").textContent=`${pad(birth.getUTCDate())}/${pad(birth.getUTCMonth()+1)} cae entre ${pad(sun[3][1])}/${pad(sun[3][0])} y ${pad(sun[4][1])}/${pad(sun[4][0])}.`;
-        $("#chinese-label").textContent=`${chin.animal} de ${chin.element} ${ELEMENT_HANZI[chin.element]}`;
+        $("#chinese-label").textContent=`${chin.animal} de ${chin.element} · ${chin.polarity}`;
         $("#chinese-animal-traits").textContent=`${chin.animal}: ${chineseAnimalTone(chin.animal)} (tema de su trino)`;
-        $("#chinese-element-traits").textContent=`${chin.element} · Principal: ${CHINESE_ELEMENT_TONE[chin.element]} · Virtud de impulso: ${CHINESE_ELEMENT_IMPULSE_ATTRIBUTE[chin.element]} · Virtud de regulación: ${CHINESE_ELEMENT_REGULATION_ATTRIBUTE[chin.element]} · Vicio: ${CHINESE_ELEMENT_VICE[chin.element]}`;
+        $("#chinese-element-traits").textContent=`${chin.element}: Atributos principales: ${CHINESE_ELEMENT_TONE[chin.element]}, ${CHINESE_ELEMENT_IMPULSE_ATTRIBUTE[chin.element]} y ${CHINESE_ELEMENT_REGULATION_ATTRIBUTE[chin.element]}`;
         $("#chinese-polarity-traits").textContent=`${chin.polarity}: ${POLARITY_TONE[chin.polarity]}`;
         const westernRelations=WESTERN_ELEMENT_RELATIONS[sun[1]];
         affinitySelection={western:sun[1],chinese:chin.element};
-        $("#western-affinity-title").textContent=`Cómo se relaciona tu ${sun[1]}`;
-        $("#western-affinity-copy").textContent=`Como ${sun[0]}, tu ${sun[1]} reconoce con facilidad a ${sun[1]}, se complementa con ${westernRelations.complement}, requiere traducción con ${westernRelations.adjust} y marca una diferencia de lenguaje con ${westernRelations.tension}. Esto compara elementos solares; no calcula aspectos.`;
+        $("#western-affinity-title").textContent=`Afinidades de ${sun[0]}`;
+        $("#western-affinity-direct").textContent=sun[1];
+        $("#western-affinity-complement").textContent=westernRelations.complement;
+        $("#western-affinity-adjust").textContent=westernRelations.adjust;
+        $("#western-affinity-tension").textContent=westernRelations.tension;
         $("#chinese-affinity-title").textContent=`Cómo circula tu ${chin.element}`;
         $("#chinese-affinity-copy").textContent=`Actúas desde ${chin.element}: tu movimiento natural es ${CHINESE_ELEMENT_ACTION[chin.element]}. Hacia afuera, alimentas a ${CHINESE_IMPULSE[chin.element]} —${CHINESE_IMPULSE_PRACTICE[chin.element].toLowerCase().replace(/\.$/,"")}— y regulas a ${CHINESE_REGULATION[chin.element]} —${CHINESE_REGULATION_PRACTICE[chin.element].toLowerCase().replace(/\.$/,"")}—.`;
         $("#chinese-affinity-incoming").textContent=CHINESE_INCOMING_PRACTICE[chin.element];
-        $("#western-affinity-matrix").setAttribute("aria-label",`Matriz occidental para ${sun[0]}. ${sun[1]} es tu elemento y está marcado en dorado. Las líneas muestran complementariedad, ajuste y diferencias de lenguaje; no son aspectos calculados.`);
         $("#chinese-affinity-matrix").setAttribute("aria-label",`Matriz china para ${chin.animal} de ${chin.element}. ${chin.element} es tu elemento y está marcado en dorado. Las flechas muestran qué fases impulsa y regula.`);
         requestAnimationFrame(drawAffinityMatrices);
         $("#chinese-calc").textContent=`Tu año chino efectivo es ${chin.effective}. Animal: el ciclo repite 12 animales y se cuenta desde Rata; (${chin.effective} − 4) deja resto ${mod(chin.effective-4,12)} al dividir por 12 → ${ANIMALS[mod(chin.effective-4,12)]}, el animal ${mod(chin.effective-4,12)+1} de 12. Elemento: cada elemento gobierna 2 años seguidos en un ciclo de 10; (${chin.effective} − 4) deja resto ${mod(chin.effective-4,10)} al dividir por 10 → ${ELEMENTS[Math.floor(mod(chin.effective-4,10)/2)]}. Polaridad: año ${chin.effective%2===0?"par":"impar"} → ${chin.polarity}.`; $("#chinese-note").textContent=chin.note; $("#chinese-kind").textContent=chin.approximate?"Aproximación":"Tradición";
