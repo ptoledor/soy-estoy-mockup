@@ -187,6 +187,9 @@
 
     main { overflow: hidden; }
     .view { animation: enter .35s ease both; }
+    .js .app-reveal { opacity: 0; transform: translateY(22px); transition: opacity .7s ease, transform .7s cubic-bezier(.2, .65, .2, 1); }
+    .js .app-reveal.in { opacity: 1; transform: none; }
+    @media (prefers-reduced-motion: reduce) { .js .app-reveal { opacity: 1; transform: none; transition: none; } }
     @keyframes enter { from { opacity: .15; transform: translateY(5px); } }
     @media (prefers-reduced-motion: reduce) { .view { animation: none; } html { scroll-behavior: auto; } }
 
@@ -254,14 +257,20 @@
     .hero.soy-hero { grid-template-columns: minmax(0, 1.25fr) minmax(180px, .55fr); align-items: center; }
     .hero-wheel { display: none; }
     .editorial-art {
+      position: relative;
       margin: 0;
       overflow: hidden;
       aspect-ratio: 2 / 3;
       border: 1px solid var(--line-dark);
       background: var(--ink);
-      box-shadow: 12px 14px 0 rgba(23, 24, 18, .08);
+      box-shadow: 0 1px 2px rgba(23, 24, 18, .08), 0 26px 60px -30px rgba(23, 24, 18, .45);
+      transform: rotate(-1.2deg);
+      transition: transform .5s cubic-bezier(.2, .65, .2, 1), box-shadow .5s ease;
     }
+    .editorial-art::after { content: ""; position: absolute; inset: 7px; border: 1px solid rgba(244, 241, 233, .38); pointer-events: none; }
+    .editorial-art:hover { transform: rotate(0deg); box-shadow: 0 1px 2px rgba(23, 24, 18, .08), 0 32px 70px -30px rgba(23, 24, 18, .5); }
     .editorial-art img { width: 100%; height: 100%; display: block; object-fit: cover; }
+    @media (prefers-reduced-motion: reduce) { .editorial-art { transform: none; transition: none; } }
     .view-hero-art { width: min(100%, 310px); justify-self: end; }
     .view-hero-art.compact { width: min(100%, 230px); }
     .wheel-spin { animation: wheel-spin 220s linear infinite; transform-origin: 300px 300px; }
@@ -338,7 +347,9 @@
       border-bottom: 1px solid var(--line);
       border-right: 1px solid var(--line);
       background: rgba(244, 241, 233, .42);
+      transition: background .35s ease;
     }
+    .evidence:hover { background: #f8f6ef; }
     .evidence:nth-child(2n) { border-right: 0; }
     .evidence:nth-last-child(-n+2) { border-bottom: 0; }
     .evidence-top { display: flex; justify-content: space-between; align-items: start; gap: 14px; }
@@ -503,7 +514,8 @@
     .today-line span { position: absolute; top: 8px; left: 7px; color: #e6bd69; font-family: var(--mono); font-size: 9px; text-transform: uppercase; }
 
     .climate-grid { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--line-dark); }
-    .climate-card { min-width: 0; padding: 24px; border-right: 1px solid var(--line); background: rgba(244, 241, 233, .5); }
+    .climate-card { min-width: 0; padding: 24px; border-right: 1px solid var(--line); background: rgba(244, 241, 233, .5); transition: background .35s ease; }
+    .climate-card:hover { background: #f8f6ef; }
     .climate-card:last-child { border-right: 0; }
     .climate-value { margin: 8px 0 8px; font-family: var(--serif); font-size: 28px; font-weight: 500; }
     .climate-card p { margin: 0; color: var(--muted); font-size: 13px; }
@@ -780,7 +792,9 @@
     .wiki-topic span:last-child { display: block; color: var(--muted); font-size: 12px; line-height: 1.45; }
     .wiki-topic span:last-child::after { content: "Abrir módulo →"; display: block; margin-top: 12px; color: var(--brass); font-family: var(--mono); font-size: 9px; letter-spacing: .08em; text-transform: uppercase; }
     .wiki-module-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: 40px; }
-    .wiki-course { min-width: 0; padding: 0; border: 1px solid var(--line-dark); background: var(--paper-2); cursor: pointer; overflow: hidden; text-align: left; }
+    .wiki-course { min-width: 0; padding: 0; border: 1px solid var(--line-dark); background: var(--paper-2); cursor: pointer; overflow: hidden; text-align: left; transition: box-shadow .35s ease, transform .35s ease; }
+    .wiki-course:hover { transform: translateY(-3px); box-shadow: 0 18px 40px -22px rgba(23, 24, 18, .45); }
+    @media (prefers-reduced-motion: reduce) { .wiki-course { transition: none; } .wiki-course:hover { transform: none; } }
     .wiki-course:hover { border-color: var(--brass); }
     .wiki-course-art { display: block; height: auto; aspect-ratio: 3 / 2; overflow: hidden; border-bottom: 1px solid var(--line); background: var(--ink); }
     .wiki-course-art img { width: 100%; height: 100%; display: block; object-fit: cover; transition: transform .45s ease; }
@@ -1541,6 +1555,7 @@
       const DAY = 86400000;
       const $ = selector => document.querySelector(selector);
       const $$ = selector => [...document.querySelectorAll(selector)];
+      document.documentElement.classList.add("js");
       const pad = value => String(value).padStart(2, "0");
       const mod = (value, divisor) => ((value % divisor) + divisor) % divisor;
       const [sharedHashView,sharedHashQuery=""] = location.hash.slice(1).split("?");
@@ -2582,6 +2597,10 @@
       updateWikiMatrixUI("western",wikiMatrixSelection.western);
       updateWikiMatrixUI("chinese",wikiMatrixSelection.chinese);
       $$('[data-view]').forEach(button=>button.addEventListener("click",()=>setView(button.dataset.view)));
+      const appReveal=new IntersectionObserver(entries=>{
+        for(const entry of entries){ if(entry.isIntersecting){ entry.target.classList.add("in"); appReveal.unobserve(entry.target); } }
+      },{threshold:.08,rootMargin:"0px 0px -30px 0px"});
+      $$(".view .section").forEach(section=>{ section.classList.add("app-reveal"); appReveal.observe(section); });
       $$('[data-go]').forEach(button=>button.addEventListener("click",()=>setView(button.dataset.go)));
       $("#aprende-view").addEventListener("click",event=>{
         const matrixSelector=event.target.closest("[data-wiki-matrix][data-matrix-node]"),matrixCanvas=event.target.closest("canvas[data-wiki-matrix]");
