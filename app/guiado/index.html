@@ -216,7 +216,9 @@
     }
     /* Un número solo necesita mucha más escala que una palabra para leerse como revelación. */
     .reveal-value.numeric { font-size: clamp(76px, 19vw, 104px); line-height: .86; margin-bottom: 14px; }
-    .reveal-body > p { margin: 0; color: var(--muted); font-size: 15px; }
+    /* :not() evita que este selector (0,1,1) le gane a .reveal-value (0,1,0)
+       y le imponga tamaño de párrafo al dato revelado. */
+    .reveal-body > p:not(.reveal-value) { margin: 0; color: var(--muted); font-size: 15px; }
     .traits { margin: 16px 0 0; border-top: 1px solid var(--line); }
     .trait {
       display: grid;
@@ -227,6 +229,18 @@
       font-size: 14px;
     }
     .trait span { color: var(--muted); font-family: var(--mono); font-size: 9px; letter-spacing: .08em; text-transform: uppercase; padding-top: 4px; }
+    .trait p { margin: 0; }
+    /* El término es el dato; la glosa lo explica. Antes competían al mismo tamaño
+       y la explicación le ganaba al dato por largo. */
+    .trait b {
+      display: block;
+      font-family: var(--serif);
+      font-size: 22px;
+      font-weight: 500;
+      line-height: 1.12;
+      letter-spacing: -.01em;
+    }
+    .trait i { display: block; margin-top: 2px; color: var(--muted); font-style: normal; font-size: 13px; line-height: 1.42; }
 
     /* La cuenta a la vista: el principio editorial del producto */
     .calc {
@@ -365,15 +379,16 @@
       .pair { gap: 10px; margin: 18px 0 20px; }
       .pair-card { padding: 14px 16px; }
       .pair-card h2 { font-size: 23px; }
-      .reveal-card { margin: 16px 0; }
+      .reveal-card { margin: 14px 0; }
       .reveal-head { padding: 13px 16px; }
-      .reveal-body { padding: 18px 16px 20px; }
-      .reveal-value { font-size: clamp(30px, 7.4vw, 40px); }
+      .reveal-body { padding: 18px 16px 16px; }
+      .reveal-value { font-size: clamp(35px, 9vw, 44px); }
       .trait { padding: 7px 0; }
-      .calc { margin-top: 13px; padding: 10px 12px; }
-      .converge { margin: 16px 0 18px; }
-      .converge-body { padding: 18px 16px 20px; }
-      .converge-body h2 { font-size: clamp(27px, 6.6vw, 34px); }
+      .trait b { font-size: 20px; }
+      .calc { margin-top: 11px; padding: 10px 12px; }
+      .converge { margin: 14px 0 16px; }
+      .converge-body { padding: 16px 16px 18px; }
+      .converge-body h2 { font-size: clamp(33px, 8.4vw, 40px); }
       .converge-body .copy { font-size: 14px; }
       .takeaway { padding: 12px 14px; }
       .field { margin-bottom: 14px; }
@@ -636,6 +651,22 @@
 
       const set = (id, text) => { document.getElementById(id).textContent = text; };
 
+      // "Tierra — prueba, estabilidad y forma concreta" se parte en dato + glosa
+      // para que el término se lea primero y la explicación no lo tape.
+      const setTerm = (id, text) => {
+        const el = document.getElementById(id);
+        const [term, ...rest] = String(text).split(" — ");
+        el.textContent = "";
+        const b = document.createElement("b");
+        b.textContent = term;
+        el.append(b);
+        if (rest.length) {
+          const i = document.createElement("i");
+          i.textContent = rest.join(" — ");
+          el.append(i);
+        }
+      };
+
       function paint(s) {
         // 1 · Numerología
         set("n-value", s.life.number);
@@ -646,15 +677,15 @@
         // 2 · Zodíaco occidental
         set("w-value", s.sun[0]);
         set("w-traits", s.sun[5].join(", "));
-        set("w-element", `${s.sun[1]} — ${ELEMENT_LANGUAGE[s.sun[1]]}`);
-        set("w-modality", `${s.sun[2]} — ${MODALITY_LANGUAGE[s.sun[2]]}`);
+        setTerm("w-element", `${s.sun[1]} — ${ELEMENT_LANGUAGE[s.sun[1]]}`);
+        setTerm("w-modality", `${s.sun[2]} — ${MODALITY_LANGUAGE[s.sun[2]]}`);
         set("w-calc", `Zodíaco tropical por fecha: ${s.sun[0]} va del ${s.sun[3][1]}/${s.sun[3][0]} al ${s.sun[4][1]}/${s.sun[4][0]}.`);
 
         // 3 · Zodíaco chino
         set("c-value", `${s.chin.animal} de ${s.chin.element}`);
         set("c-animal", chineseAnimalTone(s.chin.animal));
-        set("c-element", `${s.chin.element} — ${CHINESE_ELEMENT_TONE[s.chin.element]}`);
-        set("c-polarity", `${s.chin.polarity} — ${POLARITY_TONE[s.chin.polarity]}`);
+        setTerm("c-element", `${s.chin.element} — ${CHINESE_ELEMENT_TONE[s.chin.element]}`);
+        setTerm("c-polarity", `${s.chin.polarity} — ${POLARITY_TONE[s.chin.polarity]}`);
         set("c-calc", `Año lunisolar efectivo: ${s.chin.effective}. ${s.chin.note}`);
         document.getElementById("c-kind").textContent = s.chin.approximate ? "Tradición · aproximado" : "Tradición";
         const flag = document.getElementById("c-flag");
