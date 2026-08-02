@@ -1,0 +1,736 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#ebe7dc">
+  <meta name="robots" content="noindex">
+  <meta name="description" content="Entrada guiada a Soy/Estoy: descubre tu lectura paso a paso, una tradición a la vez.">
+  <title>Soy / Estoy · Entrada guiada</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --paper: #ebe7dc;
+      --paper-2: #f4f1e9;
+      --ink: #171812;
+      --muted: #606157;
+      --line: #c9c5b8;
+      --line-dark: #9c988c;
+      --brass: #8d6417;
+      --green: #234b3d;
+      --serif: "Newsreader", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+      --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --mono: "Cascadia Code", "SFMono-Regular", Consolas, monospace;
+      --step: min(100%, 620px);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--sans);
+      line-height: 1.55;
+      -webkit-text-size-adjust: 100%;
+    }
+    button { color: inherit; font: inherit; }
+    a { color: inherit; }
+    :focus-visible { outline: 3px solid #d09b2f; outline-offset: 3px; }
+
+    /* Grano de papel, igual que el resto del producto */
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: 99;
+      pointer-events: none;
+      opacity: .05;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 180px 180px;
+      mix-blend-mode: multiply;
+    }
+
+    /* ——— Cabecera: marca + progreso finito ——— */
+    .topbar {
+      flex: none;
+      border-bottom: 1px solid var(--line);
+      background: var(--paper-2);
+    }
+    .topbar-inner {
+      width: var(--step);
+      margin: 0 auto;
+      min-height: 58px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding-inline: 22px;
+    }
+    .brand {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 6px;
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: .15em;
+      text-decoration: none;
+    }
+    .brand i { color: var(--brass); font-style: normal; }
+    .counter { color: var(--muted); font-family: var(--mono); font-size: 11px; letter-spacing: .08em; }
+    .counter b { color: var(--ink); font-weight: 500; }
+
+    /* La barra hace visible que el recorrido termina */
+    .progress { height: 2px; background: var(--line); }
+    .progress i {
+      display: block;
+      height: 100%;
+      width: 0;
+      background: var(--brass);
+      transition: width .45s cubic-bezier(.2, .65, .2, 1);
+    }
+
+    /* ——— Escenario ——— */
+    .stage {
+      flex: 1 1 auto;
+      display: flex;
+      justify-content: center;
+      padding: 34px 22px 26px;
+    }
+    .step {
+      width: var(--step);
+      margin: auto;
+      display: none;
+      animation: enter .42s cubic-bezier(.2, .65, .2, 1) both;
+    }
+    .step.active { display: block; }
+    @keyframes enter {
+      from { opacity: 0; transform: translateY(14px); }
+      to { opacity: 1; transform: none; }
+    }
+
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 14px;
+      color: var(--brass);
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+    .eyebrow::before { content: ""; width: 26px; height: 1px; background: var(--brass); flex: none; }
+
+    h1 {
+      margin: 0 0 16px;
+      font-family: var(--serif);
+      font-size: clamp(30px, 6.4vw, 44px);
+      font-weight: 420;
+      line-height: 1.08;
+      letter-spacing: -.02em;
+    }
+    h1 em { color: var(--brass); font-style: normal; }
+    .lead { margin: 0 0 20px; color: var(--muted); font-size: 16px; }
+    .lead strong { color: var(--ink); font-weight: 500; }
+
+    /* ——— Paso 1: qué es Soy y qué es Estoy ——— */
+    .pair { display: grid; gap: 12px; margin: 24px 0 26px; }
+    .pair-card {
+      padding: 18px 20px;
+      border: 1px solid var(--line-dark);
+      background: var(--paper-2);
+    }
+    .pair-card h2 {
+      margin: 0 0 4px;
+      font-family: var(--serif);
+      font-size: 27px;
+      font-weight: 500;
+      letter-spacing: -.01em;
+    }
+    .pair-card h2 span {
+      margin-left: 8px;
+      color: var(--brass);
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      vertical-align: 4px;
+    }
+    .pair-card p { margin: 0; color: var(--muted); font-size: 14px; }
+    .pair-card p b { color: var(--ink); font-weight: 500; }
+
+    /* ——— Formulario ——— */
+    .field { display: block; margin-bottom: 16px; }
+    .field > span {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    .field input {
+      width: 100%;
+      min-height: 54px;
+      padding: 0 14px;
+      border: 1px solid var(--line-dark);
+      border-radius: 0;
+      background: var(--paper-2);
+      color: var(--ink);
+      font-family: var(--serif);
+      font-size: 20px;
+    }
+    .field input:focus { border-color: var(--brass); outline: none; box-shadow: 0 0 0 3px rgba(141, 100, 23, .16); }
+    .hint { margin: -6px 0 0; color: var(--muted); font-size: 13px; }
+    .error { margin: 12px 0 0; color: #8b3f32; font-size: 14px; }
+    .error:empty { display: none; }
+
+    /* ——— Revelación de una tradición ——— */
+    .reveal-card {
+      margin: 22px 0;
+      border: 1px solid var(--line-dark);
+      background: var(--paper-2);
+    }
+    .reveal-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--line);
+    }
+    .reveal-head span { color: var(--muted); font-family: var(--mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; }
+    .reveal-head b { color: var(--brass); font-family: var(--mono); font-size: 10px; font-weight: 400; letter-spacing: .08em; }
+    .reveal-body { padding: 22px 20px 24px; }
+    .reveal-value {
+      margin: 0 0 10px;
+      font-family: var(--serif);
+      font-size: clamp(34px, 8vw, 52px);
+      font-weight: 420;
+      line-height: 1;
+      letter-spacing: -.02em;
+    }
+    /* Un número solo necesita mucha más escala que una palabra para leerse como revelación. */
+    .reveal-value.numeric { font-size: clamp(76px, 19vw, 104px); line-height: .86; margin-bottom: 14px; }
+    .reveal-body > p { margin: 0; color: var(--muted); font-size: 15px; }
+    .traits { margin: 16px 0 0; border-top: 1px solid var(--line); }
+    .trait {
+      display: grid;
+      grid-template-columns: 88px 1fr;
+      gap: 12px;
+      padding: 9px 0;
+      border-bottom: 1px solid var(--line);
+      font-size: 14px;
+    }
+    .trait span { color: var(--muted); font-family: var(--mono); font-size: 9px; letter-spacing: .08em; text-transform: uppercase; padding-top: 4px; }
+
+    /* La cuenta a la vista: el principio editorial del producto */
+    .calc {
+      margin: 16px 0 0;
+      padding: 12px 14px;
+      border: 1px dashed var(--line-dark);
+      background: var(--paper);
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 11px;
+      line-height: 1.7;
+      overflow-wrap: anywhere;
+    }
+    .calc b { display: block; margin-bottom: 4px; color: var(--ink); font-weight: 400; letter-spacing: .06em; text-transform: uppercase; font-size: 9px; }
+    .flag {
+      margin: 14px 0 0;
+      padding: 11px 13px;
+      border-left: 2px solid var(--brass);
+      background: rgba(141, 100, 23, .07);
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    /* Marcador de cuántas tradiciones llevamos */
+    .tally { display: flex; align-items: center; gap: 7px; margin: 0 0 18px; }
+    .tally i {
+      width: 100%;
+      height: 3px;
+      background: var(--line);
+      transition: background .35s ease;
+    }
+    .tally i.done { background: var(--brass); }
+    .tally p { flex: none; margin: 0 0 0 4px; color: var(--muted); font-family: var(--mono); font-size: 10px; letter-spacing: .08em; white-space: nowrap; }
+
+    /* ——— Convergencia: el pago del recorrido ——— */
+    .converge {
+      margin: 20px 0 24px;
+      border: 1px solid var(--ink);
+      background: var(--ink);
+      color: var(--paper-2);
+    }
+    .converge-head { padding: 16px 20px; border-bottom: 1px solid rgba(235, 231, 220, .22); }
+    .converge-head span { color: #c99b46; font-family: var(--mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; }
+    .converge-body { padding: 22px 20px 24px; }
+    .converge-body h2 {
+      margin: 0 0 8px;
+      font-family: var(--serif);
+      font-size: clamp(30px, 7vw, 42px);
+      font-weight: 420;
+      line-height: 1.05;
+      letter-spacing: -.02em;
+    }
+    .converge-body .sources { margin: 0 0 14px; color: #c99b46; font-size: 13px; }
+    .converge-body .copy { margin: 0; color: #cdc9bd; font-size: 15px; }
+    .converge-sources { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 18px; }
+    .chip {
+      padding: 5px 9px;
+      border: 1px solid rgba(235, 231, 220, .3);
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: #cdc9bd;
+    }
+    .chip.on { border-color: #c99b46; color: #edd39a; }
+
+    .takeaways { display: grid; gap: 10px; margin: 0 0 24px; }
+    .takeaway { padding: 14px 16px; border: 1px solid var(--line-dark); background: var(--paper-2); }
+    .takeaway span { display: block; margin-bottom: 3px; color: var(--brass); font-family: var(--mono); font-size: 9px; letter-spacing: .1em; text-transform: uppercase; }
+    .takeaway b { display: block; font-family: var(--serif); font-size: 19px; font-weight: 500; }
+    .takeaway p { margin: 2px 0 0; color: var(--muted); font-size: 14px; }
+
+    /* ——— Acciones ——— */
+    .actions {
+      flex: none;
+      border-top: 1px solid var(--line);
+      background: var(--paper-2);
+    }
+    .actions-inner {
+      width: var(--step);
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 22px calc(14px + env(safe-area-inset-bottom));
+    }
+    .btn {
+      display: inline-flex;
+      min-height: 50px;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 0 22px;
+      border: 1px solid var(--ink);
+      background: transparent;
+      cursor: pointer;
+      text-decoration: none;
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      transition: background .22s ease, color .22s ease;
+    }
+    .btn.primary { flex: 1; background: var(--ink); color: var(--paper-2); }
+    .btn.primary::after { content: "→"; font-family: var(--sans); transition: transform .22s ease; }
+    .btn.primary:hover::after { transform: translateX(3px); }
+    .btn.ghost { flex: none; border-color: var(--line-dark); color: var(--muted); padding-inline: 16px; }
+    .btn.ghost:hover { border-color: var(--ink); color: var(--ink); }
+    .btn[hidden] { display: none; }
+    .btn.quiet {
+      border: 0;
+      background: none;
+      color: var(--muted);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      min-height: 40px;
+      padding: 0;
+      text-transform: none;
+      font-family: var(--sans);
+      font-size: 13px;
+      letter-spacing: 0;
+    }
+    .closing { display: grid; gap: 10px; margin-top: 4px; }
+    .closing .btn { width: 100%; }
+
+    @media (min-width: 620px) {
+      .pair { grid-template-columns: 1fr 1fr; }
+      .stage { padding-top: 48px; }
+    }
+
+    /* En teléfono cada paso debe caber sin scroll: ese es el punto del formato. */
+    @media (max-width: 619px) {
+      .stage { padding: 22px 20px 18px; }
+      h1 { font-size: clamp(26px, 6.4vw, 34px); margin-bottom: 12px; }
+      .lead { margin-bottom: 16px; font-size: 15px; }
+      .pair { gap: 10px; margin: 18px 0 20px; }
+      .pair-card { padding: 14px 16px; }
+      .pair-card h2 { font-size: 23px; }
+      .reveal-card { margin: 16px 0; }
+      .reveal-head { padding: 13px 16px; }
+      .reveal-body { padding: 18px 16px 20px; }
+      .reveal-value { font-size: clamp(30px, 7.4vw, 40px); }
+      .trait { padding: 7px 0; }
+      .calc { margin-top: 13px; padding: 10px 12px; }
+      .converge { margin: 16px 0 18px; }
+      .converge-body { padding: 18px 16px 20px; }
+      .converge-body h2 { font-size: clamp(27px, 6.6vw, 34px); }
+      .converge-body .copy { font-size: 14px; }
+      .takeaway { padding: 12px 14px; }
+      .field { margin-bottom: 14px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .step { animation: none; }
+      .progress i, .tally i, .btn, .btn.primary::after { transition: none; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="../"><strong>SOY</strong><i>/</i><strong>ESTOY</strong></a>
+      <p class="counter"><b id="counter-now">1</b> / <span id="counter-total">8</span></p>
+    </div>
+  </header>
+  <div class="progress" role="progressbar" aria-label="Avance del recorrido" aria-valuemin="1" aria-valuemax="8" aria-valuenow="1" id="progress"><i id="progress-fill"></i></div>
+
+  <main class="stage" id="stage">
+
+    <!-- 1 · Qué es esto. Nadie avanza sin entender el Soy/Estoy. -->
+    <section class="step active" data-step="intro" aria-label="Qué es Soy Estoy">
+      <p class="eyebrow">Antes de empezar</p>
+      <h1>Cuatro tradiciones miran <em>la misma fecha</em>.</h1>
+      <p class="lead">Numerología, zodíaco occidental, zodíaco chino y tarot interpretan tu fecha de nacimiento por separado. Nosotros mostramos cada cuenta y buscamos <strong>en qué coinciden</strong>. Eso es todo lo que hace esto.</p>
+      <div class="pair">
+        <article class="pair-card">
+          <h2>Soy <span>no cambia</span></h2>
+          <p>Sale de <b>tu fecha de nacimiento</b>. Como esa fecha no cambia nunca, tu Soy tampoco.</p>
+        </article>
+        <article class="pair-card">
+          <h2>Estoy <span>cambia</span></h2>
+          <p>Sale de <b>la fecha de hoy</b>. Por eso cambia cada semana, como el clima.</p>
+        </article>
+      </div>
+      <p class="lead">Ahora vamos a armar tu <strong>Soy</strong>, de a una tradición por vez. Toma un minuto y medio.</p>
+    </section>
+
+    <!-- 2 · Un solo campo. Sin nombre obligatorio, sin hora, sin lugar. -->
+    <section class="step" data-step="fecha" aria-label="Tu fecha de nacimiento">
+      <p class="eyebrow">Paso 1 de 2 · lo único que pedimos</p>
+      <h1>¿Cuándo naciste?</h1>
+      <p class="lead">Con la fecha basta. <strong>No pedimos hora ni lugar</strong>: sin hora exacta no se pueden calcular ascendente ni casas, y mostrarlos igual sería inventar precisión.</p>
+      <label class="field">
+        <span>Fecha de nacimiento</span>
+        <input id="birth" type="date" min="1900-01-01" required autocomplete="bday">
+      </label>
+      <label class="field">
+        <span>Tu nombre (opcional)</span>
+        <input id="name" maxlength="40" autocomplete="given-name" placeholder="Solo para saludarte">
+      </label>
+      <p class="error" id="birth-error" role="alert"></p>
+    </section>
+
+    <!-- 3-6 · Una tradición por pantalla. Cada una con su cuenta a la vista. -->
+    <section class="step" data-step="numerologia" aria-label="Numerología">
+      <div class="tally"><i class="done"></i><i></i><i></i><i></i><p>1 de 4</p></div>
+      <p class="eyebrow">Numerología</p>
+      <h1>Primero, <em>sumamos</em> tu fecha.</h1>
+      <div class="reveal-card">
+        <div class="reveal-head"><span>Camino de vida</span><b id="n-kind">Regla</b></div>
+        <div class="reveal-body">
+          <p class="reveal-value numeric" id="n-value">—</p>
+          <p id="n-meaning">—</p>
+          <div class="calc"><b>La cuenta</b><span id="n-calc">—</span></div>
+        </div>
+      </div>
+      <p class="lead">Cada tradición que viene mira la misma fecha desde otro ángulo. Al final vemos qué se repite.</p>
+    </section>
+
+    <section class="step" data-step="occidental" aria-label="Zodíaco occidental">
+      <div class="tally"><i class="done"></i><i class="done"></i><i></i><i></i><p>2 de 4</p></div>
+      <p class="eyebrow">Zodíaco occidental</p>
+      <h1>El día del año en que <em>naciste</em>.</h1>
+      <div class="reveal-card">
+        <div class="reveal-head"><span>Signo solar</span><b>Tradición</b></div>
+        <div class="reveal-body">
+          <p class="reveal-value" id="w-value">—</p>
+          <div class="traits">
+            <div class="trait"><span>Signo</span><p id="w-traits">—</p></div>
+            <div class="trait"><span>Elemento</span><p id="w-element">—</p></div>
+            <div class="trait"><span>Modalidad</span><p id="w-modality">—</p></div>
+          </div>
+          <div class="calc"><b>El criterio</b><span id="w-calc">—</span></div>
+        </div>
+      </div>
+      <p class="lead">Esto es <strong>signo solar</strong>, no una carta natal. La carta completa necesita hora y lugar.</p>
+    </section>
+
+    <section class="step" data-step="chino" aria-label="Zodíaco chino">
+      <div class="tally"><i class="done"></i><i class="done"></i><i class="done"></i><i></i><p>3 de 4</p></div>
+      <p class="eyebrow">Zodíaco chino</p>
+      <h1>El año, contado <em>a la manera lunisolar</em>.</h1>
+      <div class="reveal-card">
+        <div class="reveal-head"><span>Animal, elemento y polaridad</span><b id="c-kind">Tradición</b></div>
+        <div class="reveal-body">
+          <p class="reveal-value" id="c-value">—</p>
+          <div class="traits">
+            <div class="trait"><span>Animal</span><p id="c-animal">—</p></div>
+            <div class="trait"><span>Elemento</span><p id="c-element">—</p></div>
+            <div class="trait"><span>Polaridad</span><p id="c-polarity">—</p></div>
+          </div>
+          <div class="calc"><b>El criterio</b><span id="c-calc">—</span></div>
+          <p class="flag" id="c-flag" hidden></p>
+        </div>
+      </div>
+      <p class="lead">El año chino no parte el 1 de enero, sino en el <strong>Año Nuevo lunisolar</strong>. Por eso enero y febrero son delicados.</p>
+    </section>
+
+    <section class="step" data-step="tarot" aria-label="Tarot de nacimiento">
+      <div class="tally"><i class="done"></i><i class="done"></i><i class="done"></i><i class="done"></i><p>4 de 4</p></div>
+      <p class="eyebrow">Tarot de nacimiento</p>
+      <h1>La misma suma, leída como <em>arcano</em>.</h1>
+      <div class="reveal-card">
+        <div class="reveal-head"><span>Arcano mayor</span><b>Regla</b></div>
+        <div class="reveal-body">
+          <p class="reveal-value" id="t-value">—</p>
+          <p id="t-meaning">—</p>
+          <div class="calc"><b>La cuenta</b><span id="t-calc">—</span></div>
+        </div>
+      </div>
+      <p class="lead">Es una <strong>correspondencia simbólica</strong>: no es una tirada ni una predicción.</p>
+    </section>
+
+    <!-- 7 · El pago: por qué existe el producto. -->
+    <section class="step" data-step="convergencia" aria-label="Tu convergencia">
+      <p class="eyebrow">Esto es tu Soy</p>
+      <h1 id="cv-title">Cuatro miradas, <em>un tema</em>.</h1>
+      <p class="lead" id="cv-intro">Las cuatro tradiciones observaron tu fecha por separado. Esto es lo que se repitió.</p>
+      <div class="converge">
+        <div class="converge-head"><span id="cv-label">—</span></div>
+        <div class="converge-body">
+          <h2 id="cv-theme">—</h2>
+          <p class="sources" id="cv-sources">—</p>
+          <p class="copy" id="cv-copy">—</p>
+          <div class="converge-sources" id="cv-chips"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8 · El tema baja a tierra. Separado a propósito: es otra idea. -->
+    <section class="step" data-step="aterrizaje" aria-label="Qué hacer con esto">
+      <p class="eyebrow">Para llevar</p>
+      <h1>Un tema sirve cuando <em>se puede usar</em>.</h1>
+      <div class="takeaways">
+        <article class="takeaway"><span>Un recurso</span><b id="cv-gift">—</b><p id="cv-gift-copy">—</p></article>
+        <article class="takeaway"><span>Una tensión</span><b id="cv-shadow">—</b><p id="cv-shadow-copy">—</p></article>
+        <article class="takeaway"><span>Una pregunta para contrastar</span><b id="cv-question">—</b></article>
+      </div>
+      <p class="lead">Nada de esto es un diagnóstico. Son hipótesis para contrastar con lo que ya sabes de ti.</p>
+    </section>
+
+    <!-- 8 · Recién ahora aparece Estoy, ya con el Soy vivido. -->
+    <section class="step" data-step="cierre" aria-label="Qué sigue">
+      <p class="eyebrow">Y esto recién empieza</p>
+      <h1>Eso fue tu <em>Soy</em>. Falta tu <em>Estoy</em>.</h1>
+      <p class="lead" id="cierre-copy">Tu Soy va a decir lo mismo el año que viene: sale de una fecha que no cambia. <strong>Estoy</strong> es la otra mitad — mira la fecha de hoy y cambia cada semana con la Luna, el año personal y la temporada solar.</p>
+      <div class="pair">
+        <article class="pair-card">
+          <h2>Soy <span>listo</span></h2>
+          <p id="cierre-soy">—</p>
+        </article>
+        <article class="pair-card">
+          <h2>Estoy <span>te espera</span></h2>
+          <p>Tu momento de esta semana, con la cuenta a la vista igual que acá.</p>
+        </article>
+      </div>
+      <div class="closing">
+        <a class="btn primary" id="go-app" href="../">Abrir la versión completa</a>
+        <button class="btn quiet" type="button" id="restart">Volver a empezar con otra fecha</button>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="actions">
+    <div class="actions-inner">
+      <button class="btn ghost" type="button" id="back" hidden aria-label="Paso anterior">←</button>
+      <button class="btn primary" type="button" id="next">Empezar</button>
+    </div>
+  </footer>
+
+  <script src="nucleo.js"></script>
+  <script>
+    (() => {
+      const steps = [...document.querySelectorAll(".step")];
+      const stage = document.getElementById("stage");
+      const nextBtn = document.getElementById("next");
+      const backBtn = document.getElementById("back");
+      const progressFill = document.getElementById("progress-fill");
+      const progress = document.getElementById("progress");
+      const counterNow = document.getElementById("counter-now");
+      const birthInput = document.getElementById("birth");
+      const nameInput = document.getElementById("name");
+      const birthError = document.getElementById("birth-error");
+      const actions = document.querySelector(".actions");
+
+      // Cada paso declara el texto de su botón; el último no lleva barra de acciones.
+      const LABELS = {
+        intro: "Empezar",
+        fecha: "Ver mi primera señal",
+        numerologia: "Siguiente tradición",
+        occidental: "Siguiente tradición",
+        chino: "Última tradición",
+        tarot: "Ver qué se repite",
+        convergencia: "¿Y esto para qué me sirve?",
+        aterrizaje: "¿Y el Estoy?"
+      };
+
+      document.getElementById("counter-total").textContent = steps.length;
+      progress.setAttribute("aria-valuemax", steps.length);
+
+      let index = 0;
+      let soy = null;
+
+      function render() {
+        steps.forEach((step, i) => step.classList.toggle("active", i === index));
+        const key = steps[index].dataset.step;
+        counterNow.textContent = index + 1;
+        progress.setAttribute("aria-valuenow", index + 1);
+        progressFill.style.width = `${((index + 1) / steps.length) * 100}%`;
+        backBtn.hidden = index === 0;
+        actions.hidden = key === "cierre";
+        if (LABELS[key]) nextBtn.textContent = LABELS[key];
+        window.scrollTo(0, 0);
+        if (key === "fecha") setTimeout(() => birthInput.focus({ preventScroll: true }), 60);
+      }
+
+      function go(delta) {
+        const next = index + delta;
+        if (next < 0 || next >= steps.length) return;
+        // El único paso que puede bloquear el avance es la fecha.
+        if (delta > 0 && steps[index].dataset.step === "fecha" && !commitBirth()) return;
+        index = next;
+        render();
+      }
+
+      function commitBirth() {
+        const value = birthInput.value;
+        if (!isValidBirth(value)) {
+          birthError.textContent = "Necesitamos una fecha válida para poder calcular algo.";
+          birthInput.focus();
+          return false;
+        }
+        birthError.textContent = "";
+        soy = buildSoy(parseDate(value));
+        paint(soy);
+        return true;
+      }
+
+      function isValidBirth(value) {
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(value || "")) return false;
+        const date = parseDate(value);
+        if (Number.isNaN(date.getTime())) return false;
+        const year = date.getUTCFullYear();
+        return year >= 1900 && date.getTime() <= Date.now();
+      }
+
+      const set = (id, text) => { document.getElementById(id).textContent = text; };
+
+      function paint(s) {
+        // 1 · Numerología
+        set("n-value", s.life.number);
+        set("n-meaning", `Habla de ${s.profile.meaning}.`);
+        set("n-calc", s.life.expression);
+        document.getElementById("n-kind").textContent = [11, 22, 33].includes(s.life.number) ? "Regla · maestro" : "Regla";
+
+        // 2 · Zodíaco occidental
+        set("w-value", s.sun[0]);
+        set("w-traits", s.sun[5].join(", "));
+        set("w-element", `${s.sun[1]} — ${ELEMENT_LANGUAGE[s.sun[1]]}`);
+        set("w-modality", `${s.sun[2]} — ${MODALITY_LANGUAGE[s.sun[2]]}`);
+        set("w-calc", `Zodíaco tropical por fecha: ${s.sun[0]} va del ${s.sun[3][1]}/${s.sun[3][0]} al ${s.sun[4][1]}/${s.sun[4][0]}.`);
+
+        // 3 · Zodíaco chino
+        set("c-value", `${s.chin.animal} de ${s.chin.element}`);
+        set("c-animal", chineseAnimalTone(s.chin.animal));
+        set("c-element", `${s.chin.element} — ${CHINESE_ELEMENT_TONE[s.chin.element]}`);
+        set("c-polarity", `${s.chin.polarity} — ${POLARITY_TONE[s.chin.polarity]}`);
+        set("c-calc", `Año lunisolar efectivo: ${s.chin.effective}. ${s.chin.note}`);
+        document.getElementById("c-kind").textContent = s.chin.approximate ? "Tradición · aproximado" : "Tradición";
+        const flag = document.getElementById("c-flag");
+        // Aproximación etiquetada, no escondida: es un principio del producto.
+        flag.hidden = !s.chin.approximate;
+        flag.textContent = "Tu fecha cae entre el 21 de enero y el 20 de febrero, y no tenemos la fecha exacta del Año Nuevo lunisolar de ese año en la tabla. Este animal puede corresponder al año anterior.";
+
+        // 4 · Tarot
+        set("t-value", s.tarot[0]);
+        set("t-meaning", `Habla de ${s.tarot[1]}.`);
+        set("t-calc", `Los dígitos de tu fecha suman ${s.tarotNumber}, y ese número corresponde al arcano ${s.tarotNumber}: ${s.tarot[0]}.`);
+
+        // 5 · Convergencia
+        set("cv-label", s.synthesis.label);
+        set("cv-theme", s.synthesis.title);
+        set("cv-sources", s.synthesis.sources);
+        set("cv-copy", s.synthesis.copy);
+        set("cv-gift", s.profile.gift);
+        set("cv-gift-copy", s.profile.giftCopy);
+        set("cv-shadow", s.profile.shadow);
+        set("cv-shadow-copy", s.profile.shadowCopy);
+        set("cv-question", s.profile.question);
+
+        // Cuando no hay convergencia lo decimos, en vez de forzar una conclusión.
+        const converged = /^Convergencia/.test(s.synthesis.label);
+        document.getElementById("cv-title").innerHTML = converged
+          ? "Cuatro miradas, <em>un tema</em>."
+          : "Cuatro miradas, <em>cuatro temas</em>.";
+        set("cv-intro", converged
+          ? "Cada una miró tu fecha por separado. Esto es lo que se repitió."
+          : "Cada una miró tu fecha por separado y apuntó a un tema distinto. No forzamos una conclusión común.");
+
+        // Qué fuente sostiene el tema: el detalle que hace entendible la idea de convergencia.
+        const main = s.factors.find(factor => factor.sourceCount >= 2);
+        const supporting = new Set((main?.sources || []).map(source => source.key));
+        const chips = document.getElementById("cv-chips");
+        chips.innerHTML = "";
+        s.signals.forEach(signal => {
+          const chip = document.createElement("span");
+          chip.className = supporting.has(signal.key) ? "chip on" : "chip";
+          chip.textContent = signal.label;
+          chips.append(chip);
+        });
+
+        // 6 · Cierre
+        const greeting = nameInput.value.trim() ? `${nameInput.value.trim()}, tu ` : "Tu ";
+        set("cierre-soy", `${greeting}señal más repetida es ${s.synthesis.title.toLowerCase()}.`);
+
+        // Entregamos al usuario a la app completa con sus datos ya cargados.
+        const params = new URLSearchParams();
+        if (nameInput.value.trim()) params.set("nombre", nameInput.value.trim().slice(0, 40));
+        params.set("nacimiento", birthInput.value);
+        document.getElementById("go-app").href = `../#soy?${params.toString()}`;
+      }
+
+      nextBtn.addEventListener("click", () => go(1));
+      backBtn.addEventListener("click", () => go(-1));
+      document.getElementById("restart").addEventListener("click", () => {
+        birthInput.value = "";
+        nameInput.value = "";
+        soy = null;
+        index = 0;
+        render();
+      });
+
+      // Enter avanza desde los campos, que es lo que la gente intenta hacer igual.
+      [birthInput, nameInput].forEach(input => input.addEventListener("keydown", event => {
+        if (event.key === "Enter") { event.preventDefault(); go(1); }
+      }));
+      birthInput.addEventListener("input", () => { birthError.textContent = ""; });
+
+      render();
+    })();
+  </script>
+</body>
+</html>
