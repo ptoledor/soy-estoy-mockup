@@ -8,7 +8,7 @@
   <title>Soy / Estoy · Esoterismo aterrizado</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..620;1,9..144,300..620&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&display=swap" rel="stylesheet">
   <style>
     :root {
       --paper: #ebe7dc;
@@ -20,8 +20,8 @@
       --brass: #8d6417;
       --brass-soft: #b08a3a;
       --green: #234b3d;
-      --serif: "Fraunces", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
-      --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --serif: "Newsreader", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+      --sans: Aptos, "Segoe UI", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
       --mono: "Cascadia Code", "SFMono-Regular", Consolas, monospace;
       --max: 1120px;
       --shadow-card: 0 1px 2px rgba(23, 24, 18, .06), 0 24px 60px -28px rgba(23, 24, 18, .38);
@@ -76,8 +76,8 @@
     /* ——— Reveal al scroll ——— */
     .js .reveal {
       opacity: 0;
-      transform: translateY(26px);
-      transition: opacity .8s ease, transform .8s cubic-bezier(.2, .65, .2, 1);
+      transform: translateY(12px);
+      transition: opacity .5s ease, transform .5s cubic-bezier(.2, .65, .2, 1);
       transition-delay: var(--d, 0s);
     }
     .js .reveal.in { opacity: 1; transform: none; }
@@ -95,7 +95,7 @@
     }
     .topbar.scrolled { box-shadow: 0 14px 40px -24px rgba(23, 24, 18, .35); }
     .topbar-inner { min-height: 68px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
-    .brand { display: inline-flex; align-items: baseline; gap: 8px; text-decoration: none; font-family: var(--mono); font-size: 13px; letter-spacing: .15em; text-transform: uppercase; }
+    .brand { display: inline-flex; min-height: 44px; align-items: center; gap: 8px; text-decoration: none; font-family: var(--mono); font-size: 13px; letter-spacing: .15em; text-transform: uppercase; }
     .brand i { color: var(--brass); font-style: normal; }
     .nav { display: flex; align-items: center; gap: 22px; }
     .nav a { position: relative; color: var(--muted); font-size: 12px; text-decoration: none; }
@@ -135,18 +135,26 @@
       padding-block: 64px;
     }
     .hero h1 {
-      max-width: 13ch;
+      max-width: 16ch;
       margin: 18px 0 22px;
       font-family: var(--serif);
-      font-size: clamp(52px, 7.2vw, 92px);
+      font-size: clamp(44px, 5.6vw, 72px);
       font-weight: 420;
-      line-height: .96;
-      letter-spacing: -.035em;
-      font-variation-settings: "opsz" 120;
+      line-height: 1;
+      letter-spacing: -.033em;
+      font-variation-settings: "opsz" 72;
     }
     .hero h1 em { color: var(--brass); font-weight: 400; }
     .hero-copy > p:not(.eyebrow) { max-width: 56ch; margin: 0; color: var(--muted); font-size: clamp(17px, 2vw, 19px); line-height: 1.6; }
     .hero-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 34px; }
+    .entry-direct {
+      display: inline-block;
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 13px;
+      text-underline-offset: 3px;
+    }
+    .entry-direct:hover { color: var(--ink); }
 
     /* Composición visual: rueda + carta */
     .hero-visual { position: relative; min-height: 640px; display: flex; justify-content: center; align-items: center; }
@@ -320,7 +328,7 @@
     footer { border-top: 1px solid var(--line); background: var(--paper-2); }
     .footer-inner { min-height: 96px; display: flex; align-items: center; justify-content: space-between; gap: 30px; color: var(--muted); font-size: 11px; }
     .footer-inner p { max-width: 70ch; margin: 0; }
-    .footer-inner a { white-space: nowrap; }
+    .footer-inner a { display: inline-flex; min-height: 44px; align-items: center; white-space: nowrap; }
 
     @media (max-width: 960px) {
       .wheel { width: min(140%, 560px); }
@@ -329,7 +337,7 @@
     @media (max-width: 820px) {
       .nav > a:not(.button) { display: none; }
       .hero { min-height: auto; grid-template-columns: 1fr; padding-block: 56px 40px; }
-      .hero h1 { max-width: 11ch; }
+      .hero h1 { max-width: 16ch; }
       .hero-visual { margin-top: 56px; padding-block: 40px; }
       .hero-visual { min-height: 0; display: grid; justify-items: center; }
       .hero-art { position: relative; left: auto; top: auto; width: min(100%, 360px); }
@@ -350,9 +358,9 @@
     @media (max-width: 520px) {
       .shell { padding-inline: 16px; }
       .topbar-inner { min-height: 60px; }
-      .nav .button { min-height: 38px; padding-inline: 12px; }
+      .nav .button { min-height: 44px; padding-inline: 12px; }
       .hero { padding-top: 44px; }
-      .hero h1 { font-size: clamp(46px, 14.5vw, 64px); }
+      .hero h1 { font-size: clamp(42px, 12vw, 58px); }
       .hero-actions .button { width: 100%; }
       .hero-visual { margin-top: 40px; padding-block: 28px; }
       .sample-head, .sample-body { padding-inline: 22px; }
@@ -392,7 +400,7 @@
         <a href="#producto">El producto</a>
         <a href="#metodo">Cómo funciona</a>
         <a href="#mi-circulo">Mi círculo</a>
-        <a class="button primary" href="./soy-estoy.html">Descubrir mi Soy</a>
+        <a class="button primary" data-guided-link href="./soy-estoy.html">Descubrir mi Soy</a>
       </nav>
     </div>
   </header>
@@ -404,9 +412,12 @@
         <h1 class="reveal" style="--d:.08s">Entiende lo que se repite en <em>ti</em> —y lo que cambia con otros.</h1>
         <p class="reveal" style="--d:.16s">No necesitas otra etiqueta. Necesitas ver de dónde sale una lectura, qué señales realmente coinciden y qué pregunta concreta te deja para tu vida o tus vínculos.</p>
         <div class="hero-actions reveal" style="--d:.24s">
-          <a class="button primary cta" href="./soy-estoy.html">Descubrir mi Soy</a>
+          <a class="button primary cta" data-guided-link href="./soy-estoy.html">Descubrir mi Soy</a>
           <a class="button" href="#metodo">Ver cómo funciona</a>
         </div>
+        <!-- El fragmento explícito salta el recorrido guiado y entra directo al
+             modo completo; sin él, la app abre el recorrido. -->
+        <a class="entry-direct reveal" style="--d:.28s" href="./soy-estoy.html#soy">Ya conozco el recorrido · abrir versión completa</a>
       </div>
 
       <div class="hero-visual reveal" style="--d:.2s">
@@ -516,7 +527,7 @@
               <li>Cálculos y correspondencias visibles</li>
               <li>Lectura visual y compartible</li>
             </ul>
-            <a class="button primary cta" href="./soy-estoy.html">Crear mi lectura</a>
+            <a class="button primary cta" data-guided-link href="./soy-estoy.html">Crear mi lectura</a>
           </article>
           <article class="product reveal" style="--d:.1s">
             <figure class="product-art">
@@ -529,14 +540,15 @@
                 <g clip-path="url(#sig-moon)"><circle cx="17" cy="17" r="13.5" fill="currentColor"/><circle cx="10" cy="17" r="13.5" fill="var(--paper-2)"/></g>
               </svg>
             </div>
-            <div class="product-top"><h3>Estoy</h3><span class="tag">En validación</span></div>
+            <div class="product-top"><h3>Estoy</h3><span class="tag">Demo · en validación</span></div>
             <p>Una lectura del período para observar, priorizar y planificar con contexto.</p>
             <ul>
               <li>Un tema estable para el período</li>
               <li>La Luna modifica el cómo, no inventa otro destino</li>
               <li>Preguntas breves para volver con sentido</li>
             </ul>
-            <a class="button" href="./soy-estoy.html#estoy">Ver la demostración</a>
+            <a class="button" href="./soy-estoy.html">Conocer Estoy (demo)</a>
+            <p class="product-note">USD 5 es el precio de referencia para 30 días. Esta demo no cobra.</p>
           </article>
           <article class="product reveal" id="mi-circulo" style="--d:.2s">
             <figure class="product-art">
@@ -545,14 +557,14 @@
             <div class="product-sigil">
               <svg width="42" height="34" viewBox="0 0 42 34" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><circle cx="15" cy="13" r="8.5"/><circle cx="27" cy="13" r="8.5"/><circle cx="21" cy="22" r="8.5"/></svg>
             </div>
-            <div class="product-top"><h3>Mi círculo</h3><span class="tag">Prototipo disponible</span></div>
+            <div class="product-top"><h3>Mi círculo</h3><span class="tag">Demo disponible</span></div>
             <p>Una lectura compartida para observar una pareja, una familia, un equipo o cualquier grupo significativo.</p>
             <ul>
               <li>Qué aporta cada persona al vínculo</li>
               <li>Dónde aparecen apoyo, diferencias y regulación</li>
               <li>Un foco común para conversar o planificar</li>
             </ul>
-            <a class="button" href="./soy-estoy.html#circulo">Probar con alguien</a>
+            <a class="button" href="./soy-estoy.html">Probar con alguien</a>
             <p class="product-note">No decide si son compatibles. Organiza diferencias y puntos de encuentro para hacer mejores preguntas.</p>
           </article>
         </div>
@@ -653,7 +665,8 @@
         </div>
         <div class="reveal" style="--d:.1s">
           <details><summary>¿Esto predice mi futuro?</summary><p>No. Soy/Estoy usa tradiciones simbólicas como mapas de reflexión. Orienta preguntas y observaciones; no dicta destinos ni reemplaza decisiones.</p></details>
-          <details><summary>¿Por qué piden hora de nacimiento?</summary><p>La hora exacta sólo se usa para cálculos que realmente dependen de ella, como ascendente y casas. Si no la sabes, esos resultados se omiten o se marcan como aproximados.</p></details>
+          <details><summary>¿Por qué no calculan ascendente ni casas?</summary><p>Porque requieren una hora y un lugar de nacimiento exactos. Soy parte solo de tu fecha y omite esos resultados antes que inventar precisión.</p></details>
+          <details><summary>¿Por qué mi año chino no coincide con algunas tablas?</summary><p>Porque el año chino no empieza el 1 de enero: cambia con el Año Nuevo lunisolar, entre el 21 de enero y el 20 de febrero según el año. Si naciste cerca del cambio, tu animal puede ser el del año anterior. Soy usa la fecha exacta entre 2000 y 2044; fuera de ese rango, solo marca como aproximadas las fechas que caen dentro de esa ventana crítica.</p></details>
           <details><summary>¿Qué pasa si las señales no coinciden?</summary><p>No forzamos una conclusión. La lectura muestra señales distintas y te permite revisar cada componente por separado.</p></details>
           <details><summary>¿Mi círculo decide si un vínculo funciona?</summary><p>No. Mi círculo no entrega sentencias ni porcentajes de compatibilidad. Muestra qué trae cada persona, dónde se apoyan o difieren y qué conversación puede ser útil. La experiencia real de la relación siempre tiene prioridad.</p></details>
           <details><summary>¿Por qué Soy es gratuito?</summary><p>Porque necesitas experimentar el valor antes de considerar una lectura recurrente. Estoy sólo tendrá sentido comercial si demuestra que ayuda a volver.</p></details>
@@ -678,7 +691,7 @@
       <div class="shell">
         <p class="eyebrow bare reveal">Tu mapa empieza con una fecha</p>
         <h2 class="reveal" style="--d:.08s">La fecha abre el mapa. Tú decides qué te sirve.</h2>
-        <a class="button primary cta reveal" style="--d:.16s" href="./soy-estoy.html">Descubrir mi Soy</a>
+        <a class="button primary cta reveal" style="--d:.16s" data-guided-link href="./soy-estoy.html">Descubrir mi Soy</a>
       </div>
     </section>
   </main>
@@ -691,10 +704,11 @@
   </footer>
 
   <script>
-    document.documentElement.classList.add("js");
-
     if (!location.pathname.endsWith("/landing.html")) {
       document.getElementById("landing-brand").href = "./";
+      // El recorrido guiado ya no es una página aparte: vive dentro de la app,
+      // así que las CTA guiadas se reescriben con la misma regla que el resto
+      // (`./soy-estoy.html` → `./app/`, conservando el fragmento).
       document.querySelectorAll('a[href^="./soy-estoy.html"]').forEach(link => {
         const suffix = link.getAttribute("href").slice("./soy-estoy.html".length);
         link.href = `./app/${suffix}`;
@@ -706,15 +720,25 @@
       topbar.classList.toggle("scrolled", scrollY > 8);
     }, { passive: true });
 
-    const io = new IntersectionObserver((entries) => {
-      for (const entry of entries) {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("in");
-          io.unobserve(entry.target);
+    const revealElements = document.querySelectorAll(".reveal");
+    const motionAllowed = !matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if ("IntersectionObserver" in window && motionAllowed) {
+      revealElements.forEach((element) => {
+        if (element.getBoundingClientRect().top < innerHeight) element.classList.add("in");
+      });
+      document.documentElement.classList.add("js");
+      const io = new IntersectionObserver((entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("in");
+            io.unobserve(entry.target);
+          }
         }
-      }
-    }, { threshold: .12, rootMargin: "0px 0px -30px 0px" });
-    document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
+      }, { threshold: .12, rootMargin: "0px 0px -30px 0px" });
+      revealElements.forEach((element) => {
+        if (!element.classList.contains("in")) io.observe(element);
+      });
+    }
   </script>
 </body>
 </html>
