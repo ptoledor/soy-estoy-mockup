@@ -1186,7 +1186,12 @@
     .j-tally i.done { background: var(--brass); }
     .j-tally p { flex: none; margin: 0 0 0 4px; color: var(--muted); font-family: var(--mono); font-size: 10px; letter-spacing: .08em; white-space: nowrap; }
 
-    .j-converge { margin: 20px 0 24px; border: 1px solid var(--ink); background: var(--ink); color: var(--paper-2); }
+    /* Marrón cálido en vez de casi-negro. `--ink` (#171812) a esta escala se
+       lee como un bloque negro que rechaza más de lo que invita, justo en la
+       pantalla que es el premio del recorrido. Este tono conserva el contraste
+       (>12:1 sobre el texto claro) pero pertenece a la familia del papel y el
+       latón, no al gris. */
+    .j-converge { margin: 20px 0 24px; border: 1px solid #2f2418; background: #2f2418; color: #f2ede1; }
     .j-converge-head { padding: 16px 20px; border-bottom: 1px solid rgba(235, 231, 220, .22); }
     .j-converge-head span { color: #c99b46; font-family: var(--mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; }
     .j-converge-body { padding: 22px 20px 24px; }
@@ -1197,6 +1202,13 @@
     .j-converge .j-disclosure summary { color: #aaa69b; }
     .j-converge .j-disclosure summary::after { color: #c99b46; }
     .j-converge .j-full-copy { margin: 0 0 14px; color: #cdc9bd; font-size: 14px; line-height: 1.48; }
+    /* El segundo tema: presente pero subordinado. Mismo bloque, media línea
+       de jerarquía menos, para que no compita con la conclusión principal. */
+    .j-second { margin-top: 14px; padding-top: 12px; border-top: 1px solid rgba(235, 231, 220, .22); }
+    .j-second > span { display: block; margin-bottom: 3px; color: #c99b46; font-family: var(--mono); font-size: 9px; letter-spacing: .1em; text-transform: uppercase; }
+    .j-second strong { display: block; font-family: var(--serif); font-size: 22px; font-weight: 500; line-height: 1.15; }
+    .j-second p { margin: 3px 0 0; color: #cdc9bd; font-size: 13px; line-height: 1.45; }
+
     .j-converge-grid { margin-top: 12px; border-top: 1px solid rgba(235, 231, 220, .18); }
     .j-converge-row { display: grid; grid-template-columns: 74px 1fr; gap: 10px; align-items: baseline; padding: 5px 0; border-bottom: 1px solid rgba(235, 231, 220, .18); }
     .j-converge-row > span { color: #8f8b80; font-family: var(--mono); font-size: 9px; letter-spacing: .1em; text-transform: uppercase; }
@@ -1543,6 +1555,14 @@
               <h2 id="j-cv-theme">—</h2>
               <p class="j-sources" id="j-cv-sources">—</p>
               <p class="j-copy" id="j-cv-copy">—</p>
+              <!-- Solo aparece si un segundo tema alcanza dos tradiciones por
+                   su cuenta. Si no, no se muestra: rellenar con el siguiente
+                   de la lista seria fabricar una coincidencia. -->
+              <div class="j-second" id="j-cv-second" hidden>
+                <span id="j-cv-second-label">—</span>
+                <strong id="j-cv-second-theme">—</strong>
+                <p id="j-cv-second-copy">—</p>
+              </div>
               <details class="j-disclosure">
                 <summary>Ver interpretación y las 8 señales</summary>
                 <p class="j-full-copy" id="j-cv-copy-full">—</p>
@@ -1557,9 +1577,9 @@
           <p class="j-eyebrow">Para llevar</p>
           <h1>Un tema sirve cuando <em>se puede usar</em>.</h1>
           <div class="j-takeaways">
-            <article class="j-takeaway"><span>Un recurso</span><b id="j-cv-gift">—</b><p id="j-cv-gift-copy">—</p></article>
-            <article class="j-takeaway"><span>Una tensión</span><b id="j-cv-shadow">—</b><p id="j-cv-shadow-copy">—</p></article>
-            <article class="j-takeaway"><span>Una pregunta para contrastar</span><b id="j-cv-question">—</b></article>
+            <article class="j-takeaway"><span>Un talento</span><b id="j-cv-gift">—</b><p id="j-cv-gift-copy">—</p></article>
+            <article class="j-takeaway"><span>Una recomendación</span><b id="j-cv-shadow">—</b><p id="j-cv-shadow-copy">—</p></article>
+            <article class="j-takeaway"><span>Una pregunta para reflexionar</span><b id="j-cv-question">—</b></article>
           </div>
           <p class="j-lead">Nada de esto es un diagnóstico. Son hipótesis para contrastar con lo que ya sabes de ti.</p>
         </section>
@@ -1730,13 +1750,15 @@
             </div>
             <div class="identity-copy">
               <p class="lead" id="soy-synthesis">—</p>
-              <p class="caveat">La señal principal solo aparece cuando al menos dos tradiciones comparten un tema. Lo demás se presenta como matiz; no como otra conclusión.</p>
+              <!-- Segundo tema, sólo si alcanza dos tradiciones por su cuenta. -->
+              <p class="lead" id="soy-second" hidden>—</p>
+              <p class="caveat">Un tema solo aparece si al menos dos tradiciones lo comparten. Por eso a veces hay uno y a veces dos: no completamos la lista con el siguiente candidato. Lo que no llega a ese umbral se presenta como matiz, no como otra conclusión.</p>
             </div>
           </div>
           <div class="practical-grid summary-points">
-            <article class="practical"><span class="micro-label">Un recurso</span><b id="gift-title">—</b><p id="gift-copy">—</p></article>
-            <article class="practical"><span class="micro-label">Una tensión</span><b id="shadow-title">—</b><p id="shadow-copy">—</p></article>
-            <article class="practical"><span class="micro-label">Una pregunta</span><b>Para contrastar</b><p id="soy-question">—</p></article>
+            <article class="practical"><span class="micro-label">Un talento</span><b id="gift-title">—</b><p id="gift-copy">—</p></article>
+            <article class="practical"><span class="micro-label">Una recomendación</span><b id="shadow-title">—</b><p id="shadow-copy">—</p></article>
+            <article class="practical"><span class="micro-label">Una pregunta</span><b>Para reflexionar</b><p id="soy-question">—</p></article>
           </div>
         </section>
 
@@ -2309,8 +2331,21 @@
         return ranked.map(item=>({...item,strength:Math.max(1,Math.round(item.score/maxScore*100))}));
       }
       function buildSoySynthesis(life,profile,sun,chin,tarot,signals,factors) {
-        const main=factors.find(factor=>factor.sourceCount>=2);
-        if(!main)return {label:"Sin convergencia clara",title:"Señales distintas",sources:"Las cuatro fuentes apuntan a temas distintos.",copy:"Las cuatro tradiciones apuntan a temas diferentes. No forzamos una conclusión común: revisa cada componente por separado."};
+        /* Solo cuenta como convergencia un tema sostenido por al menos dos
+           tradiciones. `ranked` son todos los que califican, en orden; el
+           segundo se muestra cuando existe de verdad. Nunca se rellena con el
+           siguiente de la lista si no llega a dos: seria inventar una
+           coincidencia que no ocurrio. */
+        const ranked=factors.filter(factor=>factor.sourceCount>=2);
+        const main=ranked[0],runnerUp=ranked[1];
+        if(!main)return {label:"Sin convergencia clara",title:"Señales distintas",sources:"Las cuatro fuentes apuntan a temas distintos.",copy:"Las cuatro tradiciones apuntan a temas diferentes. No forzamos una conclusión común: revisa cada componente por separado.",second:null};
+        const secondDefinition=runnerUp?SOY_FACTORS[runnerUp.key]:null;
+        const second=runnerUp?{
+          title:secondDefinition.label,
+          count:runnerUp.sourceCount,
+          sources:joinSpanish([...new Map(runnerUp.sources.map(source=>[source.key,source])).values()].map(source=>source.label)),
+          copy:secondDefinition.practice
+        }:null;
         const definition=SOY_FACTORS[main.key],mainKeys=new Set(main.sources.map(source=>source.key));
         const hasWestern=[...mainKeys].some(key=>key.startsWith("western-"));
         const hasChinese=[...mainKeys].some(key=>key.startsWith("chinese-"));
@@ -2323,7 +2358,8 @@
           label:`Convergencia · ${main.sourceCount} de ${signals.length} señales`,
           title:definition.label,
           sources:`Se repite en ${joinSpanish([...new Map(main.sources.map(source=>[source.key,source])).values()].map(source=>source.label))}.`,
-          copy:`${definition.analysis} En concreto: ${definition.practice}. ${modifiers.slice(0,1).join(" ")}`
+          copy:`${definition.analysis} En concreto: ${definition.practice}. ${modifiers.slice(0,1).join(" ")}`,
+          second
         };
       }
 
@@ -3048,6 +3084,9 @@
         const {life,profile,sun,chin,tarot,tarotNumber,tarotSteps,tarotTrail,synthesis}=buildSoySnapshot(name,birth);
         const tarotDigits=`${pad(birth.getUTCDate())}${pad(birth.getUTCMonth()+1)}${birth.getUTCFullYear()}`;
         $("#soy-convergence-label").textContent=synthesis.label;
+        const soySecond=$("#soy-second");
+        soySecond.hidden=!synthesis.second;
+        if(synthesis.second)soySecond.textContent=`Un segundo tema también se repite: ${synthesis.second.title.toLowerCase()}, en ${synthesis.second.sources}. ${synthesis.second.copy}.`;
         $("#identity-title").textContent=synthesis.title;
         $("#soy-sources").textContent=synthesis.sources;
         $("#soy-synthesis").textContent=synthesis.copy;
@@ -3450,10 +3489,22 @@
 
         // Cuando no hay convergencia lo decimos, en vez de forzar una conclusión.
         const converged=/^Convergencia/.test(s.synthesis.label);
-        $("#j-cv-title").innerHTML=converged?"Cuatro miradas, <em>un tema</em>.":"Cuatro miradas, <em>cuatro temas</em>.";
-        jSet("j-cv-intro",converged
-          ? "Esto es lo que se repitió entre las cuatro."
-          : "Cada una apuntó a un tema distinto. No forzamos una conclusión común.");
+        const second=s.synthesis.second;
+        $("#j-cv-title").innerHTML=!converged
+          ? "Cuatro miradas, <em>cuatro temas</em>."
+          : second ? "Cuatro miradas, <em>dos temas</em>." : "Cuatro miradas, <em>un tema</em>.";
+        jSet("j-cv-intro",!converged
+          ? "Cada una apuntó a un tema distinto. No forzamos una conclusión común."
+          : second
+            ? "Dos temas se repitieron entre las cuatro. El primero con más apoyo."
+            : "Esto es lo que se repitió entre las cuatro.");
+        const secondBox=$("#j-cv-second");
+        secondBox.hidden=!second;
+        if(second){
+          jSet("j-cv-second-label",`También se repite · ${second.count} señales`);
+          jSet("j-cv-second-theme",second.title);
+          jSet("j-cv-second-copy",`Se repite en ${second.sources}. ${second.copy}.`);
+        }
 
         // Las 8 señales agrupadas en las 4 tradiciones ya recorridas: cierra el
         // circuito con exactamente los atributos que la persona acaba de ver.

@@ -383,6 +383,34 @@
       .footer-inner { align-items: flex-start; flex-direction: column; padding-block: 24px; }
     }
 
+    /* ——— Densidad en teléfono ———
+       El landing medía 11,4 pantallas de scroll a 390×730. Su trabajo es la
+       promesa y el paso a la primera experiencia, no enseñar el sistema
+       completo: eso vive en el recorrido y en Aprende. Acá se comprime el
+       ritmo vertical y se achica el arte —que en vertical 2:3 se come media
+       pantalla por tarjeta— sin quitar una sola frase. */
+    @media (max-width: 520px) {
+      .section { padding-block: 48px; }
+      .section-head { margin-bottom: 24px; }
+      .hero { padding-top: 32px; padding-bottom: 24px; }
+      .hero h1 { margin: 12px 0 16px; font-size: clamp(36px, 10.5vw, 48px); }
+      .hero-copy > p:not(.eyebrow) { font-size: 16px; }
+      .hero-actions { margin-top: 22px; gap: 8px; }
+      .hero-visual { margin-top: 26px; padding-block: 12px; min-height: 0; }
+      .hero-art { position: static; width: 100%; aspect-ratio: 3 / 2; }
+      .hero-visual > .wheel { display: none; }
+      .product { padding: 20px 18px; }
+      .product-art { margin: -20px -18px 16px; aspect-ratio: 5 / 2; }
+      .product ul { margin: 12px 0; font-size: 14px; line-height: 1.5; }
+      .product ul li + li { margin-top: 5px; }
+      .product-note { font-size: 12px; }
+      .product-top { margin-bottom: 6px; }
+      .step { padding: 18px 4px; }
+      .step h3 { margin-top: 18px; }
+      .honesty-copy, .layers { padding: 22px 18px; }
+      .final { padding-block: 64px; }
+    }
+
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
       .js .reveal { opacity: 1; transform: none; transition: none; }
