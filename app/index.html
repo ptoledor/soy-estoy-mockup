@@ -1353,6 +1353,12 @@
       .j-actions-inner { padding: 9px 18px calc(9px + env(safe-area-inset-bottom)); }
       .j-btn { min-height: 44px; }
       .j-skip { margin-top: 12px; }
+      /* El último paso no tiene barra de acciones: sus botones van dentro del
+         contenido, así que si el paso desborda el botón de salida queda bajo
+         el borde. Aquí se aprietan para que eso no ocurra. */
+      .j-closing { gap: 7px; margin-top: 10px; }
+      .j-second { margin-top: 11px; padding-top: 10px; }
+      .j-second strong { font-size: 20px; }
     }
 
     /* Muy cortas (≤700px útiles: iPhone SE, Android chico, o tipografía del sistema
@@ -1397,7 +1403,10 @@
     <header class="topbar">
       <div class="topbar-inner">
         <a class="brand" id="landing-link" href="./landing.html" aria-label="Volver al landing de Soy Estoy"><strong>SOY</strong><i>/</i><strong>ESTOY</strong><span class="prototype">demo</span><span class="brand-home">Inicio</span></a>
-        <p class="j-counter"><b id="j-counter-now">1</b> / <span id="j-counter-total">14</span></p>
+        <!-- En el primer paso muestra el tiempo, no la cuenta: "1 / 14" leído
+             en frío da pereza antes de empezar. El número aparece recién
+             cuando la persona ya decidió entrar, donde sí orienta. -->
+        <p class="j-counter" id="j-counter"><span id="j-counter-text">2 min</span></p>
         <nav class="main-tabs" role="tablist" aria-label="Secciones del producto" hidden>
           <button class="tab" role="tab" data-view="soy" aria-selected="true">Soy</button>
           <button class="tab" role="tab" data-view="soyplus" aria-selected="false">Soy+</button>
@@ -1585,27 +1594,13 @@
         </section>
 
         <!-- 9 · Cierra Soy antes de abrir Estoy. Una idea por vez. -->
-        <section class="j-step" data-jstep="soy-listo" aria-label="Tu Soy está listo">
-          <p class="j-eyebrow">Mitad del camino</p>
-          <h1>Tu <em>Soy</em> está completo.</h1>
-          <p class="j-lead" id="j-soy-listo-copy">—</p>
-          <div class="j-pair">
-            <article class="j-pair-card">
-              <h2>Soy <span>listo</span></h2>
-              <p id="j-soy-listo-detail">—</p>
-            </article>
-            <article class="j-pair-card">
-              <h2>Estoy <span>lo que falta</span></h2>
-              <p>Tu Soy va a decir lo mismo el año que viene: sale de una fecha que no cambia. <b>Estoy mira la fecha de hoy.</b></p>
-            </article>
-          </div>
-        </section>
-
-        <!-- 10 · Qué es Estoy, antes de pedir nada por él. -->
+        <!-- 9 · Qué es Estoy. El paso puente "tu Soy está completo" se eliminó:
+             repetía la distinción que ya hacen el paso 1 y este mismo, y al
+             escanear su titular no decía nada. -->
         <section class="j-step" data-jstep="estoy-intro" aria-label="Qué es Estoy">
           <p class="j-eyebrow">La otra mitad</p>
           <h1>Estoy no dice quién eres. Dice <em>qué pide atención ahora</em>.</h1>
-          <p class="j-lead">Cruza tu fecha natal con la de hoy y ordena el resultado en tres niveles: tema, ritmo y contexto. Igual que en Soy, cada uno muestra su cuenta.</p>
+          <p class="j-lead" id="j-estoy-intro-copy">—</p>
           <div class="j-takeaways">
             <article class="j-takeaway"><span>Tema</span><b>El año personal</b><p>Cambia una vez al año y define de qué se trata este ciclo.</p></article>
             <article class="j-takeaway"><span>Ritmo</span><b>El cuarto lunar</b><p>Cambia cada siete días y sugiere cómo trabajar ese tema.</p></article>
@@ -1613,41 +1608,17 @@
           </div>
         </section>
 
-        <!-- 11 · Pantalla propia, no diálogo: el <dialog> tiene fallback que no
-             concede acceso y dejaría el recorrido sin salida. Acá el precio y el
-             aviso de simulación quedan visibles sin abrir nada. -->
-        <section class="j-step" data-jstep="acceso" aria-label="Acceso simulado a Estoy">
-          <p class="j-eyebrow">Pago simulado · demo</p>
-          <h1>Estoy vive detrás de un <em>pase de 30 días</em>.</h1>
-          <p class="j-lead">Así se vería el acceso en el producto real. Acá está simulado: <strong>no se cobra nada y no se piden datos de tarjeta</strong>.</p>
-          <div class="j-offer">
-            <div class="j-offer-head">
-              <div><h2>Acceso completo · 30 días</h2></div>
-              <strong>USD 5</strong>
-            </div>
-            <ul>
-              <li>Estoy: una lectura al comienzo de cada período.</li>
-              <li>Mi círculo, para comparar tus vínculos.</li>
-              <li>Aprende, la biblioteca de las cuatro tradiciones.</li>
-            </ul>
-            <p class="j-note">Esta es una demo: no se cobra nada, no pedimos datos de tarjeta y no se envían datos a Mercado Pago. El acceso simulado dura solo mientras esta pestaña esté abierta.</p>
-          </div>
-        </section>
-
-        <!-- 12-13 · Estoy entregado con el mismo ritmo que Soy. -->
+        <!-- 10 · La lectura real de Estoy, ANTES del precio y gratis.
+             Iba después del muro y no funcionaba: se pedían USD 5 por algo que
+             la persona sólo había visto descrito. Ahora el tema, el período y
+             el foco se entregan de verdad, y el muro protege el detalle. -->
         <section class="j-step" data-jstep="estoy-momento" aria-label="Tu momento">
-          <!-- El diálogo de checkout deja una confirmación que permanece en
-               pantalla ("No hubo un cobro real"); el toast del recorrido se
-               desvanece. Esta nota devuelve esa señal persistente. -->
-          <p class="j-paid-note">Pago simulado · no hubo ningún cobro real</p>
           <p class="j-eyebrow">Estoy · tu momento</p>
           <h1 id="j-e-title">—</h1>
           <p class="j-lead" id="j-e-copy">—</p>
           <div class="j-summary">
             <div class="j-summary-item"><span>Tu momento</span><strong id="j-e-moment">—</strong><p id="j-e-moment-note">—</p></div>
             <div class="j-summary-item"><span>Tu período</span><strong id="j-e-period">—</strong><p id="j-e-period-note">—</p></div>
-            <!-- Sin glosa: el paso siguiente muestra ese mismo texto bajo
-                 "Prioriza". Repetirlo acá sólo hacía desbordar el paso. -->
             <div class="j-summary-item"><span>Tu foco</span><strong id="j-e-focus">—</strong></div>
           </div>
           <details class="j-disclosure">
@@ -1656,7 +1627,34 @@
           </details>
         </section>
 
+        <!-- 11 · El muro, ya con una lectura entregada detrás.
+             Pantalla propia y no diálogo: el <dialog> tiene un fallback que no
+             concede acceso y dejaría el recorrido sin salida. -->
+        <section class="j-step" data-jstep="acceso" aria-label="Acceso simulado a Estoy">
+          <p class="j-eyebrow">Pago simulado · demo</p>
+          <h1>Eso fue <em>un</em> período. El pase cubre <em>los que vienen</em>.</h1>
+          <p class="j-lead" id="j-acceso-copy">—</p>
+          <div class="j-offer">
+            <div class="j-offer-head">
+              <div><h2>Acceso completo · 30 días</h2></div>
+              <strong>USD 5</strong>
+            </div>
+            <ul>
+              <li><b>Estoy completo</b>, con el ritmo lunar y la sugerencia del día, en cada período de estos 30.</li>
+              <li><b>Mi círculo</b>: la misma lectura para alguien más, y qué comparten o no.</li>
+              <li><b>Aprende</b>: de dónde sale cada regla que acabas de ver.</li>
+            </ul>
+            <p class="j-note">Demo: no se cobra, no pedimos tarjeta y no se envían datos a Mercado Pago.</p>
+          </div>
+        </section>
+
+        <!-- 12 · Lo que el pase desbloquea, y la entrega a la app completa.
+             El antiguo paso "cierre" se fusionó acá: su titular no decía nada
+             al escanear y era una pantalla entera para un botón. -->
         <section class="j-step" data-jstep="estoy-ritmo" aria-label="El ritmo de estos días">
+          <!-- El diálogo de checkout deja una confirmación permanente en
+               pantalla; el toast del recorrido se desvanece. Esto la devuelve. -->
+          <p class="j-paid-note">Pago simulado · no hubo ningún cobro real</p>
           <p class="j-eyebrow">Estoy · el ritmo</p>
           <h1>La Luna marca el <em>ritmo</em>, no el tema.</h1>
           <div class="j-moon-row">
@@ -1671,19 +1669,12 @@
             <article class="j-takeaway"><span>Cuida</span><b id="j-e-watch-title">—</b><p id="j-e-watch-copy">—</p></article>
           </div>
           <p class="j-daily-line"><b id="j-e-daily-title">—</b><span id="j-e-daily-copy">—</span></p>
-          <p class="j-lead">La fase lunar se estima por fecha, con resolución diaria: es una <strong>aproximación etiquetada</strong>.</p>
-        </section>
-
-        <!-- 14 · Entrega a la app completa con todo ya calculado. -->
-        <section class="j-step" data-jstep="cierre" aria-label="Qué sigue">
-          <p class="j-eyebrow">Recorrido completo</p>
-          <h1>Ya viste las dos mitades. Ahora <em>todo junto</em>.</h1>
-          <p class="j-lead" id="j-cierre-copy">—</p>
-          <p class="j-lead">La versión completa suma Soy+, Mi círculo y Aprende, deja cada cuenta auditable y te permite cambiar la fecha consultada.</p>
-          <div class="j-closing">
-            <button class="j-btn primary" type="button" id="j-open-app">Abrir mi lectura completa</button>
-            <button class="j-btn quiet" type="button" id="j-restart">Volver a empezar con otra fecha</button>
-          </div>
+          <p class="j-lead">La fase lunar se estima por fecha: es una <strong>aproximación etiquetada</strong>.</p>
+          <!-- La salida vive en la barra de acciones como en todos los pasos.
+               Cuando era un botón dentro del contenido, este paso —el más
+               cargado— lo empujaba bajo el borde en pantallas cortas y dejaba
+               a la persona sin salida visible. -->
+          <p class="j-skip"><button class="j-btn quiet" type="button" id="j-restart">Volver a empezar con otra fecha</button></p>
         </section>
 
       </main>
@@ -3405,6 +3396,9 @@
       const journeyProgress=$("#journey .j-progress"),journeyProgressFill=$("#j-progress-fill");
 
       // Cada paso declara el texto de su botón; el último no lleva barra.
+      /* Etiquetas predecibles: dicen qué viene, no hacen preguntas retóricas.
+         "¿Y el Estoy?" introducía un término que la persona todavía no había
+         visto explicado, y las tres preguntas seguidas mareaban al escanear. */
       const JOURNEY_LABELS={
         intro:"Empezar",
         fecha:"Ver mi primera señal",
@@ -3412,20 +3406,19 @@
         occidental:"Siguiente tradición",
         chino:"Última tradición",
         tarot:"Ver qué se repite",
-        convergencia:"¿Y esto para qué me sirve?",
-        aterrizaje:"¿Y el Estoy?",
-        "soy-listo":"Ver qué es Estoy",
-        "estoy-intro":"Ver el acceso",
+        convergencia:"Para qué me sirve",
+        aterrizaje:"Ver mi momento actual",
+        "estoy-intro":"Ver mi Estoy de hoy",
+        "estoy-momento":"Seguir con el resto",
         // Etiqueta explícita: nadie desbloquea sin leer que es una simulación.
         acceso:"Simular pago con Mercado Pago",
-        "estoy-momento":"Ver el ritmo de la semana",
-        "estoy-ritmo":"Terminar el recorrido"
+        "estoy-ritmo":"Abrir mi lectura completa"
       };
 
       let journeyIndex=0;
       const journeyKey=()=>journeySteps[journeyIndex]?.dataset.jstep;
 
-      $("#j-counter-total").textContent=journeySteps.length;
+
       journeyProgress.setAttribute("aria-valuemax",journeySteps.length);
 
       const jSet=(id,text)=>{const node=document.getElementById(id);if(node)node.textContent=text;};
@@ -3479,7 +3472,14 @@
         jSet("j-cv-label",s.synthesis.label);
         jSet("j-cv-theme",s.synthesis.title);
         jSet("j-cv-sources",s.synthesis.sources);
-        jSet("j-cv-copy",s.synthesis.copy.match(/^.*?[.!?](?:\s|$)/)?.[0].trim()||s.synthesis.copy);
+        /* La frase visible era sólo la primera del análisis, que es la
+           favorable; el límite quedaba plegado. Todo lo que se leía sin abrir
+           nada era halago, y eso es exactamente lo que hace que una lectura
+           simbólica se sienta genérica: nadie rechazaría ninguna. Se muestra
+           también la frase del exceso o la sombra, que ya existe en el motor. */
+        const frases=(s.synthesis.copy.match(/[^.!?]+[.!?]+/g)||[]).map(f=>f.trim());
+        const limite=frases.find(f=>/\bexceso\b|\bsombra\b/i.test(f));
+        jSet("j-cv-copy",[frases[0],limite].filter(Boolean).join(" ")||s.synthesis.copy);
         jSet("j-cv-copy-full",s.synthesis.copy);
         jSet("j-cv-gift",s.profile.gift);
         jSet("j-cv-gift-copy",s.profile.giftCopy);
@@ -3533,11 +3533,13 @@
         });
 
         const greeting=journeyName.value.trim()?`${journeyName.value.trim()}, tu`:"Tu";
-        jSet("j-soy-listo-copy",`${greeting} señal más repetida es ${s.synthesis.title.toLowerCase()}. Ya tienes las cuatro tradiciones, lo que se repitió entre ellas y qué hacer con eso.`);
-        jSet("j-soy-listo-detail",`${s.synthesis.title}. Sale de tu fecha de nacimiento y no va a cambiar.`);
+        /* El paso puente desapareció; su contenido útil —nombrar el Soy ya
+           construido antes de pasar a Estoy— se conserva acá, en la entrada
+           del paso que explica Estoy. */
+        jSet("j-estoy-intro-copy",`${greeting} Soy apunta a ${s.synthesis.title.toLowerCase()} y no va a cambiar: sale de una fecha fija. Estoy mira la fecha de hoy y cruza ambas en tres niveles, cada uno con su cuenta a la vista.`);
       }
 
-      function paintJourneyEstoy(s,soyTheme){
+      function paintJourneyEstoy(s){
         jSet("j-e-title",`${s.name}, tu tema de fondo es ${s.moment[0].toLowerCase()}.`);
         jSet("j-e-copy",s.synthesis.explanation);
         jSet("j-e-moment",s.moment[0]);
@@ -3560,17 +3562,21 @@
         /* `synthesis.title` viene en imperativo ("Observa lo nuevo…"), así que
            no puede colgar de una preposición: "tu Estoy apunta a observa…" no
            es español. Se le da su propia oración. */
-        jSet("j-cierre-copy",`Tu Soy apunta a ${soyTheme.toLowerCase()}, y eso no va a cambiar. Tu Estoy pide otra cosa para estos días: ${s.synthesis.title.toLowerCase()}.`);
+        /* El muro habla de lo que la persona acaba de recibir, no de una
+           promesa abstracta: nombra su período y qué sigue después de él. */
+        jSet("j-acceso-copy",`Acabas de ver tu período —${formatDate(s.current.start)} a ${formatDate(s.current.end)}— sin pagar nada. El pase abre el detalle de éste y los que vienen en 30 días.`);
       }
 
       function renderJourney(){
         journeySteps.forEach((step,i)=>step.classList.toggle("active",i===journeyIndex));
         const key=journeyKey();
-        $("#j-counter-now").textContent=journeyIndex+1;
+        $("#j-counter-text").textContent=journeyIndex===0?"2 min":`${journeyIndex+1} / ${journeySteps.length}`;
         journeyProgress.setAttribute("aria-valuenow",journeyIndex+1);
         journeyProgressFill.style.width=`${((journeyIndex+1)/journeySteps.length)*100}%`;
         journeyBack.hidden=journeyIndex===0;
-        journeyActions.hidden=key==="cierre";
+        // La barra nunca se oculta: es lo que garantiza que la acción siguiente
+        // esté siempre visible, incluso cuando el paso desborda.
+        journeyActions.hidden=false;
         if(JOURNEY_LABELS[key])journeyNext.textContent=JOURNEY_LABELS[key];
         window.scrollTo(0,0);
         if(key==="fecha"){
@@ -3610,13 +3616,16 @@
         const person=$("#name").value.trim()||"Tu lectura",birthDate=parseDate(value);
         const soySnapshot=buildSoySnapshot(person,birthDate);
         paintJourneySoy(soySnapshot);
-        paintJourneyEstoy(buildEstoySnapshot(person,birthDate,parseDate($("#target").value)),soySnapshot.synthesis.title);
+        paintJourneyEstoy(buildEstoySnapshot(person,birthDate,parseDate($("#target").value)));
         return true;
       }
 
       function journeyGo(delta){
         const next=journeyIndex+delta;
-        if(next<0||next>=journeySteps.length)return;
+        if(next<0)return;
+        // Avanzar desde el último paso entrega al modo completo: así la salida
+        // usa la misma barra fija que el resto y nunca queda fuera de pantalla.
+        if(next>=journeySteps.length){ if(delta>0)exitJourney("soy"); return; }
         if(delta>0){
           const key=journeyKey();
           // El único paso que bloquea el avance es la fecha.
@@ -3657,7 +3666,7 @@
       journeyNext.addEventListener("click",()=>journeyGo(1));
       journeyBack.addEventListener("click",()=>journeyGo(-1));
       $("#j-skip").addEventListener("click",()=>exitJourney("soy"));
-      $("#j-open-app").addEventListener("click",()=>exitJourney("soy"));
+
       $("#j-restart").addEventListener("click",()=>{
         journeyBirth.value="";journeyName.value="";journeyBirthError.textContent="";
         journeyIndex=0;renderJourney();
