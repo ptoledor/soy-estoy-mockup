@@ -1239,7 +1239,12 @@
     .j-note { margin: 0; padding: 12px 20px 16px; color: var(--red); font-family: var(--mono); font-size: 9px; line-height: 1.6; letter-spacing: .04em; text-transform: uppercase; border-top: 1px solid var(--line); }
     .j-paid-note { margin: 0 0 14px; padding: 7px 10px; border: 1px solid var(--red); color: var(--red); font-family: var(--mono); font-size: 9px; letter-spacing: .06em; text-transform: uppercase; }
 
-    .j-actions { flex: none; border-top: 1px solid var(--line); background: var(--paper-2); }
+    /* Anclado al borde inferior. Sin esto, cuando un paso excede la pantalla
+       el pie se va con el documento y el botón "Siguiente" queda invisible:
+       la persona ve un muro de texto sin forma aparente de avanzar. Medido a
+       390×730 —un iPhone real con las barras del navegador— pasaba en 6 de
+       los 14 pasos, empezando por el primero. */
+    .j-actions { position: sticky; bottom: 0; z-index: 5; flex: none; border-top: 1px solid var(--line); background: var(--paper-2); }
     .j-actions-inner { width: min(100%, 620px); margin: 0 auto; display: flex; align-items: center; gap: 10px; padding: 14px 22px calc(14px + env(safe-area-inset-bottom)); }
     .j-btn { display: inline-flex; min-height: 50px; align-items: center; justify-content: center; gap: 8px; padding: 0 22px; border: 1px solid var(--ink); background: transparent; cursor: pointer; text-decoration: none; font-family: var(--mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; transition: background .22s ease, color .22s ease; }
     .j-btn.primary { flex: 1; background: var(--ink); color: var(--paper-2); }
@@ -1292,6 +1297,80 @@
       .j-moon { width: 68px; height: 68px; }
       .j-offer-head { padding: 14px 16px; }
       .j-offer ul { padding: 14px 16px 14px 34px; }
+    }
+
+    /* ——— Pantallas cortas ———
+       390×844 es la altura NOMINAL de un teléfono, no la utilizable: con la
+       barra de direcciones un iPhone deja ~730 y un Android chico ~620. Todo
+       el recorrido se midió a 844 y por eso 7 de 14 pasos desbordaban en un
+       teléfono real. Acá se comprime el ritmo vertical en vez de recortar
+       contenido: ninguna advertencia ni cuenta se pierde por falta de alto. */
+    @media (max-height: 800px) {
+      .j-stage { padding: 14px 18px 12px; }
+      .j-step h1 { margin-bottom: 10px; font-size: clamp(25px, 6.6vw, 31px); }
+      .j-lead { margin-bottom: 12px; font-size: 14px; }
+      .j-eyebrow { margin-bottom: 9px; }
+      .j-tally { margin-bottom: 12px; }
+      .j-pair { gap: 8px; margin: 14px 0 14px; }
+      .j-pair-card { padding: 11px 14px; }
+      .j-pair-card h2 { font-size: 21px; }
+      .j-pair-card p { font-size: 13px; }
+      .j-reveal { margin: 11px 0; }
+      .j-reveal-head { padding: 10px 16px; }
+      .j-reveal-body { padding: 13px 16px 14px; }
+      .j-value { font-size: clamp(28px, 7vw, 36px); }
+      .j-value.numeric { font-size: clamp(58px, 15vw, 74px); }
+      .j-traits { margin-top: 11px; }
+      .j-trait { padding: 7px 0; }
+      .j-trait b { font-size: 18px; }
+      .j-calc { margin-top: 9px; padding: 9px 11px; }
+      .j-flag { margin-top: 9px; padding: 8px 10px; font-size: 12px; }
+      .j-disclosure summary { min-height: 36px; }
+      .j-takeaways, .j-summary { gap: 7px; }
+      .j-takeaway, .j-summary-item { padding: 9px 12px; }
+      .j-takeaway p, .j-summary-item p { font-size: 13px; }
+      .j-summary { margin: 10px 0 12px; }
+      .j-converge { margin: 11px 0 12px; }
+      .j-converge-head { padding: 11px 16px; }
+      .j-converge-body { padding: 14px 16px 15px; }
+      .j-moon-row { margin: 12px 0 12px; padding: 11px 14px; }
+      .j-daily-line { margin-bottom: 11px; }
+      .j-offer { margin: 12px 0 12px; }
+      .j-offer-head { padding: 11px 16px; }
+      .j-offer ul { padding: 11px 16px 11px 32px; line-height: 1.55; }
+      .j-actions-inner { padding: 9px 18px calc(9px + env(safe-area-inset-bottom)); }
+      .j-btn { min-height: 44px; }
+      .j-skip { margin-top: 12px; }
+    }
+
+    /* Muy cortas (≤700px útiles: iPhone SE, Android chico, o tipografía del sistema
+       aumentada). Acá ya no se puede cumplir "una pantalla" sin mutilar el
+       contenido, así que se comprime lo que se puede y se acepta scroll: el
+       pie anclado mantiene "Siguiente" siempre a la vista, que es lo que
+       vuelve el scroll tolerable en vez de un callejón. */
+    @media (max-height: 700px) {
+      .j-stage { padding: 10px 16px 8px; }
+      .j-step h1 { margin-bottom: 8px; font-size: clamp(22px, 6vw, 27px); }
+      .j-lead { margin-bottom: 9px; font-size: 13px; }
+      .j-eyebrow { margin-bottom: 7px; }
+      .j-tally { margin-bottom: 9px; }
+      .j-pair { gap: 6px; margin: 10px 0; }
+      .j-pair-card { padding: 9px 12px; }
+      .j-pair-card h2 { font-size: 18px; }
+      .j-reveal { margin: 8px 0; }
+      .j-reveal-body { padding: 11px 14px 12px; }
+      .j-value { font-size: clamp(25px, 6.4vw, 31px); }
+      .j-value.numeric { font-size: clamp(48px, 13vw, 62px); }
+      .j-trait { padding: 6px 0; }
+      .j-trait b { font-size: 16px; }
+      .j-trait i { font-size: 12px; }
+      .j-takeaway, .j-summary-item { padding: 8px 11px; }
+      .j-takeaway b, .j-summary-item strong { font-size: 16px; }
+      .j-converge-body { padding: 11px 14px 12px; }
+      .j-moon { width: 56px; height: 56px; }
+      .j-moon-row { grid-template-columns: 56px 1fr; padding: 9px 12px; }
+      .j-offer ul { line-height: 1.45; }
+      .j-btn { min-height: 42px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -3536,11 +3615,19 @@
       }));
       journeyBirth.addEventListener("input",()=>{journeyBirthError.textContent="";});
 
-      /* Arranca en cualquier apertura sin fragmento. No es "primera visita":
-         sin persistencia, una apertura limpia posterior lo repite. Un enlace
-         compartido o un `#soy`/`#estoy` explícito entra directo al modo
-         completo. */
-      if(!document.body.classList.contains("profile-ready")&&!location.hash)startJourney();
+      /* El recorrido NO puede depender de `location.hash`: el fragmento es
+         estado de vista que `setView()` reescribe en cada cambio de tab, así
+         que al salir del recorrido la URL quedaba con `#soy` y esa dirección
+         ya no volvía a abrirlo nunca. Recargar o reabrir desde el historial
+         —lo normal en un teléfono— dejaba a la persona en el mockup completo
+         para siempre.
+
+         Ahora sólo dos cosas lo saltan, y ambas son deliberadas: un enlace
+         compartido con datos (que ya marcó `profile-ready`) y un `?directo=1`
+         explícito. Sin datos, el modo completo es un formulario vacío: volver
+         al recorrido es lo correcto, no una molestia. */
+      const skipJourney=new URLSearchParams(location.search).get("directo")==="1";
+      if(!document.body.classList.contains("profile-ready")&&!skipJourney)startJourney();
     })();
   </script>
 </body>
