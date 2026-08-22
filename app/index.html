@@ -3503,7 +3503,9 @@
         if(second){
           jSet("j-cv-second-label",`También se repite · ${second.count} señales`);
           jSet("j-cv-second-theme",second.title);
-          jSet("j-cv-second-copy",`Se repite en ${second.sources}. ${second.copy}.`);
+          // `practice` viene en minúscula porque en el tema principal va tras
+          // dos puntos ("En concreto: elige un frente…"). Acá abre oración.
+          jSet("j-cv-second-copy",`Se repite en ${second.sources}. ${second.copy.charAt(0).toUpperCase()}${second.copy.slice(1)}.`);
         }
 
         // Las 8 señales agrupadas en las 4 tradiciones ya recorridas: cierra el
