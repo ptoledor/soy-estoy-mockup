@@ -1431,7 +1431,9 @@
         <section class="j-step active" data-jstep="intro" aria-label="Qué es Soy Estoy">
           <p class="j-eyebrow">Antes de empezar</p>
           <h1>Cuatro tradiciones miran <em>la misma fecha</em>.</h1>
-          <p class="j-lead">Numerología, zodíaco occidental, zodíaco chino y tarot interpretan tu fecha de nacimiento por separado. Nosotros mostramos cada cuenta y buscamos <strong>en qué coinciden</strong>. Ese es el corazón de Soy.</p>
+          <!-- "Ese es el corazón de Soy" salió en dos rondas de crítica como
+               relleno: nombra algo que la persona todavía no conoce. -->
+          <p class="j-lead">Numerología, zodíaco occidental, zodíaco chino y tarot interpretan tu fecha de nacimiento por separado. Nosotros mostramos cada cuenta y buscamos <strong>en qué coinciden</strong>.</p>
           <div class="j-pair">
             <article class="j-pair-card">
               <h2>Soy <span>no cambia</span></h2>
@@ -1606,6 +1608,11 @@
             <article class="j-takeaway"><span>Ritmo</span><b>El cuarto lunar</b><p>Cambia cada siete días y sugiere cómo trabajar ese tema.</p></article>
             <article class="j-takeaway"><span>Contexto</span><b>Año chino y temporada solar</b><p>Clima de fondo: matizan el tema, no lo reemplazan.</p></article>
           </div>
+          <!-- Anticipa el muro. Sin esto, el precio del paso 11 sorprendía:
+               "hasta entonces parece un recorrido gratuito y no se anticipa
+               claramente un límite de pago". Decirlo antes es más honesto que
+               dejar que aparezca de golpe. -->
+          <p class="j-lead">El tema y el período los ves ahora, gratis. El detalle del ritmo va en el pase de 30 días.</p>
         </section>
 
         <!-- 10 · La lectura real de Estoy, ANTES del precio y gratis.
@@ -3409,7 +3416,7 @@
         convergencia:"Para qué me sirve",
         aterrizaje:"Ver mi momento actual",
         "estoy-intro":"Ver mi Estoy de hoy",
-        "estoy-momento":"Seguir con el resto",
+        "estoy-momento":"Ver el pase de 30 días",
         // Etiqueta explícita: nadie desbloquea sin leer que es una simulación.
         acceso:"Simular pago con Mercado Pago",
         "estoy-ritmo":"Abrir mi lectura completa"
@@ -3564,7 +3571,7 @@
            es español. Se le da su propia oración. */
         /* El muro habla de lo que la persona acaba de recibir, no de una
            promesa abstracta: nombra su período y qué sigue después de él. */
-        jSet("j-acceso-copy",`Acabas de ver tu período —${formatDate(s.current.start)} a ${formatDate(s.current.end)}— sin pagar nada. El pase abre el detalle de éste y los que vienen en 30 días.`);
+        jSet("j-acceso-copy",`El tema y el período de ${formatDate(s.current.start)} a ${formatDate(s.current.end)} ya son tuyos. El pase agrega el ritmo lunar, la sugerencia diaria y los períodos que siguen durante 30 días.`);
       }
 
       function renderJourney(){
