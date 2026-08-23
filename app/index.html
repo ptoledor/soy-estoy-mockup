@@ -2962,12 +2962,47 @@
         const animalIndex=mod(chin.effective-4,12);
         const elementRest=mod(chin.effective-4,10);
         const even=chin.effective%2===0;
+        /* Cada elemento cubre dos años. Si el resto es par, el par empieza en
+           este año; si es impar, empezó el anterior. */
+        const pairStart=chin.effective-(elementRest%2);
+        const elementPair=`${pairStart} y ${pairStart+1}`;
+        /* 2000 como ancla: es redondo, está en la tabla y fue Dragón de Metal,
+           así que sirve para el animal y para el elemento a la vez. Anclar en
+           un año memorable deja la cuenta verificable; el "año 4 d.C." del que
+           sale la aritmética modular no se lo sabe nadie. */
+        const anchorYear=2000+mod(animalIndex-mod(2000-4,12),12);
+        // Tres de los doce animales son femeninos; sin esto salía "al Serpiente".
+        const FEMENINOS=new Set(["Rata","Serpiente","Cabra"]);
+        const alAnimal=FEMENINOS.has(chin.animal)?`a la ${chin.animal}`:`al ${chin.animal}`;
+        const delAnimal=FEMENINOS.has(chin.animal)?`de la ${chin.animal}`:`del ${chin.animal}`;
+        /* Los años vecinos excluyen 2000: el ancla ya lo nombró y repetirlo en
+           la misma frase se lee como un error de cálculo. */
+        const vecinos=[chin.effective-12,chin.effective+12,chin.effective-24,chin.effective+24]
+          .filter(year=>year!==2000).slice(0,2).sort((a,b)=>a-b);
         return {
           rango:range
             ? `El año del ${chin.animal} corre ${range}. No va del 1 de enero al 31 de diciembre: abre con el Año Nuevo lunisolar y cierra en su víspera.`
             : `La tabla lunisolar del producto cubre 2000-2044, así que no podemos darte las fechas exactas del año del ${chin.animal} en ${chin.effective}. El Año Nuevo lunisolar cae siempre entre el 21 de enero y el 20 de febrero.`,
-          animal:`Los doce animales rotan en orden y el ciclo se cuenta desde la Rata. ${chin.effective} − 4 = ${chin.effective-4}; al dividir por 12 deja resto ${animalIndex}, que es el animal ${animalIndex+1} de 12: ${chin.animal}.`,
-          elemento:`Cada elemento gobierna dos años seguidos, en un ciclo de diez. ${chin.effective} − 4 = ${chin.effective-4}; al dividir por 10 deja resto ${elementRest}, y ${elementRest} ÷ 2 cae en el elemento ${Math.floor(elementRest/2)+1} de 5: ${chin.element}.`,
+          /* La derivación se cuenta como rotación, no como aritmética modular.
+             Antes decía "(año − 4) deja resto N al dividir por 12": eso explica
+             la implementación, no la tradición. El "− 4" es un número mágico
+             —viene de que el año 4 d.C. fue de la Rata— y el resto obliga a
+             sostener una lista que no está a la vista.
+             Peor: el principio del producto es mostrar la cuenta PARA QUE SE
+             PUEDA VERIFICAR, y nadie verifica un módulo. La repetición cada 12
+             años sí se comprueba contra la familia de uno. */
+          /* Las cláusulas de ancla se omiten cuando coincidirían con el propio
+             resultado: para un Dragón, "2000 fue Dragón, al Dragón le toca
+             2000" se lee como un error. */
+          animal:`Los doce rotan siempre en este orden: ${ANIMALS.join(", ")}. Una referencia redonda: 2000 fue año del Dragón.`
+            +(chin.animal==="Dragón"?"":` Contando desde ahí, ${alAnimal} le toca ${anchorYear}.`)
+            +` El ciclo dura doce años, así que también fueron ${delAnimal} ${vecinos.join(" y ")}.`,
+          elemento:`Los cinco rotan en este orden —${ELEMENTS.join(", ")}— y cada uno gobierna dos años seguidos, así que el ciclo completo dura diez. 2000 y 2001 fueron de Metal.`
+            /* Si el par propio ES el ancla, no se repite: se dice que coincide.
+               El segundo par se omite si volvería a nombrar 2000-2001. */
+            +(pairStart===2000
+              ? ` Tu año cae justo en ese par.`
+              : ` ${elementPair} corresponden a ${chin.element}`+(pairStart-10===2000?".":`, igual que ${pairStart-10} y ${pairStart-9}.`)),
           polaridad:`La polaridad alterna año a año: los pares son Yang y los impares, Yin. ${chin.effective} es ${even?"par":"impar"} → ${chin.polarity}.`
         };
       }
