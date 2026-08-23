@@ -1197,6 +1197,13 @@
     .j-reveal-body p.j-arcana-gloss { margin: 0; font-size: 14px; }
     .j-arcana .j-calc { margin-top: 12px; }
 
+    .j-upsell { display: block; width: 100%; margin: 16px 0 0; padding: 14px 16px; border: 1px dashed var(--line-dark); background: var(--paper); text-align: left; cursor: pointer; font: inherit; color: inherit; }
+    .j-upsell:hover { border-color: var(--brass); }
+    .j-upsell-top { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 5px; }
+    .j-upsell-top b { font-family: var(--serif); font-size: 21px; font-weight: 500; letter-spacing: -.01em; }
+    .j-upsell-top i { color: var(--brass); font-family: var(--mono); font-size: 12px; font-style: normal; letter-spacing: .06em; }
+    .j-upsell-copy { display: block; color: var(--muted); font-size: 13px; line-height: 1.5; }
+
     .j-discarded { margin: 10px 0 0; color: rgba(235, 231, 220, .58); font-family: var(--mono); font-size: 10px; line-height: 1.65; letter-spacing: .04em; }
     .j-discarded b { color: rgba(235, 231, 220, .82); font-weight: 400; }
 
@@ -1377,6 +1384,17 @@
       /* Dos arcanos con su cuenta es el paso mas alto del recorrido: con tres
          cartas desbordaba 84px. Se comprime el bloque, no se pliega la cuenta. */
       .j-discarded { margin-top: 5px; font-size: 9px; line-height: 1.45; }
+      /* La convergencia acumuló tres textos nuevos: el acumulador en la
+         entradilla, la línea de descartes y la cifra de tradiciones en ambos
+         temas. Es el segundo paso más alto del recorrido. */
+      .j-converge-head { padding: 12px 16px; }
+      .j-converge-body { padding: 16px 16px 18px; }
+      .j-converge-body h2 { font-size: clamp(26px, 6.2vw, 34px); }
+      .j-converge-body .j-sources { margin-bottom: 7px; font-size: 12px; }
+      .j-converge-body .j-copy { font-size: 14px; line-height: 1.4; }
+      .j-second { margin-top: 10px; padding-top: 9px; }
+      .j-second strong { font-size: 19px; }
+      .j-second p { font-size: 12px; line-height: 1.4; }
       .j-arcana + .j-arcana { margin-top: 9px; padding-top: 8px; }
       .j-arcana-role { margin-bottom: 2px; }
       .j-reveal-body p.j-arcana-name { font-size: clamp(24px, 6vw, 30px); line-height: 1; }
@@ -1678,7 +1696,14 @@
             <article class="j-takeaway"><span>Una recomendación</span><b id="j-cv-shadow">—</b><p id="j-cv-shadow-copy">—</p></article>
             <article class="j-takeaway"><span>Una pregunta para reflexionar</span><b id="j-cv-question">—</b></article>
           </div>
-          <p class="j-lead">Nada de esto es un diagnóstico. Son hipótesis para contrastar con lo que ya sabes de ti.</p>
+          <!-- Complemento, no muro: Soy queda completo con lo que la fecha
+               puede dar. Esto vende lo único que la fecha NO da, y el producto
+               ya viene diciendo desde el paso 4 que no lo calcula. Aparece al
+               cerrar Soy porque es cuando la persona ya sabe qué recibió. -->
+          <button class="j-upsell" type="button" data-open-carta>
+            <span class="j-upsell-top"><b>Completa tu Soy</b><i>USD 1,99</i></span>
+            <span class="j-upsell-copy">Con tu hora y lugar de nacimiento calculamos tu carta natal: ascendente, casas y aspectos. Es lo único que tu fecha sola no puede dar.</span>
+          </button>
         </section>
 
         <!-- 9 · Cierra Soy antes de abrir Estoy. Una idea por vez. -->
@@ -1809,7 +1834,7 @@
         <label class="field field-birth"><span>Fecha de nacimiento</span><input id="birth" type="date" min="1900-01-01" required></label>
         <button class="recalculate" id="profile-submit" type="submit">Ver mi Soy</button>
         <p class="profile-login"><button class="login-link" type="button" data-open-login>Ya tengo cuenta</button></p>
-        <p class="privacy-note"><strong>No pedimos hora ni lugar.</strong> Calculamos solo lo que puede obtenerse honestamente desde tu fecha. El ascendente y las casas requieren datos exactos adicionales.</p>
+        <p class="privacy-note"><strong>No pedimos hora ni lugar.</strong> Calculamos solo lo que puede obtenerse honestamente desde tu fecha. El ascendente y las casas requieren datos exactos adicionales. <button class="login-link" type="button" data-open-carta>Completa tu Soy por USD 1,99</button></p>
       </form>
     </section>
 
@@ -2265,7 +2290,7 @@
     <div class="checkout-panel" id="checkout-offer">
       <div class="checkout-intro-grid">
         <div class="checkout-head">
-          <div><span class="micro-label">Pago simulado</span><h2 id="checkout-title">Continúa con Estoy</h2><p>Pase único. Sin suscripción ni renovación automática.</p></div>
+          <div><span class="micro-label">Pago simulado</span><h2 id="checkout-title">Continúa con Estoy</h2><p id="checkout-sub">Pase único. Sin suscripción ni renovación automática.</p></div>
           <button class="share-close" id="checkout-close" type="button">Cerrar</button>
         </div>
         <figure class="editorial-art checkout-art">
@@ -2273,27 +2298,27 @@
         </figure>
       </div>
       <div class="checkout-order" aria-label="Resumen del pedido">
-        <div><span>Para <b id="checkout-person">—</b></span><h3>Acceso completo · 30 días</h3></div>
-        <strong class="checkout-price">USD 5</strong>
+        <div><span>Para <b id="checkout-person">—</b></span><h3 id="checkout-item">Acceso completo · 30 días</h3></div>
+        <strong class="checkout-price" id="checkout-price">USD 5</strong>
       </div>
-      <ul class="checkout-facts">
+      <ul class="checkout-facts" id="checkout-facts">
         <li>Una lectura al comienzo de cada período.</li>
         <li>Una sugerencia diaria breve por WhatsApp.</li>
         <li>Acceso a Mi círculo para comparar tus vínculos.</li>
         <li>Acceso completo a la wiki Aprende.</li>
         <li>Acceso inmediato durante 30 días.</li>
       </ul>
-      <div class="checkout-provider"><div><span>Forma de pago</span><strong>Mercado Pago</strong><small>Tarjeta o saldo disponible</small></div><strong>USD 5 total</strong></div>
+      <div class="checkout-provider"><div><span>Forma de pago</span><strong>Mercado Pago</strong><small>Tarjeta o saldo disponible</small></div><strong id="checkout-total">USD 5 total</strong></div>
       <form id="checkout-form">
-        <button class="primary checkout-submit" type="submit">Simular pago con Mercado Pago</button>
+        <button class="primary checkout-submit" id="checkout-cta" type="submit">Simular pago con Mercado Pago</button>
       </form>
       <p class="checkout-disclaimer">Esta es una demo: no se cobra nada, no pedimos datos de tarjeta y no se envían datos a Mercado Pago.</p>
     </div>
     <div class="checkout-panel checkout-success" id="checkout-success" aria-live="polite" hidden>
       <div class="checkout-success-mark" aria-hidden="true">✓</div>
       <span class="micro-label">Pago simulado</span>
-      <h2>Tu pase estaría activo.</h2>
-      <p>En producción, aquí habilitaríamos Estoy y enviaríamos la confirmación por WhatsApp.</p>
+      <h2 id="checkout-success-title">Tu pase estaría activo.</h2>
+      <p id="checkout-success-copy">En producción, aquí habilitaríamos Estoy y enviaríamos la confirmación por WhatsApp.</p>
       <div class="checkout-access"><span class="micro-label">Acceso para <b id="checkout-result-name">—</b></span><strong id="checkout-until">—</strong></div>
       <button class="primary checkout-submit" id="checkout-done" type="button">Entrar a Estoy</button>
       <p class="checkout-disclaimer">No hubo un cobro real.</p>
@@ -2366,6 +2391,7 @@
       let pendingShare = null;
       let pendingPaidView = "estoy";
       let mockAccessGranted = false;
+      let ofertaEsCarta = false;
       let preserveSharedFragment = Boolean(sharedFragmentQuery);
       const WIKI_MODULES = [
         {id:"wiki-numerology",label:"Numerología"},
@@ -2439,13 +2465,32 @@
             bucket.sources.push({...signal,matchedAttributes:match.matchedAttributes});
           });
         });
-        return Object.values(buckets).map(bucket=>({...bucket,sourceCount:new Set(bucket.sources.map(source=>source.key)).size}))
-          .sort((a,b)=>b.score-a.score||b.sourceCount-a.sourceCount);
+        /* Ordenaba por `score` -peso × coincidencias- y mostraba en pantalla
+           el número de señales. Como no son la misma cifra, el titular podía
+           decir "3 de 8" arriba y "5 señales" en el segundo tema, debajo de una
+           frase que prometía "el primero con más apoyo". Para el 26/8/1992 el
+           tema que se repetía en las CUATRO tradiciones quedaba de nota al pie
+           detrás de uno que solo tenía dos.
+
+           Ahora manda lo que el producto afirma: cuántas tradiciones coinciden.
+           El score queda de desempate. */
+        return Object.values(buckets).map(bucket=>({...bucket,
+            sourceCount:new Set(bucket.sources.map(source=>source.key)).size,
+            traditionCount:new Set(bucket.sources.map(source=>TRADITION_OF(source.key))).size}))
+          .sort((a,b)=>b.traditionCount-a.traditionCount||b.score-a.score||b.sourceCount-a.sourceCount);
       }
       function joinSpanish(items) {
         if(items.length<2)return items[0]||"";
         return `${items.slice(0,-1).join(", ")} y ${items[items.length-1]}`;
       }
+      /* De qué tradición viene cada señal. La convergencia es una afirmación
+         sobre tradiciones que coinciden, así que este mapa es el que manda:
+         tres señales chinas de acuerdo entre sí no son una convergencia, son
+         una tradición repitiéndose. */
+      const TRADITION_OF=key=>key==="life"?"numerología"
+        :key.startsWith("western-")?"occidental"
+        :key.startsWith("chinese-")?"chino":"tarot";
+
       function buildSoySignals(life,profile,sun,chin,tarot) {
         return [
           {key:"life",label:`Camino de vida ${life.number}`,weight:3,detail:`${profile.meaning}; ${profile.gift}; ${profile.giftCopy}`},
@@ -2478,13 +2523,13 @@
            segundo se muestra cuando existe de verdad. Nunca se rellena con el
            siguiente de la lista si no llega a dos: seria inventar una
            coincidencia que no ocurrio. */
-        const ranked=factors.filter(factor=>factor.sourceCount>=2);
+        const ranked=factors.filter(factor=>factor.traditionCount>=2);
         const main=ranked[0],runnerUp=ranked[1];
         if(!main)return {label:"Sin convergencia clara",title:"Señales distintas",sources:"Las cuatro fuentes apuntan a temas distintos.",copy:"Las cuatro tradiciones apuntan a temas diferentes. No forzamos una conclusión común: revisa cada componente por separado.",second:null};
         const secondDefinition=runnerUp?SOY_FACTORS[runnerUp.key]:null;
         const second=runnerUp?{
           title:secondDefinition.label,
-          count:runnerUp.sourceCount,
+          count:runnerUp.traditionCount,
           sources:joinSpanish([...new Map(runnerUp.sources.map(source=>[source.key,source])).values()].map(source=>source.label)),
           copy:secondDefinition.practice
         }:null;
@@ -2497,7 +2542,7 @@
         if(!mainKeys.has("life")&&modifiers.length<2)modifiers.push(`El recurso de fondo apunta a ${profile.gift.toLowerCase()}.`);
         if(!hasChinese&&modifiers.length<2)modifiers.push(`Se templa con ${CHINESE_ELEMENT_TONE[chin.element]}.`);
         return {
-          label:`Convergencia · ${main.sourceCount} de ${signals.length} señales`,
+          label:`Convergencia · ${main.traditionCount} de 4 tradiciones`,
           title:definition.label,
           sources:`Se repite en ${joinSpanish([...new Map(main.sources.map(source=>[source.key,source])).values()].map(source=>source.label))}.`,
           copy:`${definition.analysis} En concreto: ${definition.practice}. ${modifiers.slice(0,1).join(" ")}`,
@@ -3576,15 +3621,56 @@
         if(typeof dialog.showModal==="function")dialog.showModal();
         else {pendingShare=null;await executeShare(payload,"link");}
       }
+      /* Dos ofertas en un mismo diálogo. La carta natal es un complemento del
+         Soy y no otro muro: Soy sigue completo y gratis con lo que la fecha
+         puede dar honestamente, y esto vende lo único que la fecha NO da.
+         Por eso pide hora y lugar antes que dinero. */
+      const OFERTAS={
+        estoy:{
+          sub:"Pase único. Sin suscripción ni renovación automática.",
+          item:"Acceso completo · 30 días", precio:"USD 5", total:"USD 5 total",
+          cta:"Simular pago con Mercado Pago",
+          exito:"Tu pase estaría activo.",
+          exitoCopy:"En producción, aquí habilitaríamos Estoy y enviaríamos la confirmación por WhatsApp.",
+          facts:["Una lectura al comienzo de cada período.",
+                 "Una sugerencia diaria breve por WhatsApp.",
+                 "Acceso a Mi círculo para comparar tus vínculos.",
+                 "Acceso completo a la wiki Aprende.",
+                 "Acceso inmediato durante 30 días."]},
+        carta:{
+          sub:"Compra única. Se agrega a tu Soy y no vence.",
+          item:"Carta natal · ascendente y casas", precio:"USD 1,99", total:"USD 1,99 total",
+          cta:"Simular compra con Mercado Pago",
+          exito:"Tu carta natal estaría lista.",
+          exitoCopy:"En producción pediríamos tu hora y lugar de nacimiento y calcularíamos la carta con efemérides.",
+          facts:["Ascendente: el signo que subía en el horizonte a tu hora.",
+                 "Las doce casas y en cuál cae cada planeta.",
+                 "Los aspectos entre planetas, con su orbe.",
+                 "Requiere hora y lugar de nacimiento exactos.",
+                 "Se suma a tu Soy: no reemplaza nada de lo que ya viste."]}
+      };
       function openCheckoutDialog(destination="estoy") {
         if(!currentProfile)return;
+        const esCarta=destination==="carta";
+        ofertaEsCarta=esCarta;
         pendingPaidView=["estoy","circulo","aprende"].includes(destination)?destination:"estoy";
+        const oferta=OFERTAS[esCarta?"carta":"estoy"];
         const today=parseDate(isoDate(new Date())),until=addDays(today,30);
         $("#checkout-person").textContent=currentProfile.name;
         $("#checkout-result-name").textContent=currentProfile.name;
-        $("#checkout-until").textContent=`Hasta ${formatDate(until,true)}`;
-        $("#checkout-title").textContent=pendingPaidView==="aprende"?"Accede a Aprende":"Continúa con Estoy";
-        $("#checkout-done").textContent=pendingPaidView==="circulo"?"Entrar a Mi círculo":pendingPaidView==="aprende"?"Entrar a Aprende":"Entrar a Estoy";
+        $("#checkout-until").textContent=esCarta?"Sin vencimiento":`Hasta ${formatDate(until,true)}`;
+        $("#checkout-sub").textContent=oferta.sub;
+        $("#checkout-item").textContent=oferta.item;
+        $("#checkout-price").textContent=oferta.precio;
+        $("#checkout-total").textContent=oferta.total;
+        $("#checkout-cta").textContent=oferta.cta;
+        $("#checkout-success-title").textContent=oferta.exito;
+        $("#checkout-success-copy").textContent=oferta.exitoCopy;
+        const facts=$("#checkout-facts");
+        facts.textContent="";
+        oferta.facts.forEach(text=>{const li=document.createElement("li");li.textContent=text;facts.append(li);});
+        $("#checkout-title").textContent=esCarta?"Completa tu Soy":pendingPaidView==="aprende"?"Accede a Aprende":"Continúa con Estoy";
+        $("#checkout-done").textContent=esCarta?"Volver a mi Soy":pendingPaidView==="circulo"?"Entrar a Mi círculo":pendingPaidView==="aprende"?"Entrar a Aprende":"Entrar a Estoy";
         $("#checkout-offer").hidden=false;$("#checkout-success").hidden=true;
         const dialog=$("#checkout-dialog");
         if(typeof dialog.showModal==="function")dialog.showModal();
@@ -3613,6 +3699,7 @@
       function wireLoginDialog() {
         const dialog=$("#login-dialog");
         $$("[data-open-login]").forEach(node=>node.addEventListener("click",event=>{event.preventDefault();openLoginDialog();}));
+        $$("[data-open-carta]").forEach(node=>node.addEventListener("click",event=>{event.preventDefault();openCheckoutDialog("carta");}));
         $("#login-close").addEventListener("click",()=>dialog.close());
         $("#login-back").addEventListener("click",()=>{$("#login-identify").hidden=false;$("#login-code").hidden=true;});
         $("#login-form").addEventListener("submit",event=>{
@@ -3747,10 +3834,13 @@
       $("#access-estoy").addEventListener("click",()=>openCheckoutDialog("estoy"));
       $("#checkout-button").addEventListener("click",()=>openCheckoutDialog("estoy"));
       $("#checkout-close").addEventListener("click",()=>$("#checkout-dialog").close());
-      $("#checkout-done").addEventListener("click",()=>{$("#checkout-dialog").close();setView(pendingPaidView);});
+      $("#checkout-done").addEventListener("click",()=>{$("#checkout-dialog").close();setView(ofertaEsCarta?"soy":pendingPaidView);});
       $("#checkout-form").addEventListener("submit",event=>{
         event.preventDefault();
-        mockAccessGranted=true;
+        /* La carta natal es un complemento del Soy, no el pase de Estoy: si
+           concediera acceso, comprar el complemento abriría por accidente todo
+           lo que cuesta USD 5. */
+        if(!ofertaEsCarta)mockAccessGranted=true;
         $("#checkout-offer").hidden=true;$("#checkout-success").hidden=false;
         $("#checkout-done").focus();
       });
@@ -3944,9 +4034,16 @@
         // Cuando no hay convergencia lo decimos, en vez de forzar una conclusión.
         const converged=/^Convergencia/.test(s.synthesis.label);
         const second=s.synthesis.second;
+        /* El titular decía "dos temas" siempre que hubiera un segundo, y el
+           84% de los segundos se apoya en apenas 2 de 4 tradiciones: el mínimo
+           para contar como convergencia. Presentarlos como iguales es lo que
+           el escéptico leyó como cubrirse para acertar. Ahora solo comparten
+           titular si el segundo también pasa de ese mínimo; si no, sigue
+           visible con su cifra, pero como lo que es: más débil. */
+        const segundoFuerte=Boolean(second)&&second.count>=3;
         $("#j-cv-title").innerHTML=!converged
           ? "Cuatro miradas, <em>cuatro temas</em>."
-          : second ? "Cuatro miradas, <em>dos temas</em>." : "Cuatro miradas, <em>un tema</em>.";
+          : segundoFuerte ? "Cuatro miradas, <em>dos temas</em>." : "Cuatro miradas, <em>un tema</em>.";
         /* Nombra las cuatro señales que venías acumulando en el contador de los
            pasos anteriores. Sin esto, el acumulador se llena y no se gasta: la
            convergencia aparece como un resultado nuevo en vez del destino de lo
@@ -3954,13 +4051,13 @@
         const juntadas=`${s.life.number} · ${s.sun[0]} · ${s.chin.animal} · ${s.tarot[0]}.`;
         jSet("j-cv-intro",!converged
           ? `${juntadas} Cada una apuntó a un tema distinto, así que no forzamos una conclusión común.`
-          : second
-            ? `${juntadas} Dos temas se repitieron entre las cuatro; el primero con más apoyo.`
-            : `${juntadas} Esto es lo que se repitió entre las cuatro.`);
+          : segundoFuerte
+            ? `${juntadas} Dos temas se repitieron en tres tradiciones o más.`
+            : `${juntadas} Esto es lo que más se repitió.`);
         const secondBox=$("#j-cv-second");
         secondBox.hidden=!second;
         if(second){
-          jSet("j-cv-second-label",`También se repite · ${second.count} señales`);
+          jSet("j-cv-second-label",`${segundoFuerte?"También se repite":"Más débil"} · ${second.count} de 4 tradiciones`);
           jSet("j-cv-second-theme",second.title);
           // `practice` viene en minúscula porque en el tema principal va tras
           // dos puntos ("En concreto: elige un frente…"). Acá abre oración.
@@ -3969,7 +4066,7 @@
 
         // Las 8 señales agrupadas en las 4 tradiciones ya recorridas: cierra el
         // circuito con exactamente los atributos que la persona acaba de ver.
-        const main=s.factors.find(factor=>factor.sourceCount>=2);
+        const main=s.factors.find(factor=>factor.traditionCount>=2);
         const supporting=new Set((main?.sources||[]).map(source=>source.key));
 
         /* Los temas que una sola tradición levantó y ninguna otra respaldó.
@@ -3979,8 +4076,7 @@
         /* Dos y no tres, nombres cortos y sin frase de cierre: con la versión
            larga el paso desbordaba 41px. Lo que no se sacrifica es el dato
            —qué tema y de qué tradición—, que es lo que lo hace verificable. */
-        const TRADICION={life:"numerología","western-sign":"occidental","western-element":"occidental","western-modality":"occidental","chinese-animal":"chino","chinese-element":"chino","chinese-polarity":"chino",tarot:"tarot"};
-        const sueltos=s.factors.filter(f=>f.sourceCount===1&&SOY_FACTORS[f.key]).slice(0,2);
+        const sueltos=s.factors.filter(f=>f.traditionCount===1&&SOY_FACTORS[f.key]).slice(0,2);
         const descartada=$("#j-cv-discarded");
         descartada.hidden=!sueltos.length;
         if(sueltos.length){
@@ -3990,7 +4086,7 @@
             const fuerte=document.createElement("b");
             fuerte.textContent=SOY_FACTORS[f.key].label.toLowerCase();
             descartada.append(fuerte);
-            const origen=TRADICION[f.sources[0]?.key];
+            const origen=f.sources[0]?TRADITION_OF(f.sources[0].key):null;
             descartada.append(document.createTextNode(origen?` (${origen})`:""));
             if(i<sueltos.length-1)descartada.append(document.createTextNode(", "));
           });
