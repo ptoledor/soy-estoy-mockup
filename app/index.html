@@ -1251,6 +1251,12 @@
     .j-note { margin: 0; padding: 12px 20px 16px; color: var(--red); font-family: var(--mono); font-size: 9px; line-height: 1.6; letter-spacing: .04em; text-transform: uppercase; border-top: 1px solid var(--line); }
     .j-paid-note { margin: 0 0 14px; padding: 7px 10px; border: 1px solid var(--red); color: var(--red); font-family: var(--mono); font-size: 9px; letter-spacing: .06em; text-transform: uppercase; }
 
+    .j-return { margin: 16px 0 0; padding: 14px 16px; border: 1px solid var(--line-dark); background: var(--paper-2); }
+    .j-return > span { display: block; margin-bottom: 4px; color: var(--brass); font-family: var(--mono); font-size: 9px; letter-spacing: .1em; text-transform: uppercase; }
+    .j-return p { margin: 0 0 12px; color: var(--muted); font-size: 13px; line-height: 1.45; }
+    .j-return .j-btn { width: 100%; }
+    .j-return small { display: block; margin-top: 9px; color: var(--muted); font-size: 11px; line-height: 1.45; }
+
     /* Anclado al borde inferior. Sin esto, cuando un paso excede la pantalla
        el pie se va con el documento y el botón "Siguiente" queda invisible:
        la persona ve un muro de texto sin forma aparente de avanzar. Medido a
@@ -1675,12 +1681,23 @@
             <article class="j-takeaway"><span>Prioriza</span><b id="j-e-focus-title">—</b><p id="j-e-focus-copy">—</p></article>
             <article class="j-takeaway"><span>Cuida</span><b id="j-e-watch-title">—</b><p id="j-e-watch-copy">—</p></article>
           </div>
-          <p class="j-daily-line"><b id="j-e-daily-title">—</b><span id="j-e-daily-copy">—</span></p>
-          <p class="j-lead">La fase lunar se estima por fecha: es una <strong>aproximación etiquetada</strong>.</p>
-          <!-- La salida vive en la barra de acciones como en todos los pasos.
-               Cuando era un botón dentro del contenido, este paso —el más
-               cargado— lo empujaba bajo el borde en pantallas cortas y dejaba
-               a la persona sin salida visible. -->
+          <!-- El aviso de aproximación baja a la línea del día para que el
+               paso final no acumule dos párrafos sueltos: es el paso más
+               cargado y el bloque de retorno tiene que quedar visible. -->
+          <p class="j-daily-line"><b id="j-e-daily-title">—</b><span id="j-e-daily-copy">—</span> <em>La fase se estima por fecha: aproximación etiquetada.</em></p>
+          <!-- Retorno sin cuenta. `fullReadingShareUrl()` ya reconstruye la
+               lectura completa desde el fragmento, así que enviarse el enlace
+               es un magic link sin backend: no hay registro, contraseña, base
+               de datos ni credenciales que custodiar. El plan bloquea
+               autenticación hasta el gate 14; esto entrega el mismo trabajo
+               —volver sin reescribir la fecha— sin cruzarlo.
+               El enlace lleva nombre y fecha natal en el fragmento, nunca en
+               el query (invariante 4), y por eso se advierte antes de enviar. -->
+          <div class="j-return">
+            <span>Para volver sin escribir la fecha</span>
+            <button class="j-btn" type="button" id="j-save-link">Enviarme mi enlace por WhatsApp</button>
+            <small>No hay cuenta ni contraseña: tu lectura vive en el enlace. Incluye tu nombre y fecha natal, así que guárdalo donde solo tú lo veas.</small>
+          </div>
           <p class="j-skip"><button class="j-btn quiet" type="button" id="j-restart">Volver a empezar con otra fecha</button></p>
         </section>
 
@@ -3674,6 +3691,15 @@
       journeyBack.addEventListener("click",()=>journeyGo(-1));
       $("#j-skip").addEventListener("click",()=>exitJourney("soy"));
 
+      /* Retorno sin cuenta: se envía a sí misma el enlace reconstruible. Abre
+         un borrador; nada se envía hasta que la persona lo confirme, igual que
+         el resto de los flujos de WhatsApp del producto. */
+      $("#j-save-link").addEventListener("click",()=>{
+        if(!currentProfile)return;
+        const url=fullReadingShareUrl(currentProfile.name,currentProfile.birth,parseDate($("#target").value),"estoy");
+        openWhatsAppMessage(`Mi lectura en Soy/Estoy — para volver sin escribir la fecha de nuevo:\n${url}`);
+        toast("Abrimos un borrador en WhatsApp con tu enlace. Tú decides si lo envías.");
+      });
       $("#j-restart").addEventListener("click",()=>{
         journeyBirth.value="";journeyName.value="";journeyBirthError.textContent="";
         journeyIndex=0;renderJourney();
