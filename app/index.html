@@ -782,6 +782,23 @@
     .checkout-provider small { display: block; margin-top: 3px; color: var(--muted); font-size: 11px; }
     .checkout-submit { width: 100%; }
     .checkout-disclaimer { margin: 12px 0 0; color: var(--red); font-family: var(--mono); font-size: 9px; line-height: 1.5; letter-spacing: .04em; text-transform: uppercase; }
+
+    /* Ingreso simulado. Hereda .checkout-panel, .checkout-head, .checkout-submit
+       y .checkout-disclaimer del diálogo de pago; esto es solo el formulario. */
+    .login-form { margin: 18px 0 0; }
+    .login-field { display: block; margin-bottom: 14px; }
+    .login-field span { display: block; margin-bottom: 6px; }
+    .login-field input { width: 100%; padding: 13px 14px; border: 1px solid var(--line-dark); border-radius: 0; background: var(--paper); color: var(--ink); font-family: var(--mono); font-size: 14px; letter-spacing: .02em; }
+    .login-field input:focus-visible { outline: 2px solid var(--brass); outline-offset: 1px; }
+    #login-code-input { font-size: 22px; letter-spacing: .5em; text-align: center; }
+    .login-hint { margin-top: 16px; padding: 12px 14px; border: 1px dashed var(--line-dark); background: var(--paper); }
+    .login-hint strong { display: block; margin-top: 6px; font-family: var(--mono); font-size: 24px; font-weight: 400; letter-spacing: .34em; }
+    .login-error { margin: -6px 0 12px; color: var(--red); font-family: var(--mono); font-size: 10px; letter-spacing: .04em; text-transform: uppercase; }
+    /* Entrada discreta: el landing ya tiene cinco llamadas compitiendo y un
+       sexto botón empeora justo lo que hay que arreglar. */
+    .login-link { background: none; border: 0; padding: 0; color: var(--muted); font-family: var(--mono); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+    .login-link:hover { color: var(--ink); }
+    .profile-login { margin: 10px 0 0; }
     .checkout-success { text-align: center; }
     .checkout-success-mark { width: 48px; height: 48px; margin: 0 auto 18px; border: 1px solid var(--brass); border-radius: 50%; display: grid; place-items: center; color: var(--brass); font-family: var(--serif); font-size: 24px; }
     .checkout-success h2 { margin: 4px 0 10px; font-family: var(--serif); font-size: 32px; font-weight: 500; }
@@ -1180,6 +1197,9 @@
     .j-reveal-body p.j-arcana-gloss { margin: 0; font-size: 14px; }
     .j-arcana .j-calc { margin-top: 12px; }
 
+    .j-discarded { margin: 10px 0 0; color: rgba(235, 231, 220, .58); font-family: var(--mono); font-size: 10px; line-height: 1.65; letter-spacing: .04em; }
+    .j-discarded b { color: rgba(235, 231, 220, .82); font-weight: 400; }
+
     .j-calc { margin: 16px 0 0; padding: 12px 14px; border: 1px dashed var(--line-dark); background: var(--paper); color: var(--muted); font-family: var(--mono); font-size: 11px; line-height: 1.7; overflow-wrap: anywhere; }
     .j-calc b { display: block; margin-bottom: 4px; color: var(--ink); font-weight: 400; letter-spacing: .06em; text-transform: uppercase; font-size: 9px; }
     .j-disclosure { margin-top: 12px; border-top: 1px solid var(--line); }
@@ -1192,7 +1212,10 @@
     .j-flag { margin: 14px 0 0; padding: 11px 13px; border-left: 2px solid var(--brass); background: rgba(141, 100, 23, .07); color: var(--muted); font-size: 13px; }
 
     .j-tally { display: flex; align-items: center; gap: 7px; margin: 0 0 18px; }
-    .j-tally i { width: 100%; height: 3px; background: var(--line); transition: background .35s ease; }
+    /* min-width: sin piso, un acumulador largo ("22 · Capricornio · Serpiente
+       · La Sacerdotisa") aplasta las barras a 6px y dejan de leerse como
+       progreso. Con piso, el que cede es el texto, que sabe recortarse. */
+    .j-tally i { width: 100%; min-width: 16px; height: 3px; background: var(--line); transition: background .35s ease; }
     .j-tally i.done { background: var(--brass); }
     .j-tally p { flex: none; margin: 0 0 0 4px; color: var(--muted); font-family: var(--mono); font-size: 10px; letter-spacing: .08em; white-space: nowrap; }
 
@@ -1353,6 +1376,7 @@
       .j-trait b { font-size: 18px; }
       /* Dos arcanos con su cuenta es el paso mas alto del recorrido: con tres
          cartas desbordaba 84px. Se comprime el bloque, no se pliega la cuenta. */
+      .j-discarded { margin-top: 5px; font-size: 9px; line-height: 1.45; }
       .j-arcana + .j-arcana { margin-top: 9px; padding-top: 8px; }
       .j-arcana-role { margin-bottom: 2px; }
       .j-reveal-body p.j-arcana-name { font-size: clamp(24px, 6vw, 30px); line-height: 1; }
@@ -1405,6 +1429,7 @@
       .j-trait { padding: 6px 0; }
       .j-trait b { font-size: 16px; }
       .j-trait i { font-size: 12px; }
+      .j-discarded { margin-top: 5px; font-size: 9px; line-height: 1.45; }
       .j-arcana + .j-arcana { margin-top: 9px; padding-top: 8px; }
       .j-reveal-body p.j-arcana-name { font-size: clamp(21px, 5.4vw, 26px); }
       .j-reveal-body p.j-arcana-gloss { font-size: 12px; }
@@ -1493,7 +1518,7 @@
 
         <!-- 3-6 · Una tradición por pantalla, cada una con su cuenta. -->
         <section class="j-step" data-jstep="numerologia" aria-label="Numerología">
-          <div class="j-tally"><i class="done"></i><i></i><i></i><i></i><p>1 de 4</p></div>
+          <div class="j-tally"><i class="done"></i><i></i><i></i><i></i><p id="j-tally-1">—</p></div>
           <p class="j-eyebrow">Numerología</p>
           <h1>Primero, <em>sumamos</em> tu fecha.</h1>
           <div class="j-reveal">
@@ -1514,7 +1539,7 @@
         </section>
 
         <section class="j-step" data-jstep="occidental" aria-label="Zodíaco occidental">
-          <div class="j-tally"><i class="done"></i><i class="done"></i><i></i><i></i><p>2 de 4</p></div>
+          <div class="j-tally"><i class="done"></i><i class="done"></i><i></i><i></i><p id="j-tally-2">—</p></div>
           <p class="j-eyebrow">Zodíaco occidental</p>
           <h1>El día del año en que <em>naciste</em>.</h1>
           <div class="j-reveal">
@@ -1540,7 +1565,7 @@
         </section>
 
         <section class="j-step" data-jstep="chino" aria-label="Zodíaco chino">
-          <div class="j-tally"><i class="done"></i><i class="done"></i><i class="done"></i><i></i><p>3 de 4</p></div>
+          <div class="j-tally"><i class="done"></i><i class="done"></i><i class="done"></i><i></i><p id="j-tally-3">—</p></div>
           <p class="j-eyebrow">Zodíaco chino</p>
           <h1>El año, contado <em>a la manera lunisolar</em>.</h1>
           <div class="j-reveal">
@@ -1573,7 +1598,7 @@
         </section>
 
         <section class="j-step" data-jstep="tarot" aria-label="Arcanos de nacimiento">
-          <div class="j-tally"><i class="done"></i><i class="done"></i><i class="done"></i><i class="done"></i><p>4 de 4</p></div>
+          <div class="j-tally"><i class="done"></i><i class="done"></i><i class="done"></i><i class="done"></i><p id="j-tally-4">—</p></div>
           <p class="j-eyebrow">Arcanos de nacimiento</p>
           <!-- Decía "La misma suma": era cierto con la regla anterior. Arrien
                suma día, mes y año como números; numerología suma los dígitos
@@ -1619,6 +1644,13 @@
             <div class="j-converge-body">
               <h2 id="j-cv-theme">—</h2>
               <p class="j-sources" id="j-cv-sources">—</p>
+              <!-- Lo que NO convergió. El escéptico: "se cubren para acertar;
+                   dos temas amplían las posibilidades de que reconozca algo
+                   propio" y "necesitaría alternativas que la app descarte
+                   claramente". El dato ya existía —los temas con una sola
+                   tradición detrás— pero solo se veía como chips grises dentro
+                   del detalle, sin decir qué significaban. -->
+              <p class="j-discarded" id="j-cv-discarded" hidden>—</p>
               <p class="j-copy" id="j-cv-copy">—</p>
               <!-- Solo aparece si un segundo tema alcanza dos tradiciones por
                    su cuenta. Si no, no se muestra: rellenar con el siguiente
@@ -1706,6 +1738,10 @@
               <li><b>Aprende</b>: de dónde sale cada regla que acabas de ver.</li>
             </ul>
             <p class="j-note">Demo: no se cobra, no pedimos tarjeta y no se envían datos a Mercado Pago.</p>
+            <!-- Quien ya pagó choca justo acá. Enlace y no botón: el paso ya
+                 tiene su acción principal y competir con ella sería empujar a
+                 pagar de nuevo a quien no debe. -->
+            <p class="j-note"><button class="login-link" type="button" data-open-login>Ya tengo cuenta · entrar con mi correo o SMS</button></p>
           </div>
         </section>
 
@@ -1772,6 +1808,7 @@
         <label class="field field-name"><span>Tu nombre</span><input id="name" autocomplete="name" maxlength="40" required></label>
         <label class="field field-birth"><span>Fecha de nacimiento</span><input id="birth" type="date" min="1900-01-01" required></label>
         <button class="recalculate" id="profile-submit" type="submit">Ver mi Soy</button>
+        <p class="profile-login"><button class="login-link" type="button" data-open-login>Ya tengo cuenta</button></p>
         <p class="privacy-note"><strong>No pedimos hora ni lugar.</strong> Calculamos solo lo que puede obtenerse honestamente desde tu fecha. El ascendente y las casas requieren datos exactos adicionales.</p>
       </form>
     </section>
@@ -2262,6 +2299,48 @@
       <p class="checkout-disclaimer">No hubo un cobro real.</p>
     </div>
   </dialog>
+
+  <!-- Ingreso de una cuenta existente. Reutiliza la anatomía del diálogo de
+       pago —dos paneles, mismo botón, mismo descargo— porque es la misma
+       promesa: algo que en producción tendría backend y acá está simulado, y
+       se dice en pantalla en vez de fingirlo. El código se muestra en vez de
+       "enviarse": inventar un envío que no ocurre es la única parte de esto
+       que sería mentira. -->
+  <dialog class="checkout-dialog" id="login-dialog" aria-label="Ingreso simulado a una cuenta existente">
+    <div class="checkout-panel" id="login-identify">
+      <div class="checkout-head">
+        <div><span class="micro-label">Ingreso simulado</span><h2>Ya tengo cuenta</h2><p>Te llega un código de un solo uso. No usamos contraseña.</p></div>
+        <button class="share-close" id="login-close" type="button">Cerrar</button>
+      </div>
+      <form id="login-form" class="login-form">
+        <label class="login-field">
+          <span class="micro-label">Correo o teléfono</span>
+          <input id="login-id" type="text" autocomplete="username" placeholder="ana@correo.cl  ·  +56 9 1234 5678" required>
+        </label>
+        <button class="primary checkout-submit" type="submit">Enviarme el código</button>
+      </form>
+      <p class="checkout-disclaimer">Esta es una demo: no se envía ningún correo ni SMS, no se crea ninguna cuenta y lo que escribas no sale de este navegador.</p>
+    </div>
+    <div class="checkout-panel" id="login-code" hidden>
+      <div class="checkout-head">
+        <div><span class="micro-label">Ingreso simulado</span><h2>Escribe el código</h2><p id="login-sent-to">—</p></div>
+        <button class="share-close" id="login-back" type="button">Volver</button>
+      </div>
+      <div class="login-hint">
+        <span class="micro-label">En producción esto llegaría a tu bandeja. Acá te lo mostramos:</span>
+        <strong id="login-expected">—</strong>
+      </div>
+      <form id="login-code-form" class="login-form">
+        <label class="login-field">
+          <span class="micro-label">Código de 6 dígitos</span>
+          <input id="login-code-input" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]{6}" placeholder="······" required>
+        </label>
+        <p class="login-error" id="login-error" hidden>Ese no es el código. Es el que aparece arriba.</p>
+        <button class="primary checkout-submit" type="submit">Entrar a mi cuenta</button>
+      </form>
+      <p class="checkout-disclaimer">No hay cuentas reales: el código se genera en tu navegador y se valida ahí mismo.</p>
+    </div>
+  </dialog>
   <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 
   <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
@@ -2325,18 +2404,18 @@
       };
 
       const PEARSON_ARCHETYPES = {
-        idealist:{label:"Inocente",pearson:"Inocente",alias:"Idealista",thesis:"Confiar en que algo puede repararse y orientar la experiencia hacia una posibilidad mejor.",resource:"Esperanza con dirección",risk:"Negar complejidad o conflicto",question:"¿Qué esperanza puedes convertir en una acción verificable?",factors:{expansion:.55,intuition:.2,creativity:.2}},
-        realist:{label:"Huérfano",pearson:"Huérfano",alias:"Realista",thesis:"Reconocer límites, pertenecer y construir desde lo que efectivamente está disponible.",resource:"Pragmatismo y cooperación",risk:"Resignarse o esperar exclusión",question:"¿Qué apoyo real existe hoy, sin idealizarlo ni descartarlo?",factors:{link:.45,structure:.25,care:.25,mind:.15}},
-        hero:{label:"Héroe",pearson:"Guerrero / Héroe",thesis:"Responder a un desafío con decisión, disciplina y capacidad de avanzar.",resource:"Coraje aplicado",risk:"Convertir todo en prueba o combate",question:"¿Qué desafío merece tu esfuerzo y cuál no necesita una batalla?",factors:{action:1,structure:.45}},
-        caregiver:{label:"Cuidador",pearson:"Cuidador",thesis:"Sostener, proteger y hacer que el cuidado se vuelva una ayuda concreta.",resource:"Servicio que da soporte",risk:"Postergarte o generar dependencia",question:"¿Qué cuidado ayuda a crecer y cuál te está reemplazando?",factors:{care:1,link:.35}},
-        explorer:{label:"Explorador",pearson:"Buscador / Explorador",thesis:"Buscar autonomía, ampliar el horizonte y probar caminos con sentido propio.",resource:"Libertad con curiosidad",risk:"Escapar antes de profundizar",question:"¿Qué necesitas explorar y qué necesita que permanezcas?",factors:{freedom:1,expansion:.8}},
-        lover:{label:"Amante",pearson:"Amante",thesis:"Crear valor mediante vínculo, belleza, elección y presencia afectiva.",resource:"Compromiso y sensibilidad",risk:"Perder criterio por agradar",question:"¿Qué vínculo pide más presencia sin pedirte que desaparezcas?",factors:{link:1,care:.25,creativity:.25}},
-        rebel:{label:"Rebelde",pearson:"Destructor / Revolucionario",thesis:"Romper una forma agotada para recuperar libertad y permitir una transformación real.",resource:"Liberación y renovación",risk:"Destruir antes de comprender",question:"¿Qué debe terminar y qué solo necesita una reforma?",factors:{transformation:1,freedom:.55}},
-        creator:{label:"Creador",pearson:"Creador",thesis:"Dar una forma original y compartible a una idea, una visión o una sensibilidad.",resource:"Imaginación que toma forma",risk:"Perfeccionismo o dispersión",question:"¿Qué versión imperfecta ya merece existir?",factors:{creativity:1,mind:.25,structure:.15}},
-        ruler:{label:"Gobernante",pearson:"Gobernante",thesis:"Ordenar recursos, asumir responsabilidad y crear estructuras que puedan sostenerse.",resource:"Dirección y estabilidad",risk:"Rigidez o control excesivo",question:"¿Qué necesita una regla clara y qué necesita más autonomía?",factors:{structure:1,action:.45,link:.15}},
-        magician:{label:"Mago",pearson:"Mago",thesis:"Leer relaciones invisibles, integrar señales y convertir una transición en cambio consciente.",resource:"Transformación e integración",risk:"Confundir intuición con certeza",question:"¿Qué cambio puedes acompañar sin pretender controlarlo por completo?",factors:{intuition:.85,transformation:.65,creativity:.3,expansion:.25}},
+        idealist:{label:"Inocente",pearson:"Inocente",alias:"Idealista",thesis:"Confiar en que algo puede repararse y orientar la experiencia hacia una posibilidad mejor.",resource:"Esperanza con dirección",risk:"Pedir que nadie mencione lo que anda mal",question:"¿Qué esperanza puedes convertir en una acción verificable?",factors:{expansion:.55,intuition:.2,creativity:.2}},
+        realist:{label:"Huérfano",pearson:"Huérfano",alias:"Realista",thesis:"Reconocer límites, pertenecer y construir desde lo que efectivamente está disponible.",resource:"Pragmatismo y cooperación",risk:"Retirarte primero y llamarlo realismo",question:"¿Qué apoyo real existe hoy, sin idealizarlo ni descartarlo?",factors:{link:.45,structure:.25,care:.25,mind:.15}},
+        hero:{label:"Héroe",pearson:"Guerrero / Héroe",thesis:"Responder a un desafío con decisión, disciplina y capacidad de avanzar.",resource:"Coraje aplicado",risk:"Necesitar un rival para saber qué hacer",question:"¿Qué desafío merece tu esfuerzo y cuál no necesita una batalla?",factors:{action:1,structure:.45}},
+        caregiver:{label:"Cuidador",pearson:"Cuidador",thesis:"Sostener, proteger y hacer que el cuidado se vuelva una ayuda concreta.",resource:"Servicio que da soporte",risk:"Volverte necesario y llamarlo cuidado",question:"¿Qué cuidado ayuda a crecer y cuál te está reemplazando?",factors:{care:1,link:.35}},
+        explorer:{label:"Explorador",pearson:"Buscador / Explorador",thesis:"Buscar autonomía, ampliar el horizonte y probar caminos con sentido propio.",resource:"Libertad con curiosidad",risk:"Irte cuando la novedad se acaba y el otro se queda",question:"¿Qué necesitas explorar y qué necesita que permanezcas?",factors:{freedom:1,expansion:.8}},
+        lover:{label:"Amante",pearson:"Amante",thesis:"Crear valor mediante vínculo, belleza, elección y presencia afectiva.",resource:"Compromiso y sensibilidad",risk:"Decir que sí y cobrarlo después",question:"¿Qué vínculo pide más presencia sin pedirte que desaparezcas?",factors:{link:1,care:.25,creativity:.25}},
+        rebel:{label:"Rebelde",pearson:"Destructor / Revolucionario",thesis:"Romper una forma agotada para recuperar libertad y permitir una transformación real.",resource:"Liberación y renovación",risk:"Romper algo que funcionaba porque no lo elegiste tú",question:"¿Qué debe terminar y qué solo necesita una reforma?",factors:{transformation:1,freedom:.55}},
+        creator:{label:"Creador",pearson:"Creador",thesis:"Dar una forma original y compartible a una idea, una visión o una sensibilidad.",resource:"Imaginación que toma forma",risk:"Guardar lo que no está listo hasta que deja de importar",question:"¿Qué versión imperfecta ya merece existir?",factors:{creativity:1,mind:.25,structure:.15}},
+        ruler:{label:"Gobernante",pearson:"Gobernante",thesis:"Ordenar recursos, asumir responsabilidad y crear estructuras que puedan sostenerse.",resource:"Dirección y estabilidad",risk:"Confundir tu orden con el orden correcto",question:"¿Qué necesita una regla clara y qué necesita más autonomía?",factors:{structure:1,action:.45,link:.15}},
+        magician:{label:"Mago",pearson:"Mago",thesis:"Leer relaciones invisibles, integrar señales y convertir una transición en cambio consciente.",resource:"Transformación e integración",risk:"Presentar una corazonada como si fuera una lectura",question:"¿Qué cambio puedes acompañar sin pretender controlarlo por completo?",factors:{intuition:.85,transformation:.65,creativity:.3,expansion:.25}},
         sage:{label:"Sabio",pearson:"Sabio",thesis:"Buscar claridad mediante observación, conocimiento, contraste y perspectiva.",resource:"Discernimiento",risk:"Analizar para no actuar",question:"¿Qué dato podría corregir la historia que hoy te cuentas?",factors:{mind:1,intuition:.35,expansion:.35}},
-        jester:{label:"Bufón",pearson:"Bufón",thesis:"Recuperar juego, espontaneidad y perspectiva para que la vida no se vuelva una tarea cerrada.",resource:"Ligereza y presencia",risk:"Evitar profundidad mediante distracción",question:"¿Dónde una dosis de juego abriría una posibilidad nueva?",factors:{creativity:.55,freedom:.3,link:.2}}
+        jester:{label:"Bufón",pearson:"Bufón",thesis:"Recuperar juego, espontaneidad y perspectiva para que la vida no se vuelva una tarea cerrada.",resource:"Ligereza y presencia",risk:"Hacer un chiste justo cuando alguien iba a decir algo",question:"¿Dónde una dosis de juego abriría una posibilidad nueva?",factors:{creativity:.55,freedom:.3,link:.2}}
       };
 
       function normalizeSignalText(text) {
@@ -3511,6 +3590,64 @@
         if(typeof dialog.showModal==="function")dialog.showModal();
         else toast(`Simulación: pase de 30 días por USD 5 para ${currentProfile.name}. No se realizará ningún cobro.`);
       }
+      /* Ingreso de una cuenta existente. Concede el mismo acceso que el pago
+         porque una cuenta con pase vigente no vuelve a pagar; usa el mismo
+         interruptor, mockAccessGranted.
+
+         El fallback repite la regla del checkout: si el navegador no tiene
+         <dialog>.showModal, se avisa y NO se concede acceso. Un fallback que
+         abre la puerta vuelve decorativo todo el muro. */
+      let loginExpectedCode=null;
+      function openLoginDialog() {
+        loginExpectedCode=String(Math.floor(100000+Math.random()*900000));
+        $("#login-expected").textContent=loginExpectedCode;
+        $("#login-id").value="";
+        $("#login-code-input").value="";
+        $("#login-error").hidden=true;
+        $("#login-identify").hidden=false;
+        $("#login-code").hidden=true;
+        const dialog=$("#login-dialog");
+        if(typeof dialog.showModal==="function"){dialog.showModal();$("#login-id").focus();}
+        else toast("Simulación de ingreso: este navegador no puede abrir el diálogo. No se creó ninguna sesión.");
+      }
+      function wireLoginDialog() {
+        const dialog=$("#login-dialog");
+        $$("[data-open-login]").forEach(node=>node.addEventListener("click",event=>{event.preventDefault();openLoginDialog();}));
+        $("#login-close").addEventListener("click",()=>dialog.close());
+        $("#login-back").addEventListener("click",()=>{$("#login-identify").hidden=false;$("#login-code").hidden=true;});
+        $("#login-form").addEventListener("submit",event=>{
+          event.preventDefault();
+          const id=$("#login-id").value.trim();
+          if(!id)return;
+          /* Decimos a dónde iría, con el dato que la persona escribió: si dice
+             "te lo enviamos" sin decir a dónde, parece que algo salió. */
+          $("#login-sent-to").textContent=`Iría a ${id}. Como es una demo, no salió nada.`;
+          $("#login-identify").hidden=true;
+          $("#login-code").hidden=false;
+          $("#login-code-input").focus();
+        });
+        $("#login-code-form").addEventListener("submit",event=>{
+          event.preventDefault();
+          if($("#login-code-input").value.trim()!==loginExpectedCode){
+            $("#login-error").hidden=false;
+            $("#login-code-input").select();
+            return;
+          }
+          mockAccessGranted=true;
+          dialog.close();
+          /* Sin fecha válida todavía no hay perfil, y saltar a Estoy mostraría
+             una vista vacía. En ese caso el recorrido sigue: el acceso ya está
+             concedido, así que el muro del paso 11 deja pasar sin pagar. */
+          const enRecorrido=document.body.classList.contains("journey-mode");
+          const hayPerfil=isValidJourneyBirth(journeyBirth.value)||Boolean(currentProfile);
+          if(enRecorrido&&hayPerfil)exitJourney("estoy");
+          else if(!enRecorrido&&currentProfile)setView("estoy");
+          toast(hayPerfil
+            ? "Sesión simulada iniciada. Tu pase quedó activo en esta demo."
+            : "Sesión simulada iniciada. Falta tu fecha para armar la lectura.");
+        });
+      }
+
       function renderAll() {
         const birth=parseDate($("#birth").value), target=parseDate($("#target").value), name=$("#name").value.trim()||"Tu lectura";
         if(Number.isNaN(birth.getTime())||Number.isNaN(target.getTime())) return;
@@ -3560,6 +3697,7 @@
         const index=Number(removeButton.dataset.circleRemove),removed=circleMembers[index];
         if(!removed)return;circleMembers.splice(index,1);renderCircle();toast(`${removed.name} fue quitado del círculo.`);
       });
+      wireLoginDialog();
       mountWikiModules();
       updateWikiMatrixUI("western",wikiMatrixSelection.western);
       updateWikiMatrixUI("chinese",wikiMatrixSelection.chinese);
@@ -3690,7 +3828,35 @@
         body.append(strong,note);
       };
 
+      /* El contador decía "1 de 4", "2 de 4"... y el crítico ciego cerraba en
+         la quinta pantalla: "siento que sigo pulsando para completar una
+         lista". Cuatro pasos con la misma tarjeta se leen como repetición
+         aunque el contenido cambie. Mostrando lo que llevas junto, los cuatro
+         pasos pasan a ser una cosa que se arma y que la convergencia consume.
+
+         Reemplaza el texto en su línea en vez de agregar una tira nueva: el
+         paso de arcanos tiene 3px de holgura a 390×730 y no aguanta más alto. */
+      function paintJourneyTally(s){
+        const señales=[s.life.number,s.sun[0],s.chin.animal,s.tarot[0]];
+        /* Presupuesto en caracteres y no en píxeles medidos: el paso todavía
+           está oculto cuando esto corre, así que scrollWidth daría 0. Son 354px
+           de tira menos 89 de barras con su piso, sobre 6,8px por carácter en
+           mono 10px. Al pasarse suelta lo más viejo: el valor del paso actual
+           es el que no se puede perder. */
+        const TOPE=36;
+        for(let i=1;i<=4;i++){
+          let visibles=señales.slice(0,i);
+          let texto=visibles.join(" · ");
+          while(texto.length>TOPE&&visibles.length>1){
+            visibles=visibles.slice(1);
+            texto=`… · ${visibles.join(" · ")}`;
+          }
+          jSet(`j-tally-${i}`,texto);
+        }
+      }
+
       function paintJourneySoy(s){
+        paintJourneyTally(s);
         jSet("j-n-value",s.life.number);
         jSet("j-n-meaning",`Habla de ${s.profile.meaning}.`);
         jSet("j-n-calc",s.life.expression);
@@ -3781,11 +3947,16 @@
         $("#j-cv-title").innerHTML=!converged
           ? "Cuatro miradas, <em>cuatro temas</em>."
           : second ? "Cuatro miradas, <em>dos temas</em>." : "Cuatro miradas, <em>un tema</em>.";
+        /* Nombra las cuatro señales que venías acumulando en el contador de los
+           pasos anteriores. Sin esto, el acumulador se llena y no se gasta: la
+           convergencia aparece como un resultado nuevo en vez del destino de lo
+           que la persona fue juntando. */
+        const juntadas=`${s.life.number} · ${s.sun[0]} · ${s.chin.animal} · ${s.tarot[0]}.`;
         jSet("j-cv-intro",!converged
-          ? "Cada una apuntó a un tema distinto. No forzamos una conclusión común."
+          ? `${juntadas} Cada una apuntó a un tema distinto, así que no forzamos una conclusión común.`
           : second
-            ? "Dos temas se repitieron entre las cuatro. El primero con más apoyo."
-            : "Esto es lo que se repitió entre las cuatro.");
+            ? `${juntadas} Dos temas se repitieron entre las cuatro; el primero con más apoyo.`
+            : `${juntadas} Esto es lo que se repitió entre las cuatro.`);
         const secondBox=$("#j-cv-second");
         secondBox.hidden=!second;
         if(second){
@@ -3800,6 +3971,31 @@
         // circuito con exactamente los atributos que la persona acaba de ver.
         const main=s.factors.find(factor=>factor.sourceCount>=2);
         const supporting=new Set((main?.sources||[]).map(source=>source.key));
+
+        /* Los temas que una sola tradición levantó y ninguna otra respaldó.
+           Nombrarlos es lo que convierte la convergencia en una afirmación con
+           filo: si todo lo que aparece se presenta como señal, nada se
+           descarta y acertar deja de significar algo. */
+        /* Dos y no tres, nombres cortos y sin frase de cierre: con la versión
+           larga el paso desbordaba 41px. Lo que no se sacrifica es el dato
+           —qué tema y de qué tradición—, que es lo que lo hace verificable. */
+        const TRADICION={life:"numerología","western-sign":"occidental","western-element":"occidental","western-modality":"occidental","chinese-animal":"chino","chinese-element":"chino","chinese-polarity":"chino",tarot:"tarot"};
+        const sueltos=s.factors.filter(f=>f.sourceCount===1&&SOY_FACTORS[f.key]).slice(0,2);
+        const descartada=$("#j-cv-discarded");
+        descartada.hidden=!sueltos.length;
+        if(sueltos.length){
+          descartada.textContent="";
+          descartada.append(document.createTextNode("Sin respaldo cruzado: "));
+          sueltos.forEach((f,i)=>{
+            const fuerte=document.createElement("b");
+            fuerte.textContent=SOY_FACTORS[f.key].label.toLowerCase();
+            descartada.append(fuerte);
+            const origen=TRADICION[f.sources[0]?.key];
+            descartada.append(document.createTextNode(origen?` (${origen})`:""));
+            if(i<sueltos.length-1)descartada.append(document.createTextNode(", "));
+          });
+          descartada.append(document.createTextNode("."));
+        }
         const chips=$("#j-cv-chips");
         chips.textContent="";
         [["Numerología",["life"]],
@@ -3985,8 +4181,14 @@
          compartido con datos (que ya marcó `profile-ready`) y un `?directo=1`
          explícito. Sin datos, el modo completo es un formulario vacío: volver
          al recorrido es lo correcto, no una molestia. */
-      const skipJourney=new URLSearchParams(location.search).get("directo")==="1";
+      const params=new URLSearchParams(location.search);
+      const skipJourney=params.get("directo")==="1";
       if(!document.body.classList.contains("profile-ready")&&!skipJourney)startJourney();
+      /* `?entrar=1` viene del enlace del landing. Va después de startJourney
+         para que el diálogo quede encima del recorrido: quien entra con cuenta
+         no debería tener que atravesarlo, pero si cierra el diálogo tiene que
+         caer en algo, no en una pantalla vacía. */
+      if(params.get("entrar")==="1")openLoginDialog();
     })();
   </script>
 </body>

@@ -236,6 +236,8 @@
     .product:nth-child(2) { background: var(--paper-2); }
     .product:hover { background: #f8f6ef; }
     .product-art { aspect-ratio: 3 / 2; margin: -32px -32px 26px; overflow: hidden; border-bottom: 1px solid var(--line-dark); background: var(--ink); }
+    .product-link { display: inline-block; margin-top: 18px; color: var(--ink); font-family: var(--mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; text-decoration: none; border-bottom: 1px solid var(--brass); padding-bottom: 3px; }
+    .product-link:hover { color: var(--brass); }
     .product-art img { object-position: center 38%; transition: transform .5s cubic-bezier(.2, .65, .2, 1); }
     .product:hover .product-art img { transform: scale(1.025); }
     .product-sigil { color: var(--brass); margin-bottom: 26px; }
@@ -357,6 +359,10 @@
 
     @media (max-width: 520px) {
       .shell { padding-inline: 16px; }
+      /* Tres ilustraciones decorativas de 142px en la sección más larga del
+         landing. En móvil el hero ya trae su carta y estas solo alargan. */
+      .product-art { display: none; }
+      .product { padding-top: 26px; }
       .topbar-inner { min-height: 60px; }
       .nav .button { min-height: 44px; padding-inline: 12px; }
       .hero { padding-top: 44px; }
@@ -446,6 +452,11 @@
         <!-- El fragmento explícito salta el recorrido guiado y entra directo al
              modo completo; sin él, la app abre el recorrido. -->
         <a class="entry-direct reveal" style="--d:.28s" href="./soy-estoy.html?directo=1">Ya conozco el recorrido · abrir versión completa</a>
+        <!-- Reutiliza .entry-direct en vez de un sexto CTA: cinco llamadas ya
+             compiten y el crítico que solo vio el landing dijo que no sabía
+             cuál tocar. `?entrar=1` hace que la app abra el ingreso al cargar,
+             como `?directo=1` salta el recorrido. -->
+        <a class="entry-direct reveal" style="--d:.32s" href="./soy-estoy.html?entrar=1">Ya tengo cuenta · entrar con mi correo o SMS</a>
       </div>
 
       <div class="hero-visual reveal" style="--d:.2s">
@@ -540,7 +551,6 @@
           <p class="eyebrow reveal">Tres escalas, una experiencia</p>
           <div>
             <h2 class="reveal">Quién eres, cómo estás y qué ocurre entre ustedes.</h2>
-            <p class="reveal" style="--d:.1s"><strong>Soy</strong> organiza patrones de base. <strong>Estoy</strong> observa ciclos que cambian. <strong>Mi círculo</strong> explora cómo se encuentran varias personas sin reducir el vínculo a un puntaje.</p>
           </div>
         </div>
         <div class="split">
@@ -558,7 +568,7 @@
               <li>Cálculos y correspondencias visibles</li>
               <li>Lectura visual y compartible</li>
             </ul>
-            <a class="button primary cta" data-guided-link href="./soy-estoy.html">Crear mi lectura</a>
+            <a class="product-link" data-guided-link href="./soy-estoy.html">Crear mi lectura →</a>
           </article>
           <article class="product reveal" style="--d:.1s">
             <figure class="product-art">
@@ -578,7 +588,7 @@
               <li>La Luna modifica el cómo, no inventa otro destino</li>
               <li>Preguntas breves para volver con sentido</li>
             </ul>
-            <a class="button" href="./soy-estoy.html">Conocer Estoy (demo)</a>
+            <a class="product-link" href="./soy-estoy.html">Conocer Estoy →</a>
             <p class="product-note">USD 5 es el precio de referencia para 30 días. Esta demo no cobra.</p>
           </article>
           <article class="product reveal" id="mi-circulo" style="--d:.2s">
@@ -595,7 +605,7 @@
               <li>Dónde aparecen apoyo, diferencias y regulación</li>
               <li>Un foco común para conversar o planificar</li>
             </ul>
-            <a class="button" href="./soy-estoy.html">Probar con alguien</a>
+            <a class="product-link" href="./soy-estoy.html">Probar con alguien →</a>
             <p class="product-note">No decide si son compatibles. Organiza diferencias y puntos de encuentro para hacer mejores preguntas.</p>
           </article>
         </div>
@@ -697,10 +707,8 @@
         <div class="reveal" style="--d:.1s">
           <details><summary>¿Esto predice mi futuro?</summary><p>No. Soy/Estoy usa tradiciones simbólicas como mapas de reflexión. Orienta preguntas y observaciones; no dicta destinos ni reemplaza decisiones.</p></details>
           <details><summary>¿Por qué no calculan ascendente ni casas?</summary><p>Porque requieren una hora y un lugar de nacimiento exactos. Soy parte solo de tu fecha y omite esos resultados antes que inventar precisión.</p></details>
-          <details><summary>¿Por qué mi año chino no coincide con algunas tablas?</summary><p>Porque el año chino no empieza el 1 de enero: cambia con el Año Nuevo lunisolar, entre el 21 de enero y el 20 de febrero según el año. Si naciste cerca del cambio, tu animal puede ser el del año anterior. Soy usa la fecha exacta entre 2000 y 2044; fuera de ese rango, solo marca como aproximadas las fechas que caen dentro de esa ventana crítica.</p></details>
+          <details><summary>¿Por qué mi año chino no coincide con algunas tablas?</summary><p>Porque el año chino no empieza el 1 de enero: cambia con el Año Nuevo lunisolar, entre el 21 de enero y el 20 de febrero según el año. Si naciste cerca del cambio, tu animal puede ser el del año anterior. Soy usa la fecha exacta del cambio entre 1900 y 2044.</p></details>
           <details><summary>¿Qué pasa si las señales no coinciden?</summary><p>No forzamos una conclusión. La lectura muestra señales distintas y te permite revisar cada componente por separado.</p></details>
-          <details><summary>¿Mi círculo decide si un vínculo funciona?</summary><p>No. Mi círculo no entrega sentencias ni porcentajes de compatibilidad. Muestra qué trae cada persona, dónde se apoyan o difieren y qué conversación puede ser útil. La experiencia real de la relación siempre tiene prioridad.</p></details>
-          <details><summary>¿Por qué Soy es gratuito?</summary><p>Porque necesitas experimentar el valor antes de considerar una lectura recurrente. Estoy sólo tendrá sentido comercial si demuestra que ayuda a volver.</p></details>
         </div>
       </div>
     </section>
