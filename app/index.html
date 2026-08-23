@@ -2999,11 +2999,18 @@
              resultado que en la mayoría de las fechas no está en duda.
              El Año Nuevo lunisolar sólo importa si naciste cerca del borde;
              a siete meses de distancia el animal es inequívoco. */
-          rango:range
-            ? `El año ${delAnimal} corre ${range}. No va del 1 de enero al 31 de diciembre: abre con el Año Nuevo lunisolar y cierra en su víspera.`
-            : chin.approximate
-              ? `El año ${delAnimal} abre con el Año Nuevo lunisolar, que cae entre el 21 de enero y el 20 de febrero. Naciste dentro de esa ventana, así que las fechas exactas de ${chin.effective} sí cambian tu resultado: por eso arriba lo marcamos como aproximado.`
-              : `El año ${delAnimal} abre con el Año Nuevo lunisolar, que cae entre el 21 de enero y el 20 de febrero, y cierra en la víspera del siguiente. Tu fecha está lejos de ese borde, así que tu año es ${chin.effective} sin ambigüedad.`,
+          /* La regla primero, las fechas propias después. Antes abría con "No
+             va del 1 de enero al 31 de diciembre", que corrige al lector en
+             vez de explicarle, y además no decía por qué la fecha se mueve.
+             Es luna NUEVA, no menguante: el año lunisolar empieza con la luna
+             nueva que cae en esa ventana —equivale a la segunda luna nueva tras
+             el solsticio de invierno—, y por eso cambia cada año. */
+          rango:`El año lunisolar empieza con la luna nueva que cae entre el 21 de enero y el 20 de febrero, así que la fecha cambia cada año. `
+            +(range
+              ? `Para la tuya: el año ${delAnimal} corre ${range}.`
+              : chin.approximate
+                ? `Naciste justo dentro de esa ventana y no tenemos la luna nueva exacta de ${chin.effective}, así que tu animal podría ser el del año anterior.`
+                : `Tu fecha queda lejos de esa ventana, así que tu año es ${chin.effective} sin ambigüedad.`),
           /* La derivación se cuenta como rotación, no como aritmética modular.
              Antes decía "(año − 4) deja resto N al dividir por 12": eso explica
              la implementación, no la tradición. El "− 4" es un número mágico
