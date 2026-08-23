@@ -1170,6 +1170,16 @@
     .j-trait b { display: block; font-family: var(--serif); font-size: 19px; font-weight: 500; line-height: 1.2; letter-spacing: -.01em; }
     .j-trait i { display: block; color: var(--muted); font-style: normal; font-size: 13px; line-height: 1.42; }
 
+    /* Dos arcanos, de menor a mayor número, cada uno con su cuenta. No usan
+       .j-value: con dos cartas en el mismo paso, un tamaño de titular para cada
+       una desborda el alto útil, y darle titular a una sola inventa jerarquía
+       donde el método no la tiene. */
+    .j-arcana + .j-arcana { margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--line); }
+    .j-arcana-role { display: block; margin-bottom: 6px; color: var(--muted); font-family: var(--mono); font-size: 9px; letter-spacing: .08em; text-transform: uppercase; }
+    .j-reveal-body p.j-arcana-name { margin: 0 0 4px; color: var(--ink); font-family: var(--serif); font-size: clamp(28px, 6.6vw, 36px); font-weight: 420; line-height: 1.05; letter-spacing: -.02em; }
+    .j-reveal-body p.j-arcana-gloss { margin: 0; font-size: 14px; }
+    .j-arcana .j-calc { margin-top: 12px; }
+
     .j-calc { margin: 16px 0 0; padding: 12px 14px; border: 1px dashed var(--line-dark); background: var(--paper); color: var(--muted); font-family: var(--mono); font-size: 11px; line-height: 1.7; overflow-wrap: anywhere; }
     .j-calc b { display: block; margin-bottom: 4px; color: var(--ink); font-weight: 400; letter-spacing: .06em; text-transform: uppercase; font-size: 9px; }
     .j-disclosure { margin-top: 12px; border-top: 1px solid var(--line); }
@@ -1341,6 +1351,13 @@
       .j-traits { margin-top: 11px; }
       .j-trait { padding: 7px 0; }
       .j-trait b { font-size: 18px; }
+      /* Dos arcanos con su cuenta es el paso mas alto del recorrido: con tres
+         cartas desbordaba 84px. Se comprime el bloque, no se pliega la cuenta. */
+      .j-arcana + .j-arcana { margin-top: 9px; padding-top: 8px; }
+      .j-arcana-role { margin-bottom: 2px; }
+      .j-reveal-body p.j-arcana-name { font-size: clamp(24px, 6vw, 30px); line-height: 1; }
+      .j-reveal-body p.j-arcana-gloss { font-size: 12.5px; }
+      .j-arcana .j-calc { margin-top: 7px; padding: 7px 10px; line-height: 1.5; }
       .j-calc { margin-top: 9px; padding: 9px 11px; }
       .j-flag { margin-top: 9px; padding: 8px 10px; font-size: 12px; }
       .j-disclosure summary { min-height: 36px; }
@@ -1388,6 +1405,10 @@
       .j-trait { padding: 6px 0; }
       .j-trait b { font-size: 16px; }
       .j-trait i { font-size: 12px; }
+      .j-arcana + .j-arcana { margin-top: 9px; padding-top: 8px; }
+      .j-reveal-body p.j-arcana-name { font-size: clamp(21px, 5.4vw, 26px); }
+      .j-reveal-body p.j-arcana-gloss { font-size: 12px; }
+      .j-arcana .j-calc { margin-top: 6px; }
       .j-takeaway, .j-summary-item { padding: 8px 11px; }
       .j-takeaway b, .j-summary-item strong { font-size: 16px; }
       .j-converge-body { padding: 11px 14px 12px; }
@@ -1551,9 +1572,9 @@
           <p class="j-lead" id="j-c-lead">El año chino cambia con el <strong>Año Nuevo lunisolar</strong>, no el 1 de enero.</p>
         </section>
 
-        <section class="j-step" data-jstep="tarot" aria-label="Tarot de nacimiento">
+        <section class="j-step" data-jstep="tarot" aria-label="Arcanos de nacimiento">
           <div class="j-tally"><i class="done"></i><i class="done"></i><i class="done"></i><i class="done"></i><p>4 de 4</p></div>
-          <p class="j-eyebrow">Tarot de nacimiento</p>
+          <p class="j-eyebrow">Arcanos de nacimiento</p>
           <!-- Decía "La misma suma": era cierto con la regla anterior. Arrien
                suma día, mes y año como números; numerología suma los dígitos
                sueltos. Son dos cuentas distintas sobre la misma fecha. -->
@@ -1561,18 +1582,26 @@
           <div class="j-reveal">
             <!-- Decía "Arcano mayor": nombra el grupo de 22 como si fuera la
                  carta, y deja al lector sin saber si la del alma es otra cosa. -->
-            <div class="j-reveal-head"><span>Carta de personalidad</span><b>Regla</b></div>
+            <div class="j-reveal-head"><span id="j-t-head">Arcanos de nacimiento</span><b>Regla</b></div>
             <div class="j-reveal-body">
-              <p class="j-value" id="j-t-value">—</p>
-              <p id="j-t-meaning">—</p>
-              <!-- Segunda carta: sólo aparece cuando difiere de la primera. -->
-              <div class="j-traits" id="j-t-soul" hidden>
-                <div class="j-trait"><span>Carta del alma</span><p id="j-t-soul-body">—</p></div>
+              <!-- Las cartas van de menor a mayor número, cada una con su
+                   cuenta. El bloque del alma se oculta cuando la personalidad
+                   ya es de un dígito: no hay nada que reducir y es la misma
+                   carta. Pasa en el 37,7% de las fechas, no es un borde raro. -->
+              <div class="j-arcana" id="j-t-soul" hidden>
+                <span class="j-arcana-role" id="j-t-soul-role">—</span>
+                <p class="j-arcana-name" id="j-t-soul-name">—</p>
+                <p class="j-arcana-gloss" id="j-t-soul-gloss">—</p>
+                <div class="j-calc"><b>La cuenta</b><span id="j-t-soul-calc">—</span></div>
               </div>
-              <div class="j-calc"><b>La cuenta</b><span id="j-t-calc">—</span></div>
+              <div class="j-arcana">
+                <span class="j-arcana-role" id="j-t-pers-role">—</span>
+                <p class="j-arcana-name" id="j-t-pers-name">—</p>
+                <p class="j-arcana-gloss" id="j-t-pers-gloss">—</p>
+                <div class="j-calc"><b>La cuenta</b><span id="j-t-pers-calc">—</span></div>
+              </div>
               <details class="j-disclosure">
-                <summary>Ver la derivación y el método</summary>
-                <div class="j-calc"><b>Paso a paso</b><span id="j-t-derivacion">—</span></div>
+                <summary>Ver el método</summary>
                 <div class="j-calc"><b>El método</b><span id="j-t-metodo">—</span></div>
               </details>
             </div>
@@ -1808,9 +1837,9 @@
               <details><summary>Ver cuenta y criterio</summary><p class="calculation" id="life-calc">—</p><p>Método utilizado: sumamos los dígitos de la fecha completa y conservamos 11, 22 y 33. Goodwin reduce mes, día y año por separado y conserva 11 y 22; por eso no presentamos esta regla como universal.</p></details>
             </article>
             <article class="evidence">
-              <div class="evidence-top"><div><span class="micro-label">Tarot de nacimiento</span><h3 id="tarot-label">—</h3></div><span class="kind">Regla</span></div>
+              <div class="evidence-top"><div><span class="micro-label">Arcanos de nacimiento</span><h3 id="tarot-label">—</h3></div><span class="kind">Regla</span></div>
               <p class="meaning" id="tarot-meaning">—</p>
-              <details><summary>Ver cuenta y criterio</summary><p class="calculation" id="tarot-calc">—</p><p>Los arcanos mayores son las 22 cartas principales del tarot. De ahí salen tus dos: la de <strong>personalidad</strong>, que describe cómo te presentas y cómo aprendes, y la del <strong>alma</strong>, el fondo que se repite debajo. Las dos son arcanos mayores; cambia el papel, no el tipo de carta.</p><p>Es una correspondencia simbólica: no es una tirada ni una predicción. Método de Angeles Arrien, publicado por Mary K. Greer; otras escuelas reducen la fecha de otra forma y llegan a cartas distintas.</p></details>
+              <details><summary>Ver cuenta y criterio</summary><p class="calculation" id="tarot-calc">—</p><p id="tarot-metodo">—</p><p>Es una correspondencia simbólica: no es una tirada ni una predicción. Otras escuelas reducen la fecha de otra forma y llegan a cartas distintas.</p></details>
             </article>
           </div>
 
@@ -2403,22 +2432,43 @@
         const cuenta=`Se suman día, mes y año como números: ${dia} + ${mes} + ${anio} = ${s.tarotRaw}. `
           +`Después se suman sus dígitos: ${String(s.tarotRaw).split("").join("+")} = ${sumDigits(s.tarotRaw)}`
           +(s.tarotReduced?`, y como supera 22 se vuelven a sumar → ${s.tarotNumber}`:"")
-          +`. El ${s.tarotNumber} corresponde a ${s.tarot[0]}.`;
+          +`. El ${s.tarotNumber} es ${s.tarot[0]}.`;
         const alma=s.tarotSameCard
           ? `Tu carta es una sola: cuando el número ya es de un dígito, personalidad y alma coinciden.`
-          : `La carta del alma reduce ese número a un dígito: ${s.tarotChain.join(" → ")}. El ${s.tarotSoulNumber} corresponde a ${s.tarotSoul[0]}.`
+          : `La carta del alma reduce ese número a un dígito: ${s.tarotChain.join(" → ")}. El ${s.tarotSoulNumber} es ${s.tarotSoul[0]}.`
             +(s.tarotChain.length===3?` Tu fecha pasa por tres arcanos; la tradición los cuenta los tres.`:"");
-        /* La versión breve va a la vista y la derivación completa al detalle.
-           Con el método anterior la cuenta cabía en una línea; ésta ya no, y
-           entera desbordaba el paso. Lo que no se pliega es la cuenta misma. */
-        const breve=`${dia} + ${mes} + ${anio} = ${s.tarotRaw} → ${String(s.tarotRaw).split("").join("+")} = ${sumDigits(s.tarotRaw)}`
-          +(s.tarotReduced?` → ${s.tarotNumber}`:"")
-          +(s.tarotSameCard?"":` → ${s.tarotSoulNumber}`);
-        return { breve, cuenta, alma,
-          /* El lector no distingue "arcano mayor" (el grupo de 22) de "carta
-             del alma" (un rol dentro de ese grupo), porque la pantalla nombra
-             el grupo como si fuera una carta. Aquí se dice de una vez. */
-          metodo:`Los arcanos mayores son las 22 cartas principales del tarot. De ahí salen tus dos: la de personalidad, que describe cómo te presentas y cómo aprendes, y la del alma, el fondo que se repite debajo. Las dos son arcanos mayores; cambia el papel, no el tipo de carta. Método de Angeles Arrien, publicado por Mary K. Greer.` };
+
+        /* Una cuenta por carta, en vez de una derivación corrida: cada bloque
+           muestra de dónde sale SU número. La del alma parte del número de
+           personalidad, así que sólo tiene sentido leída después. */
+        const cuentaPersona=`${dia} + ${mes} + ${anio} = ${s.tarotRaw}`
+          +` → ${String(s.tarotRaw).split("").join("+")} = ${sumDigits(s.tarotRaw)}`
+          +(s.tarotReduced?` → ${s.tarotNumber} (pasaba de 22)`:"");
+        /* La cadena completa, no sólo el extremo: el 19 baja dos veces y esa
+           carta intermedia es un arcano que la tradición también cuenta. */
+        const cuentaAlma=s.tarotChain.map((n,i)=>
+          i===0?String(n):`${String(s.tarotChain[i-1]).split("").join("+")} = ${n}`).join(" → ");
+        /* La glosa del caso de tres arcanos vivía dentro de esta caja y le
+           agregaba 34px al paso más alto del recorrido. La caja lleva la
+           cuenta; la explicación va al método, que se pliega. */
+        const notaTres=s.tarotChain.length===3
+          ? ` Tu fecha baja dos veces y pasa por tres arcanos —el intermedio es ${ARCANA[s.tarotChain[1]][0]}—; la tradición los cuenta los tres.`
+          : "";
+
+        /* Con la personalidad ya de un dígito no hay nada que reducir y la
+           carta es una sola. Pasa en el 37,7% de las fechas: prometer dos
+           cartas ahí deja al lector buscando la que falta. */
+        const metodoBase=`Los arcanos mayores son las 22 cartas principales del tarot.`;
+        const metodoRoles=`La carta de personalidad describe cómo te presentas y cómo aprendes; la del alma, el fondo que se repite debajo.`;
+        const metodo=s.tarotSameCard
+          ? `${metodoBase} De ahí sale la tuya. ${metodoRoles} Cuando el número ya es de un dígito no queda nada que reducir, así que una sola carta cumple los dos papeles. Método de Angeles Arrien, publicado por Mary K. Greer.`
+          : `${metodoBase} De ahí salen las tuyas. ${metodoRoles} Las dos son arcanos mayores: cambia el papel, no el tipo de carta.${notaTres} Método de Angeles Arrien, publicado por Mary K. Greer.`;
+
+        return { cuenta, alma, cuentaPersona, cuentaAlma, metodo,
+          rolPersona:s.tarotSameCard
+            ? `Carta de personalidad y de alma · ${s.tarotNumber}`
+            : `Carta de personalidad · ${s.tarotNumber}`,
+          rolAlma:`Carta del alma · ${s.tarotSoulNumber}` };
       }
 
       function buildSoySnapshot(name,birth) {
@@ -2534,7 +2584,7 @@
         drawShareSignal(ctx,72,688,410,"Numerología",`Camino de vida ${snapshot.life.number}`,snapshot.profile.gift);
         drawShareSignal(ctx,580,688,428,"Zodíaco tropical",`${snapshot.sun[0]} · ${snapshot.sun[1]} · ${snapshot.sun[2]}`,snapshot.sun[5].slice(0,2).join(", "));
         drawShareSignal(ctx,72,898,410,"Zodíaco chino",`${snapshot.chin.animal} de ${snapshot.chin.element} · ${snapshot.chin.polarity}`,chineseAnimalTone(snapshot.chin.animal));
-        drawShareSignal(ctx,580,898,428,"Tarot de nacimiento",snapshot.tarotSameCard?`${snapshot.tarot[0]} · ${snapshot.tarotNumber}`:`${snapshot.tarot[0]} · ${snapshot.tarotSoul[0]}`,snapshot.tarot[1]);
+        drawShareSignal(ctx,580,898,428,snapshot.tarotSameCard?"Arcano de nacimiento":"Arcanos de nacimiento",snapshot.tarotSameCard?`${snapshot.tarot[0]} · ${snapshot.tarotNumber}`:`${snapshot.tarotSoul[0]} · ${snapshot.tarot[0]}`,snapshot.tarot[1]);
 
         ctx.strokeStyle="#9c988c";ctx.beginPath();ctx.moveTo(72,1110);ctx.lineTo(1008,1110);ctx.stroke();
         const qrSize=drawShareQr(ctx,shareUrl,72,1128,204),footerX=qrSize?72+qrSize+34:72;
@@ -3300,9 +3350,15 @@
           shiftNote.textContent="El año chino cambia con el Año Nuevo lunisolar —entre el 21 de enero y el 20 de febrero según el año—, no el 1 de enero.";
         }
         const tarotCrit=tarotCriterion(snapshot);
-        $("#tarot-label").textContent=snapshot.tarotSameCard?`${tarot[0]} · ${tarotNumber}`:`${tarot[0]} · ${snapshot.tarotSoul[0]}`;
-        $("#tarot-meaning").textContent=snapshot.tarotSameCard?tarot[1]:`Personalidad, ${tarot[0]}: ${tarot[1]}. Alma, ${snapshot.tarotSoul[0]}: ${snapshot.tarotSoul[1]}.`;
+        /* Ascendentes por número, igual que en el recorrido: el alma es siempre
+           la menor porque reducir nunca sube. */
+        $("#tarot-label").textContent=snapshot.tarotSameCard?`${tarot[0]} · ${tarotNumber}`:`${snapshot.tarotSoul[0]} · ${tarot[0]}`;
+        $("#tarot-meaning").textContent=snapshot.tarotSameCard?`Personalidad y alma en una sola carta: ${tarot[1]}.`:`Alma, ${snapshot.tarotSoul[0]} (${snapshot.tarotSoulNumber}): ${snapshot.tarotSoul[1]}. Personalidad, ${tarot[0]} (${tarotNumber}): ${tarot[1]}.`;
         $("#tarot-calc").textContent=`${tarotCrit.cuenta} ${tarotCrit.alma}`;
+        /* El método era estático y prometía dos cartas; con la personalidad ya
+           de un dígito la carta es una sola y el texto dejaba al lector
+           buscando la que faltaba. */
+        $("#tarot-metodo").textContent=tarotCrit.metodo;
         $("#gift-title").textContent=profile.gift; $("#gift-copy").textContent=profile.giftCopy; $("#shadow-title").textContent=profile.shadow; $("#shadow-copy").textContent=profile.shadowCopy; $("#soy-question").textContent=profile.question;
         return { life, profile, sun, chin, tarot };
       }
@@ -3665,18 +3721,30 @@
         // La glosa de cierre repite la advertencia; con ambas el paso desborda.
         $("#j-c-lead").hidden=s.chin.approximate;
 
-        jSet("j-t-value",s.tarot[0]);
-        jSet("j-t-meaning",`Habla de ${s.tarot[1]}.`);
+        /* Las dos cartas se listan de menor a mayor número. La del alma es
+           siempre la menor —reducir nunca sube—, así que va arriba; con una
+           sola carta su bloque desaparece y queda el de personalidad. */
         const tarotCrit=tarotCriterion(s);
         const almaBox=$("#j-t-soul");
         almaBox.hidden=s.tarotSameCard;
-        if(!s.tarotSameCard)jSetTrait("j-t-soul-body",s.tarotSoul[0],s.tarotSoul[1]);
+        if(!s.tarotSameCard){
+          jSet("j-t-soul-role",tarotCrit.rolAlma);
+          jSet("j-t-soul-name",s.tarotSoul[0]);
+          jSet("j-t-soul-gloss",`Habla de ${s.tarotSoul[1]}.`);
+          jSet("j-t-soul-calc",tarotCrit.cuentaAlma);
+        }
+        /* El epígrafe del paso ya dice "Arcanos de nacimiento"; la cabecera
+           repetía la misma frase. Como en los otros pasos, nombra lo que hay
+           dentro y en el orden en que aparece. */
+        jSet("j-t-head",s.tarotSameCard?"Una sola carta":"Alma y personalidad");
+        jSet("j-t-pers-role",tarotCrit.rolPersona);
+        jSet("j-t-pers-name",s.tarot[0]);
+        jSet("j-t-pers-gloss",`Habla de ${s.tarot[1]}.`);
+        /* La cuenta completa, no sólo el resultado: la suma cruda puede superar
+           22 y volver a reducirse. Decir "los dígitos suman N" con el N ya
+           reducido es afirmar una cuenta que no ocurrió. */
+        jSet("j-t-pers-calc",tarotCrit.cuentaPersona);
         jSet("j-t-metodo",tarotCrit.metodo);
-        /* La derivación completa, no sólo el resultado: la suma cruda puede
-           superar 22 y volver a reducirse. Decir "los dígitos suman N" con el
-           N ya reducido es afirmar una cuenta que no ocurrió. */
-        jSet("j-t-calc",tarotCrit.breve);
-        jSet("j-t-derivacion",`${tarotCrit.cuenta} ${tarotCrit.alma}`);
 
         jSet("j-cv-label",s.synthesis.label);
         jSet("j-cv-theme",s.synthesis.title);
