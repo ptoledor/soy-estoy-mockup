@@ -2451,8 +2451,19 @@
         /* La glosa del caso de tres arcanos vivía dentro de esta caja y le
            agregaba 34px al paso más alto del recorrido. La caja lleva la
            cuenta; la explicación va al método, que se pliega. */
+        /* El arcano del medio no tiene papel propio: las fuentes listan los tres
+           juntos sin nombrar al intermedio. Lo que sí tiene nombre es el
+           conjunto —Greer lo llama constelación, por la carta más baja—, y ese
+           es el dato que faltaba. No confundir con la carta oculta o del
+           maestro, que en Greer sale de otra cuenta. */
+        /* Los nombres traen su artículo ("El Mago"), así que concatenar da
+           "de El Mago". Contraer es lo único que hace falta: los 22 arcanos
+           empiezan con El, La o Los. */
+        const deArcano=n=>n.startsWith("El ")?`del ${n.slice(3)}`
+          :n.startsWith("Los ")?`de los ${n.slice(4)}`
+          :n.startsWith("La ")?`de la ${n.slice(3)}`:`de ${n}`;
         const notaTres=s.tarotChain.length===3
-          ? ` Tu fecha baja dos veces y pasa por tres arcanos —el intermedio es ${ARCANA[s.tarotChain[1]][0]}—; la tradición los cuenta los tres.`
+          ? ` Tu fecha baja dos veces, así que pasa por tres arcanos: ${ARCANA[s.tarotChain[0]][0]}, ${ARCANA[s.tarotChain[1]][0]} y ${ARCANA[s.tarotChain[2]][0]}. Se cuentan como un conjunto —Greer lo llama la constelación ${deArcano(ARCANA[s.tarotSoulNumber][0])}, por la carta más baja— y el del medio no lleva un papel aparte.`
           : "";
 
         /* Con la personalidad ya de un dígito no hay nada que reducir y la
