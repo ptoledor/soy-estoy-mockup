@@ -1536,7 +1536,11 @@
               <p class="j-flag" id="j-c-flag" hidden></p>
               <details class="j-disclosure">
                 <summary>Ver el criterio</summary>
-                <div class="j-calc"><b>El criterio</b><span id="j-c-calc">—</span></div>
+                <div class="j-calc"><b>Rango del año</b><span id="j-c-calc-rango">—</span></div>
+                <div class="j-calc"><b>Por qué ese año</b><span id="j-c-calc-nota">—</span></div>
+                <div class="j-calc"><b>Por qué ese animal</b><span id="j-c-calc-animal">—</span></div>
+                <div class="j-calc"><b>Por qué ese elemento</b><span id="j-c-calc-elemento">—</span></div>
+                <div class="j-calc"><b>Por qué esa polaridad</b><span id="j-c-calc-polaridad">—</span></div>
               </details>
             </div>
           </div>
@@ -2935,6 +2939,39 @@
         }
         return { effective, animal:ANIMALS[mod(effective-4,12)], element:ELEMENTS[Math.floor(mod(effective-4,10)/2)], polarity:effective%2===0?"Yang":"Yin", approximate, note, shifted:effective!==year, boundaryLabel };
       }
+      /* Criterio del año chino en tres partes: el rango de fechas que cubre
+         ese animal, y la derivación del elemento y de la polaridad. Vive acá
+         y no en cada superficie porque el recorrido y la app completa venían
+         mostrando versiones distintas del mismo cálculo.
+
+         El rango sólo puede darse exacto cuando la tabla lunisolar tiene los
+         dos bordes —el Año Nuevo que abre el año y el que lo cierra—, y la
+         tabla cubre 2000-2044. Fuera de eso se declara el límite en vez de
+         estimarlo: inventar un rango sería exactamente la precisión falsa que
+         el producto promete no aparentar. */
+      function chineseYearRange(effective) {
+        const open=CNY[effective],close=CNY[effective+1];
+        if(!open||!close)return null;
+        const day=([m,d],y)=>formatDate(parseDate(`${y}-${pad(m)}-${pad(d)}`),true);
+        // El año cierra la víspera del Año Nuevo siguiente, no el día mismo.
+        const previous=new Date(parseDate(`${effective+1}-${pad(close[0])}-${pad(close[1])}`).getTime()-DAY);
+        return `del ${day(open,effective)} al ${formatDate(previous,true)}`;
+      }
+      function chineseCriterion(chin) {
+        const range=chineseYearRange(chin.effective);
+        const animalIndex=mod(chin.effective-4,12);
+        const elementRest=mod(chin.effective-4,10);
+        const even=chin.effective%2===0;
+        return {
+          rango:range
+            ? `El año del ${chin.animal} corre ${range}. No va del 1 de enero al 31 de diciembre: abre con el Año Nuevo lunisolar y cierra en su víspera.`
+            : `La tabla lunisolar del producto cubre 2000-2044, así que no podemos darte las fechas exactas del año del ${chin.animal} en ${chin.effective}. El Año Nuevo lunisolar cae siempre entre el 21 de enero y el 20 de febrero.`,
+          animal:`Los doce animales rotan en orden y el ciclo se cuenta desde la Rata. ${chin.effective} − 4 = ${chin.effective-4}; al dividir por 12 deja resto ${animalIndex}, que es el animal ${animalIndex+1} de 12: ${chin.animal}.`,
+          elemento:`Cada elemento gobierna dos años seguidos, en un ciclo de diez. ${chin.effective} − 4 = ${chin.effective-4}; al dividir por 10 deja resto ${elementRest}, y ${elementRest} ÷ 2 cae en el elemento ${Math.floor(elementRest/2)+1} de 5: ${chin.element}.`,
+          polaridad:`La polaridad alterna año a año: los pares son Yang y los impares, Yin. ${chin.effective} es ${even?"par":"impar"} → ${chin.polarity}.`
+        };
+      }
+
       function chineseRelation(natal, current) {
         if (natal.animal === current.animal) return { label:"Año propio", key:"revisión", copy:"El mismo animal reaparece: la tradición lo lee como revisión de identidad, ritmo y decisiones." };
         if (OPPOSITES[natal.animal] === current.animal) return { label:"Oposición", key:"cambio", copy:"Los animales se oponen en el ciclo: úsalo como lente para observar tensiones de ritmo, no como pronóstico de conflicto." };
@@ -3127,7 +3164,11 @@
         $("#western-affinity-matrix").setAttribute("aria-label",`Afinidades de ${sun[0]}. ${sun[1]} está marcado en dorado: afinidad positiva con ${sun[1]} y ${westernRelations.complement}, neutra con ${westernRelations.adjust} y en tensión con ${westernRelations.tension}. No son aspectos calculados.`);
         $("#chinese-affinity-matrix").setAttribute("aria-label",`Matriz china para ${chin.animal} de ${chin.element}. ${chin.element} es tu elemento y está marcado en dorado. Las flechas muestran qué fases impulsa y regula.`);
         requestAnimationFrame(drawAffinityMatrices);
-        $("#chinese-calc").textContent=`Tu año chino efectivo es ${chin.effective}. Animal: el ciclo repite 12 animales y se cuenta desde Rata; (${chin.effective} − 4) deja resto ${mod(chin.effective-4,12)} al dividir por 12 → ${ANIMALS[mod(chin.effective-4,12)]}, el animal ${mod(chin.effective-4,12)+1} de 12. Elemento: cada elemento gobierna 2 años seguidos en un ciclo de 10; (${chin.effective} − 4) deja resto ${mod(chin.effective-4,10)} al dividir por 10 → ${ELEMENTS[Math.floor(mod(chin.effective-4,10)/2)]}. Polaridad: año ${chin.effective%2===0?"par":"impar"} → ${chin.polarity}.`; $("#chinese-note").textContent=chin.note; $("#chinese-kind").textContent=chin.approximate?"Aproximación":"Tradición";
+        // Mismo criterio que el recorrido: una sola función, para que las dos
+        // superficies no vuelvan a explicar distinto el mismo cálculo.
+        const chineseCrit=chineseCriterion(chin);
+        $("#chinese-calc").textContent=`${chineseCrit.rango} Tu año chino efectivo es ${chin.effective}. ${chineseCrit.animal} ${chineseCrit.elemento} ${chineseCrit.polaridad}`;
+        $("#chinese-note").textContent=chin.note; $("#chinese-kind").textContent=chin.approximate?"Aproximación":"Tradición";
         const shiftNote=$("#chinese-shift-note");
         if(chin.shifted){
           shiftNote.innerHTML=chin.boundaryLabel
@@ -3476,7 +3517,15 @@
         jSet("j-c-animal",`Habla de ${chineseAnimalTone(s.chin.animal)}.`);
         jSetTrait("j-c-element",s.chin.element,CHINESE_ELEMENT_TONE[s.chin.element]);
         jSetTrait("j-c-polarity",s.chin.polarity,POLARITY_TONE[s.chin.polarity]);
-        jSet("j-c-calc",`Tu año chino es ${s.chin.animal} de ${s.chin.element}, en polaridad ${s.chin.polarity}. Año lunisolar efectivo: ${s.chin.effective}. ${s.chin.note}`);
+        const criterio=chineseCriterion(s.chin);
+        jSet("j-c-calc-rango",criterio.rango);
+        // La nota explica cómo se resolvió el año efectivo, no el rango: junto
+        // al rango se leía como una contradicción ("corre del X al Y... el año
+        // se resuelve sin tabla").
+        jSet("j-c-calc-nota",`Tu año chino efectivo es ${s.chin.effective}. ${s.chin.note}`);
+        jSet("j-c-calc-animal",criterio.animal);
+        jSet("j-c-calc-elemento",criterio.elemento);
+        jSet("j-c-calc-polaridad",criterio.polaridad);
         jSet("j-c-kind",s.chin.approximate?"Tradición · aproximado":"Tradición");
         // Invariante 5: la advertencia que cambia la validez nunca se pliega.
         const flag=$("#j-c-flag");
