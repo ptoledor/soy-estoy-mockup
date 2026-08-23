@@ -211,6 +211,10 @@
     .sample-body { padding: 28px 28px 32px; }
     .sample-body h2 { margin: 12px 0 14px; font-family: var(--serif); font-size: clamp(31px, 4vw, 42px); font-weight: 440; line-height: 1; letter-spacing: -.02em; }
     .sample-body > p { margin: 0; color: var(--muted); font-size: 14px; }
+    /* Las dos que convergen se marcan; las otras dos siguen visibles porque
+       ocultarlas sería mostrar solo lo que confirma. */
+    .signal:not(.on) { opacity: .55; }
+    .signal.on .dot { background: var(--brass); }
     .signal-list { margin-top: 24px; border-top: 1px solid var(--line); }
     .signal { display: grid; grid-template-columns: 102px 1fr; gap: 14px; padding: 12px 0; border-bottom: 1px solid var(--line); font-size: 13px; }
     .signal span { color: var(--muted); font-family: var(--mono); font-size: 9px; letter-spacing: .08em; text-transform: uppercase; }
@@ -506,18 +510,27 @@
         </svg>
 
         <aside class="sample" aria-label="Ejemplo de una síntesis Soy">
-          <div class="sample-head"><span>Ejemplo de lectura</span><b>3 señales coinciden</b></div>
+          <div class="sample-head"><span>Ejemplo de lectura</span><b>2 de 4 tradiciones</b></div>
           <div class="sample-body">
-            <!-- Rotulado como ejemplo, no como afirmación. Antes decía "La
-                 señal que se repite" y se leía como una frase abstracta más:
-                 la gente pedía "ver un ejemplo real" teniendo uno delante. -->
+            <!-- Estos valores son la salida real del motor para el 5/3/1990:
+                 verificables abriendo la app con esa fecha. Antes el bloque
+                 estaba rotulado con la fecha pero su contenido era inventado
+                 —decía Camino de vida 1 y un signo de tierra cuando esa fecha
+                 da 9 y Piscis— y el tema tampoco era el que calcula. Un ejemplo
+                 con fecha es una afirmación comprobable, no una ilustración.
+
+                 Muestra las cuatro tradiciones, incluido el tarot, que no
+                 aparecía en ninguna parte del landing; y muestra que solo dos
+                 coinciden, que es justamente lo que el producto promete no
+                 forzar. -->
             <p class="eyebrow">Ejemplo · nacida el 5 de marzo de 1990</p>
-            <h2>Acción con criterio</h2>
-            <p>Esto es lo que devuelve una lectura: un tema que aparece en más de una tradición, y qué lo sostiene. La precisión pone la condición: abrir camino sin actuar a ciegas.</p>
+            <h2>Expansión y visión</h2>
+            <p>Esto es lo que devuelve una lectura: el tema que se repite entre tradiciones, y cuáles lo sostienen. Aquí coinciden dos de las cuatro; las otras dos aportan otra cosa y no se fuerzan.</p>
             <div class="signal-list">
-              <div class="signal"><span><i class="dot"></i>Numerología</span><div>Aporta iniciativa y autonomía.</div></div>
-              <div class="signal"><span><i class="dot"></i>Zodíaco</span><div>Pide precisión y servicio.</div></div>
-              <div class="signal"><span><i class="dot"></i>Elemento</span><div>Agrega adaptación sin perder dirección.</div></div>
+              <div class="signal on"><span><i class="dot"></i>Numerología</span><div>Camino de vida 9</div></div>
+              <div class="signal on"><span><i class="dot"></i>Tarot</span><div>El Ermitaño</div></div>
+              <div class="signal"><span><i class="dot"></i>Zodíaco occidental</span><div>Piscis · Agua · Mutable</div></div>
+              <div class="signal"><span><i class="dot"></i>Zodíaco chino</span><div>Caballo de Metal · Yang</div></div>
             </div>
           </div>
         </aside>

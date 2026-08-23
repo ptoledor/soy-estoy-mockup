@@ -2000,7 +2000,7 @@
         <section class="section rule" aria-labelledby="factor-ledger-title">
           <div class="section-head">
             <div><p class="section-kicker">02 · Resumen intermedio</p><h2 class="section-title" id="factor-ledger-title">Antes del arquetipo, aparecen estos atributos.</h2></div>
-            <p class="section-intro">La barra muestra cuántas de las ocho fuentes aportan a cada atributo. Los atributos con más fuentes aparecen primero; si empatan, la profundidad de sus coincidencias define el orden. Ábrela para ver el detalle.</p>
+            <p class="section-intro">La barra muestra en cuántas de las cuatro tradiciones aparece cada atributo. Los que aparecen en más tradiciones van primero; si empatan, la profundidad de sus coincidencias define el orden. Ábrela para ver el detalle.</p>
           </div>
           <div class="factor-ledger" id="factor-ledger"></div>
         </section>
@@ -2529,7 +2529,7 @@
            coincidencia que no ocurrio. */
         const ranked=factors.filter(factor=>factor.traditionCount>=2);
         const main=ranked[0],runnerUp=ranked[1];
-        if(!main)return {label:"Sin convergencia clara",title:"Señales distintas",sources:"Las cuatro fuentes apuntan a temas distintos.",copy:"Las cuatro tradiciones apuntan a temas diferentes. No forzamos una conclusión común: revisa cada componente por separado.",second:null};
+        if(!main)return {label:"Sin convergencia clara",title:"Señales distintas",sources:"Las cuatro tradiciones apuntan a temas distintos.",copy:"Las cuatro tradiciones apuntan a temas diferentes. No forzamos una conclusión común: revisa cada componente por separado.",second:null};
         const secondDefinition=runnerUp?SOY_FACTORS[runnerUp.key]:null;
         const second=runnerUp?{
           title:secondDefinition.label,
@@ -3419,8 +3419,8 @@
           $("#archetype-cards").innerHTML='<article class="archetype-card"><p>No hay suficientes coincidencias para proponer dos arquetipos.</p></article>';
         } else {
           $("#archetype-intro").textContent=top[0].sourceCount===top[1].sourceCount
-            ? `Ambos reúnen atributos respaldados por ${top[0].sourceCount} de ${snapshot.signals.length} fuentes; el orden se resuelve por su fuerza relativa.`
-            : `El primer patrón reúne atributos respaldados por ${top[0].sourceCount} de ${snapshot.signals.length} fuentes; el segundo, por ${top[1].sourceCount}. La fuerza relativa resuelve los empates.`;
+            ? `Ambos reúnen atributos respaldados por ${top[0].sourceCount} de ${snapshot.signals.length} señales; el orden se resuelve por su fuerza relativa.`
+            : `El primer patrón reúne atributos respaldados por ${top[0].sourceCount} de ${snapshot.signals.length} señales; el segundo, por ${top[1].sourceCount}. La fuerza relativa resuelve los empates.`;
           $("#archetype-cards").innerHTML=top.map((archetype,index)=>{
             const supports=[...new Map(archetype.evidence.flatMap(item=>item.sources.map(source=>{
               const matches=(source.matchedAttributes||[]).slice(0,2).join(", ");
@@ -3428,18 +3428,21 @@
             }))).values()];
             const evidence=supports.map(({source,factor,matches})=>`<li><button type="button" data-soy-source="${escapeHTML(source.key)}">${escapeHTML(contextualSoySourceLabel(source))}</button><span>${escapeHTML(SOY_FACTORS[factor].label)}${matches?` · ${escapeHTML(matches)}`:""}</span></li>`).join("");
             const alias=archetype.alias?`<p class="archetype-alias">También conocido como: ${escapeHTML(archetype.alias)}</p>`:"";
-            return `<article class="archetype-card"><div class="archetype-card-head"><div><span class="micro-label">Pearson · ${escapeHTML(archetype.pearson)}</span><h3>${escapeHTML(archetype.label)}</h3>${alias}</div><span class="archetype-rank">0${index+1}</span></div><p class="archetype-support">${archetype.strength}/100 relativo · ${archetype.sourceCount} de ${snapshot.signals.length} fuentes</p><p class="archetype-thesis">${escapeHTML(archetype.thesis)}</p><div class="archetype-pair"><div><span class="micro-label">Recurso</span><strong>${escapeHTML(archetype.resource)}</strong></div><div><span class="micro-label">Exceso posible</span><strong>${escapeHTML(archetype.risk)}</strong></div></div><details class="archetype-sources"><summary>Ver fuentes</summary><ul class="archetype-evidence" aria-label="Fuentes y atributos que sostienen ${escapeHTML(archetype.label)}">${evidence}</ul></details><p class="archetype-question"><strong>Para contrastar:</strong> ${escapeHTML(archetype.question)}</p></article>`;
+            return `<article class="archetype-card"><div class="archetype-card-head"><div><span class="micro-label">Pearson · ${escapeHTML(archetype.pearson)}</span><h3>${escapeHTML(archetype.label)}</h3>${alias}</div><span class="archetype-rank">0${index+1}</span></div><p class="archetype-support">${archetype.strength}/100 relativo · ${archetype.sourceCount} de ${snapshot.signals.length} señales</p><p class="archetype-thesis">${escapeHTML(archetype.thesis)}</p><div class="archetype-pair"><div><span class="micro-label">Recurso</span><strong>${escapeHTML(archetype.resource)}</strong></div><div><span class="micro-label">Exceso posible</span><strong>${escapeHTML(archetype.risk)}</strong></div></div><details class="archetype-sources"><summary>Ver señales</summary><ul class="archetype-evidence" aria-label="Fuentes y atributos que sostienen ${escapeHTML(archetype.label)}">${evidence}</ul></details><p class="archetype-question"><strong>Para contrastar:</strong> ${escapeHTML(archetype.question)}</p></article>`;
           }).join("");
         }
-        const visibleFactors=[...snapshot.factors].sort((a,b)=>b.sourceCount-a.sourceCount||b.score-a.score).slice(0,6);
+        /* Misma unidad que la convergencia: tradiciones. Estas filas ordenaban
+           y medían por "N de 8 fuentes" mientras la síntesis, dos bloques más
+           arriba, decía "N de 4 tradiciones". Dos varas para lo mismo. */
+        const visibleFactors=[...snapshot.factors].sort((a,b)=>b.traditionCount-a.traditionCount||b.score-a.score||b.sourceCount-a.sourceCount).slice(0,6);
         $("#factor-ledger").innerHTML=visibleFactors.map(factor=>{
-          const strength=Math.round(factor.sourceCount/snapshot.signals.length*100);
+          const strength=Math.round(factor.traditionCount/4*100);
           const sources=[...new Map(factor.sources.map(source=>[source.key,source])).values()];
           const sourceCards=sources.map(source=>{
             const matches=(source.matchedAttributes||[]).join(", ")||SOY_FACTORS[factor.key].label.toLowerCase();
             return `<div class="source-card"><strong>${escapeHTML(contextualSoySourceLabel(source))}</strong><small>Coincide en: ${escapeHTML(matches)}</small></div>`;
           }).join("");
-          return `<details class="factor-row"><summary class="factor-summary"><strong>${escapeHTML(SOY_FACTORS[factor.key].label)}</strong><div class="factor-track" aria-label="${factor.sourceCount} de ${snapshot.signals.length} fuentes"><i style="--factor-strength:${strength}%"></i></div><span class="factor-meta"><b>${factor.sourceCount} de ${snapshot.signals.length} fuentes</b><i>Ver fuentes</i></span></summary><div class="factor-sources">${sourceCards}</div></details>`;
+          return `<details class="factor-row"><summary class="factor-summary"><strong>${escapeHTML(SOY_FACTORS[factor.key].label)}</strong><div class="factor-track" aria-label="${factor.traditionCount} de 4 tradiciones"><i style="--factor-strength:${strength}%"></i></div><span class="factor-meta"><b>${factor.traditionCount} de 4 tradiciones</b><i>Ver señales</i></span></summary><div class="factor-sources">${sourceCards}</div></details>`;
         }).join("");
       }
 
