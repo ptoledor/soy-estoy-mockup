@@ -2497,27 +2497,33 @@
 
       function buildSoySignals(life,profile,sun,chin,tarotChain) {
         return [
-          {key:"life",label:`Camino de vida ${life.number}`,weight:3,detail:`${profile.meaning}; ${profile.gift}; ${profile.giftCopy}`},
-          {key:"western-sign",label:sun[0],weight:2.5/3,detail:`${sun[0]}; ${sun[5].join(", ")}`},
-          {key:"western-element",label:sun[1],weight:2.5/3,detail:ELEMENT_LANGUAGE[sun[1]]},
-          {key:"western-modality",label:sun[2],weight:2.5/3,detail:MODALITY_LANGUAGE[sun[2]]},
-          {key:"chinese-animal",label:chin.animal,weight:.5,detail:chineseAnimalTone(chin.animal)},
-          {key:"chinese-element",label:chin.element,weight:.5,detail:`${CHINESE_ELEMENT_TONE[chin.element]}; ${CHINESE_ELEMENT_IMPULSE_ATTRIBUTE[chin.element]}; ${CHINESE_ELEMENT_REGULATION_ATTRIBUTE[chin.element]}`},
-          {key:"chinese-polarity",label:chin.polarity,weight:.5,detail:POLARITY_TONE[chin.polarity]},
+          /* Las cuatro tradiciones pesan lo mismo: 1 cada una, repartido
+             entre sus señales. Antes eran numerología 3, occidental 2,5,
+             tarot 2,5 y chino 1,5 —la numerología pesaba el doble que el
+             chino— sin ninguna razón registrada y sin decirlo en pantalla,
+             mientras todo lo visible ("cuatro miradas", "4 de 4 tradiciones",
+             el acumulador) las presenta como pares. */
+          {key:"life",label:`Camino de vida ${life.number}`,weight:1,detail:`${profile.meaning}; ${profile.gift}; ${profile.giftCopy}`},
+          {key:"western-sign",label:sun[0],weight:1/3,detail:`${sun[0]}; ${sun[5].join(", ")}`},
+          {key:"western-element",label:sun[1],weight:1/3,detail:ELEMENT_LANGUAGE[sun[1]]},
+          {key:"western-modality",label:sun[2],weight:1/3,detail:MODALITY_LANGUAGE[sun[2]]},
+          {key:"chinese-animal",label:chin.animal,weight:1/3,detail:chineseAnimalTone(chin.animal)},
+          {key:"chinese-element",label:chin.element,weight:1/3,detail:`${CHINESE_ELEMENT_TONE[chin.element]}; ${CHINESE_ELEMENT_IMPULSE_ATTRIBUTE[chin.element]}; ${CHINESE_ELEMENT_REGULATION_ATTRIBUTE[chin.element]}`},
+          {key:"chinese-polarity",label:chin.polarity,weight:1/3,detail:POLARITY_TONE[chin.polarity]},
           /* Una señal por arcano, no una por tradición. El tarot aportaba
              solo la carta de personalidad y la del alma no contaba para nada,
              aunque el 62% de las fechas tiene dos o tres cartas y la tradición
              las cuenta todas.
 
-             El peso 2,5 se reparte entre ellas en vez de multiplicarse, igual
-             que el zodíaco occidental reparte su 2,5 entre signo, elemento y
-             modalidad. Si cada carta pesara 2,5 completo, quien tiene tres
+             El peso de la tradición se reparte entre ellas en vez de
+             multiplicarse, igual que el occidental reparte el suyo entre signo,
+             elemento y modalidad. Si cada carta pesara 2,5 completo, quien tiene tres
              arcanos tendría un tarot tres veces más fuerte que quien tiene uno,
              y las lecturas dejarían de ser comparables entre personas. */
           ...tarotChain.map((number,index)=>({
             key:index===0?"tarot":`tarot-${index}`,
             label:ARCANA[number][0],
-            weight:2.5/tarotChain.length,
+            weight:1/tarotChain.length,
             detail:ARCANA[number][1]
           }))
         ];
