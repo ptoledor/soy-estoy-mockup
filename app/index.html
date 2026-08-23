@@ -1683,7 +1683,7 @@
                 <p id="j-cv-second-copy">—</p>
               </div>
               <details class="j-disclosure">
-                <summary>Ver interpretación y las 8 señales</summary>
+                <summary>Ver interpretación y todas las señales</summary>
                 <p class="j-full-copy" id="j-cv-copy-full">—</p>
                 <div class="j-converge-grid" id="j-cv-chips"></div>
               </details>
@@ -2495,7 +2495,7 @@
         :key.startsWith("western-")?"occidental"
         :key.startsWith("chinese-")?"chino":"tarot";
 
-      function buildSoySignals(life,profile,sun,chin,tarot) {
+      function buildSoySignals(life,profile,sun,chin,tarotChain) {
         return [
           {key:"life",label:`Camino de vida ${life.number}`,weight:3,detail:`${profile.meaning}; ${profile.gift}; ${profile.giftCopy}`},
           {key:"western-sign",label:sun[0],weight:2.5/3,detail:`${sun[0]}; ${sun[5].join(", ")}`},
@@ -2504,7 +2504,22 @@
           {key:"chinese-animal",label:chin.animal,weight:.5,detail:chineseAnimalTone(chin.animal)},
           {key:"chinese-element",label:chin.element,weight:.5,detail:`${CHINESE_ELEMENT_TONE[chin.element]}; ${CHINESE_ELEMENT_IMPULSE_ATTRIBUTE[chin.element]}; ${CHINESE_ELEMENT_REGULATION_ATTRIBUTE[chin.element]}`},
           {key:"chinese-polarity",label:chin.polarity,weight:.5,detail:POLARITY_TONE[chin.polarity]},
-          {key:"tarot",label:tarot[0],weight:2.5,detail:tarot[1]}
+          /* Una señal por arcano, no una por tradición. El tarot aportaba
+             solo la carta de personalidad y la del alma no contaba para nada,
+             aunque el 62% de las fechas tiene dos o tres cartas y la tradición
+             las cuenta todas.
+
+             El peso 2,5 se reparte entre ellas en vez de multiplicarse, igual
+             que el zodíaco occidental reparte su 2,5 entre signo, elemento y
+             modalidad. Si cada carta pesara 2,5 completo, quien tiene tres
+             arcanos tendría un tarot tres veces más fuerte que quien tiene uno,
+             y las lecturas dejarían de ser comparables entre personas. */
+          ...tarotChain.map((number,index)=>({
+            key:index===0?"tarot":`tarot-${index}`,
+            label:ARCANA[number][0],
+            weight:2.5/tarotChain.length,
+            detail:ARCANA[number][1]
+          }))
         ];
       }
       function buildArchetypeAnalysis(factors) {
@@ -2542,7 +2557,8 @@
         const hasChinese=[...mainKeys].some(key=>key.startsWith("chinese-"));
         const modifiers=[];
         if(!hasWestern)modifiers.push(`La condición que la acompaña: hacerlo con ${sun[5][0]} y ${sun[5][1]}.`);
-        if(!mainKeys.has("tarot"))modifiers.push(`Como matiz aparece ${tarot[1]}.`);
+        const hasTarot=[...mainKeys].some(key=>TRADITION_OF(key)==="tarot");
+        if(!hasTarot)modifiers.push(`Como matiz aparece ${tarot[1]}.`);
         if(!mainKeys.has("life")&&modifiers.length<2)modifiers.push(`El recurso de fondo apunta a ${profile.gift.toLowerCase()}.`);
         if(!hasChinese&&modifiers.length<2)modifiers.push(`Se templa con ${CHINESE_ELEMENT_TONE[chin.element]}.`);
         return {
@@ -2636,7 +2652,7 @@
         while(tarotSoulNumber>9){tarotSoulNumber=sumDigits(tarotSoulNumber);tarotChain.push(tarotSoulNumber);}
         const tarotSoul=ARCANA[tarotSoulNumber];
         const tarotSameCard=tarotSoulNumber===tarotNumber;
-        const tarot=ARCANA[tarotNumber],signals=buildSoySignals(life,profile,sun,chin,tarot),factors=analyzeSoyConvergence(signals),archetypes=buildArchetypeAnalysis(factors),synthesis=buildSoySynthesis(life,profile,sun,chin,tarot,signals,factors);
+        const tarot=ARCANA[tarotNumber],signals=buildSoySignals(life,profile,sun,chin,tarotChain),factors=analyzeSoyConvergence(signals),archetypes=buildArchetypeAnalysis(factors),synthesis=buildSoySynthesis(life,profile,sun,chin,tarot,signals,factors);
         return {name,birth,life,profile,sun,chin,tarot,tarotNumber,tarotRaw,tarotReduced,tarotSoul,tarotSoulNumber,tarotChain,tarotSameCard,signals,factors,archetypes,synthesis};
       }
       function buildEstoySnapshot(name,birth,target) {
@@ -3407,7 +3423,7 @@
 
       function contextualSoySourceLabel(source) {
         if(source.key==="life")return `Numerología: ${source.label}`;
-        if(source.key==="tarot")return `Tarot de Nacimiento: ${source.label}`;
+        if(source.key.startsWith("tarot"))return `Arcanos de nacimiento: ${source.label}`;
         if(source.key.startsWith("western-"))return `Zodíaco Occidental: ${source.label}`;
         if(source.key.startsWith("chinese-"))return `Zodíaco Chino: ${source.label}`;
         return source.label;
@@ -4085,7 +4101,7 @@
           jSet("j-cv-second-copy",`Se repite en ${second.sources}. ${second.copy.charAt(0).toUpperCase()}${second.copy.slice(1)}.`);
         }
 
-        // Las 8 señales agrupadas en las 4 tradiciones ya recorridas: cierra el
+        // Las señales agrupadas en las 4 tradiciones ya recorridas: cierra el
         // circuito con exactamente los atributos que la persona acaba de ver.
         const main=s.factors.find(factor=>factor.traditionCount>=2);
         const supporting=new Set((main?.sources||[]).map(source=>source.key));
@@ -4118,7 +4134,7 @@
         [["Numerología",["life"]],
          ["Occidental",["western-sign","western-element","western-modality"]],
          ["Chino",["chinese-animal","chinese-element","chinese-polarity"]],
-         ["Tarot",["tarot"]]].forEach(([tradition,keys])=>{
+         ["Tarot",["tarot","tarot-1","tarot-2"]]].forEach(([tradition,keys])=>{
           const own=s.signals.filter(signal=>keys.includes(signal.key));
           if(!own.length)return;
           const row=document.createElement("div");row.className="j-converge-row";
