@@ -2483,6 +2483,35 @@
             traditionCount:new Set(bucket.sources.map(source=>TRADITION_OF(source.key))).size}))
           .sort((a,b)=>b.traditionCount-a.traditionCount||b.score-a.score||b.sourceCount-a.sourceCount);
       }
+      /* La frase decía "Se repite en Camino de vida 1, Mutable, Agua, Yang y
+         La Rueda": cinco elementos en fila, que se leen como cinco
+         confirmaciones. Pero Mutable viene con Virgo y Yang viene con Mono —el
+         ciclo sexagenario solo admite animal y polaridad de igual paridad—, así
+         que varias de esas entradas son facetas del mismo hecho.
+
+         El conteo nunca estuvo inflado: traditionCount ya agrupa. Lo que estaba
+         inflado era la frase. Agrupando, la unidad se ve. */
+      const NOMBRE_TRADICION={"numerología":"Numerología","occidental":"Solar","chino":"Lunisolar","tarot":"Arcanos"};
+      const ORDEN_TRADICION=["numerología","occidental","chino","tarot"];
+      function agruparPorTradicion(sources) {
+        const unicas=[...new Map(sources.map(source=>[source.key,source])).values()];
+        const grupos=new Map();
+        unicas.forEach(source=>{
+          const t=TRADITION_OF(source.key);
+          if(!grupos.has(t))grupos.set(t,[]);
+          grupos.get(t).push(source.label);
+        });
+        return ORDEN_TRADICION.filter(t=>grupos.has(t))
+          .map(t=>`${NOMBRE_TRADICION[t]}: ${grupos.get(t).join(", ")}`);
+      }
+      /* Solo los nombres de las tradiciones que se alinean. La agrupada llega a
+         113 caracteres y en el recorrido eso son tres líneas, en el paso que ya
+         va con menos holgura. Los componentes están en los chips del detalle. */
+      function tradicionesQueAlinean(sources) {
+        const grupos=new Set(sources.map(source=>TRADITION_OF(source.key)));
+        return joinSpanish(ORDEN_TRADICION.filter(t=>grupos.has(t)).map(t=>NOMBRE_TRADICION[t].toLowerCase()));
+      }
+
       function joinSpanish(items) {
         if(items.length<2)return items[0]||"";
         return `${items.slice(0,-1).join(", ")} y ${items[items.length-1]}`;
@@ -2550,12 +2579,12 @@
            coincidencia que no ocurrio. */
         const ranked=factors.filter(factor=>factor.traditionCount>=2);
         const main=ranked[0],runnerUp=ranked[1];
-        if(!main)return {label:"Sin convergencia clara",title:"Señales distintas",sources:"Las cuatro tradiciones apuntan a temas distintos.",copy:"Las cuatro tradiciones apuntan a temas diferentes. No forzamos una conclusión común: revisa cada componente por separado.",second:null};
+        if(!main)return {label:"Sin convergencia clara",title:"Señales distintas",sources:"Las cuatro tradiciones apuntan a temas distintos.",sourcesBreve:"Las cuatro tradiciones apuntan a temas distintos.",copy:"Las cuatro tradiciones apuntan a temas diferentes. No forzamos una conclusión común: revisa cada componente por separado.",second:null};
         const secondDefinition=runnerUp?SOY_FACTORS[runnerUp.key]:null;
         const second=runnerUp?{
           title:secondDefinition.label,
           count:runnerUp.traditionCount,
-          sources:joinSpanish([...new Map(runnerUp.sources.map(source=>[source.key,source])).values()].map(source=>source.label)),
+          sources:agruparPorTradicion(runnerUp.sources).join(" · "),
           copy:secondDefinition.practice
         }:null;
         const definition=SOY_FACTORS[main.key],mainKeys=new Set(main.sources.map(source=>source.key));
@@ -2570,7 +2599,8 @@
         return {
           label:`Convergencia · ${main.traditionCount} de 4 tradiciones`,
           title:definition.label,
-          sources:`Se repite en ${joinSpanish([...new Map(main.sources.map(source=>[source.key,source])).values()].map(source=>source.label))}.`,
+          sources:agruparPorTradicion(main.sources).join(" · "),
+          sourcesBreve:`Coincide en ${tradicionesQueAlinean(main.sources)}.`,
           copy:`${definition.analysis} En concreto: ${definition.practice}. ${modifiers.slice(0,1).join(" ")}`,
           second
         };
@@ -4058,7 +4088,7 @@
 
         jSet("j-cv-label",s.synthesis.label);
         jSet("j-cv-theme",s.synthesis.title);
-        jSet("j-cv-sources",s.synthesis.sources);
+        jSet("j-cv-sources",s.synthesis.sourcesBreve);
         /* La frase visible era sólo la primera del análisis, que es la
            favorable; el límite quedaba plegado. Todo lo que se leía sin abrir
            nada era halago, y eso es exactamente lo que hace que una lectura
