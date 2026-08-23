@@ -96,6 +96,10 @@
     .brand i { color: var(--brass); font-style: normal; }
     .brand-home { display: none; margin-left: 4px; padding-left: 12px; border-left: 1px solid var(--line-dark); color: var(--muted); font-size: 9px; letter-spacing: .08em; }
     body.profile-ready .brand-home { display: inline-block; }
+    /* Sin perfil no hay Soy que completar, y el botón quedaba visible y muerto:
+       se veía igual pero no abría nada. Un control que no puede funcionar no se
+       muestra; y si aun así se alcanza, el handler explica qué falta. */
+    body:not(.profile-ready) .profile-bar [data-open-carta] { display: none; }
     .brand:hover .brand-home, .brand:focus-visible .brand-home { color: var(--brass); }
     .prototype {
       color: var(--muted);
@@ -3649,8 +3653,19 @@
                  "Requiere hora y lugar de nacimiento exactos.",
                  "Se suma a tu Soy: no reemplaza nada de lo que ya viste."]}
       };
+      function pedirFechaPrimero(queCosa) {
+        toast(`Necesitamos tu fecha de nacimiento para ${queCosa}.`);
+        revealProfileForm();
+        return false;
+      }
+      function revealProfileForm() {
+        const campo=$("#birth");
+        if(!campo)return;
+        campo.scrollIntoView({block:"center",behavior:"smooth"});
+        campo.focus({preventScroll:true});
+      }
       function openCheckoutDialog(destination="estoy") {
-        if(!currentProfile)return;
+        if(!currentProfile)return pedirFechaPrimero(destination==="carta"?"calcular tu carta natal":"armar tu lectura");
         const esCarta=destination==="carta";
         ofertaEsCarta=esCarta;
         pendingPaidView=["estoy","circulo","aprende"].includes(destination)?destination:"estoy";
@@ -3815,9 +3830,12 @@
         if(moduleButton&&moduleButton.dataset.wikiOpen){openWikiModule(moduleButton.dataset.wikiOpen);return;}
         if(home)showWikiHub();
       });
-      $("#share-soy").addEventListener("click",async()=>{if(currentProfile)await openShareDialog({type:"soy",name:currentProfile.name,birth:currentProfile.birth});});
+      $("#share-soy").addEventListener("click",async()=>{
+        if(!currentProfile){pedirFechaPrimero("preparar tu tarjeta");return;}
+        await openShareDialog({type:"soy",name:currentProfile.name,birth:currentProfile.birth});
+      });
       $("#share-estoy").addEventListener("click",async()=>{
-        if(!currentProfile)return;
+        if(!currentProfile){pedirFechaPrimero("preparar tu tarjeta");return;}
         const target=parseDate($("#target").value);
         await openShareDialog({type:"estoy",name:currentProfile.name,birth:currentProfile.birth,target});
       });
@@ -4251,7 +4269,7 @@
          un borrador; nada se envía hasta que la persona lo confirme, igual que
          el resto de los flujos de WhatsApp del producto. */
       $("#j-save-link").addEventListener("click",()=>{
-        if(!currentProfile)return;
+        if(!currentProfile){pedirFechaPrimero("armar el enlace de tu lectura");return;}
         const url=fullReadingShareUrl(currentProfile.name,currentProfile.birth,parseDate($("#target").value),"estoy");
         openWhatsAppMessage(`Mi lectura en Soy/Estoy — para volver sin escribir la fecha de nuevo:\n${url}`);
         toast("Abrimos un borrador en WhatsApp con tu enlace. Tú decides si lo envías.");
