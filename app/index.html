@@ -1510,7 +1510,8 @@
               </div>
               <details class="j-disclosure">
                 <summary>Ver el criterio</summary>
-                <div class="j-calc"><b>El criterio</b><span id="j-w-calc">—</span></div>
+                <div class="j-calc"><b>Por qué ese signo</b><span id="j-w-calc">—</span></div>
+                <div class="j-calc"><b>Por qué ese elemento y esa modalidad</b><span id="j-w-calc-conjunto">—</span></div>
               </details>
             </div>
           </div>
@@ -3210,7 +3211,7 @@
         $("#sun-sign-traits").textContent=`${sun[0]}: ${sun[5].join(", ")}`;
         $("#sun-element-traits").textContent=`${sun[1]}: ${ELEMENT_LANGUAGE[sun[1]]}`;
         $("#sun-modality-traits").textContent=`${sun[2]}: ${MODALITY_LANGUAGE[sun[2]]}`;
-        $("#sun-calc").textContent=`${pad(birth.getUTCDate())}/${pad(birth.getUTCMonth()+1)} cae entre ${pad(sun[3][1])}/${pad(sun[3][0])} y ${pad(sun[4][1])}/${pad(sun[4][0])}.`;
+        $("#sun-calc").textContent=`${pad(birth.getUTCDate())}/${pad(birth.getUTCMonth()+1)} cae entre ${pad(sun[3][1])}/${pad(sun[3][0])} y ${pad(sun[4][1])}/${pad(sun[4][0])}. De tu fecha sale una sola cosa —el signo—: elemento y modalidad vienen con él, y todo ${sun[0]} es ${sun[1]} y ${sun[2]}. Los doce signos reparten cuatro elementos entre tres modalidades, y cada una de esas doce combinaciones le toca a un solo signo.`;
         $("#chinese-label").textContent=`${chin.animal} de ${chin.element} · ${chin.polarity}`;
         $("#chinese-animal-traits").textContent=`${chin.animal}: ${chineseAnimalTone(chin.animal)} (tema de su trino)`;
         $("#chinese-element-traits").textContent=`${chin.element}: Atributos principales: ${CHINESE_ELEMENT_TONE[chin.element]}, ${CHINESE_ELEMENT_IMPULSE_ATTRIBUTE[chin.element]} y ${CHINESE_ELEMENT_REGULATION_ATTRIBUTE[chin.element]}`;
@@ -3572,6 +3573,12 @@
         jSetTrait("j-w-element",s.sun[1],ELEMENT_LANGUAGE[s.sun[1]]);
         jSetTrait("j-w-modality",s.sun[2],MODALITY_LANGUAGE[s.sun[2]]);
         jSet("j-w-calc",`Zodíaco tropical por fecha: ${s.sun[0]} va del ${s.sun[3][1]}/${s.sun[3][0]} al ${s.sun[4][1]}/${s.sun[4][0]}.`);
+        /* De tu fecha sale UNA sola cosa —el signo—; elemento y modalidad
+           vienen con él. Presentarlos como tres filas sugería tres cálculos
+           distintos, y no lo son: todo Virgo es Tierra y Mutable, siempre.
+           Verificado contra la tabla: 4 elementos × 3 modalidades = 12
+           combinaciones, cada una en un solo signo. */
+        jSet("j-w-calc-conjunto",`No se calculan aparte: vienen con el signo, y todo ${s.sun[0]} es ${s.sun[1]} y ${s.sun[2]}. Los doce signos reparten cuatro elementos —Fuego, Tierra, Aire, Agua— entre tres modalidades —Cardinal, Fijo, Mutable—, y cada una de esas doce combinaciones le toca a un solo signo: ${s.sun[1]} con ${s.sun[2]} es ${s.sun[0]} y ningún otro.`);
 
         /* Sólo el animal en el titular. El compuesto "Dragón de Tierra" nombra
            animal y elemento, y la fila de abajo define el elemento: juntos se
