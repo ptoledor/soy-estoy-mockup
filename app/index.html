@@ -1554,9 +1554,14 @@
         <section class="j-step" data-jstep="tarot" aria-label="Tarot de nacimiento">
           <div class="j-tally"><i class="done"></i><i class="done"></i><i class="done"></i><i class="done"></i><p>4 de 4</p></div>
           <p class="j-eyebrow">Tarot de nacimiento</p>
-          <h1>La misma suma, leída como <em>arcano</em>.</h1>
+          <!-- Decía "La misma suma": era cierto con la regla anterior. Arrien
+               suma día, mes y año como números; numerología suma los dígitos
+               sueltos. Son dos cuentas distintas sobre la misma fecha. -->
+          <h1>La misma fecha, leída como <em>arcano</em>.</h1>
           <div class="j-reveal">
-            <div class="j-reveal-head"><span>Arcano mayor</span><b>Regla</b></div>
+            <!-- Decía "Arcano mayor": nombra el grupo de 22 como si fuera la
+                 carta, y deja al lector sin saber si la del alma es otra cosa. -->
+            <div class="j-reveal-head"><span>Carta de personalidad</span><b>Regla</b></div>
             <div class="j-reveal-body">
               <p class="j-value" id="j-t-value">—</p>
               <p id="j-t-meaning">—</p>
@@ -1805,7 +1810,7 @@
             <article class="evidence">
               <div class="evidence-top"><div><span class="micro-label">Tarot de nacimiento</span><h3 id="tarot-label">—</h3></div><span class="kind">Regla</span></div>
               <p class="meaning" id="tarot-meaning">—</p>
-              <details><summary>Ver cuenta y criterio</summary><p class="calculation" id="tarot-calc">—</p><p>Asocia la suma reducida con un arcano mayor. Es una correspondencia simbólica; no una tirada ni una predicción.</p><p>La suma más baja que produce una fecha es 4, y las mayores que 22 se reducen una sola vez, así que el resultado cae siempre entre 3 y 22: con esta regla <strong>El Mago y La Sacerdotisa no le tocan a nadie</strong>. Otras escuelas reducen distinto y sí los alcanzan.</p></details>
+              <details><summary>Ver cuenta y criterio</summary><p class="calculation" id="tarot-calc">—</p><p>Los arcanos mayores son las 22 cartas principales del tarot. De ahí salen tus dos: la de <strong>personalidad</strong>, que describe cómo te presentas y cómo aprendes, y la del <strong>alma</strong>, el fondo que se repite debajo. Las dos son arcanos mayores; cambia el papel, no el tipo de carta.</p><p>Es una correspondencia simbólica: no es una tirada ni una predicción. Método de Angeles Arrien, publicado por Mary K. Greer; otras escuelas reducen la fecha de otra forma y llegan a cartas distintas.</p></details>
             </article>
           </div>
 
@@ -2410,7 +2415,10 @@
           +(s.tarotReduced?` → ${s.tarotNumber}`:"")
           +(s.tarotSameCard?"":` → ${s.tarotSoulNumber}`);
         return { breve, cuenta, alma,
-          metodo:`Método de Angeles Arrien, publicado por Mary K. Greer. Se eligió porque sumar los dígitos sueltos de la fecha dejaba fuera a El Mago y La Sacerdotisa: no le tocaban a nadie. Con éste, entre la carta de personalidad y la del alma se alcanzan los 22 arcanos.` };
+          /* El lector no distingue "arcano mayor" (el grupo de 22) de "carta
+             del alma" (un rol dentro de ese grupo), porque la pantalla nombra
+             el grupo como si fuera una carta. Aquí se dice de una vez. */
+          metodo:`Los arcanos mayores son las 22 cartas principales del tarot. De ahí salen tus dos: la de personalidad, que describe cómo te presentas y cómo aprendes, y la del alma, el fondo que se repite debajo. Las dos son arcanos mayores; cambia el papel, no el tipo de carta. Método de Angeles Arrien, publicado por Mary K. Greer.` };
       }
 
       function buildSoySnapshot(name,birth) {
