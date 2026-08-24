@@ -3866,13 +3866,22 @@
         if(payload.type==="estoy")await shareEstoyImage(payload.name,payload.birth,payload.target);
         else await shareSoyImage(payload.name,payload.birth);
       }
-      async function openShareDialog(payload) {
+      /* `directoAImagen` salta el selector de formato. Lo usa la tarjeta del
+         panel: ahi la persona ya eligio -el boton dice "Tu tarjeta", y debajo
+         "una imagen con tu lectura"-, asi que preguntarle que quiere compartir
+         es devolverle la pregunta que acaba de contestar. Desde los botones de
+         la app completa el selector sigue teniendo sentido: ahi el punto de
+         partida es "compartir", no "ver mi tarjeta". */
+      async function openShareDialog(payload, directoAImagen=false) {
         pendingShare=payload;
         $("#share-dialog-context").textContent=payload.type==="estoy"
           ? `Estoy de ${payload.name} para ${formatDate(payload.target,true)}.`
           : `Soy de ${payload.name}.`;
         const dialog=$("#share-dialog");
-        if(typeof dialog.showModal==="function")dialog.showModal();
+        if(typeof dialog.showModal==="function"){
+          dialog.showModal();
+          if(directoAImagen){previewDirecto=true;mostrarPrevisualizacion(payload);}
+        }
         else {pendingShare=null;await executeShare(payload,"link");}
       }
       /* Dos ofertas en un mismo diálogo. La carta natal es un complemento del
@@ -4150,6 +4159,10 @@ const NATAL_API = (()=>{ try { return localStorage.getItem("natal-api"); } catch
          Enviar una imagen con tus datos a un tercero sin haberla visto es una
          decision que la persona nunca llego a tomar. */
       let previewPendiente=null;
+      /* Cuando se entro directo a la imagen no hubo selector de formato, asi
+         que "Volver" tiene que cerrar el dialogo y devolver al panel. Mostrar
+         el selector seria llevar a la persona a una pantalla que nunca vio. */
+      let previewDirecto=false;
       function mostrarPrevisualizacion(payload){
         const esEstoy=payload.type==="estoy";
         const snapshot=esEstoy
@@ -4180,7 +4193,10 @@ const NATAL_API = (()=>{ try { return localStorage.getItem("natal-api"); } catch
         $("#share-dialog").close();
         await executeShare(payload,mode);
       });
-      onId("share-preview-back","click",cerrarPrevisualizacion);
+      onId("share-preview-back","click",()=>{
+        if(previewDirecto)$("#share-dialog").close();
+        else cerrarPrevisualizacion();
+      });
       onId("share-preview-send","click",async()=>{
         const payload=previewPendiente; if(!payload)return;
         pendingShare=null; cerrarPrevisualizacion(); $("#share-dialog").close();
@@ -4204,7 +4220,7 @@ const NATAL_API = (()=>{ try { return localStorage.getItem("natal-api"); } catch
         pendingShare=null; cerrarPrevisualizacion(); $("#share-dialog").close();
         toast("Imagen descargada. No se envió a nadie.");
       });
-      $("#share-dialog").addEventListener("close",()=>{pendingShare=null;cerrarPrevisualizacion();});
+      $("#share-dialog").addEventListener("close",()=>{pendingShare=null;previewDirecto=false;cerrarPrevisualizacion();});
       $("#trial-button").addEventListener("click",()=>{
         openWhatsAppMessage("Hola, quiero conocer la prueba de 28 días de Soy / Estoy.");
         toast("Abrimos un mensaje borrador en WhatsApp. Tú decides si enviarlo.");
@@ -4216,7 +4232,13 @@ const NATAL_API = (()=>{ try { return localStorage.getItem("natal-api"); } catch
         $("#checkout-dialog").close();
         /* Volvia a Soy, donde no hay nada de carta natal: se pagaba y no
            aparecia nada. La seccion vive en Soy+, asi que ahi va. */
-        setView(ofertaEsCarta?"soyplus":pendingPaidView);
+        const destino=ofertaEsCarta?"soyplus":pendingPaidView;
+        /* El checkout ahora puede abrirse desde el panel del recorrido, y ahi
+           `setView` no muestra nada: journey-mode tapa `#content`. Este es el
+           momento correcto para salir -la persona ya compro y necesita la
+           seccion-, no el de abrir el checkout. */
+        if(document.body.classList.contains("journey-mode"))exitJourney(destino);
+        else setView(destino);
         if(ofertaEsCarta)setTimeout(()=>{
           const sec=$("#natal");
           if(sec)sec.scrollIntoView({block:"start",behavior:"smooth"});
@@ -4639,12 +4661,22 @@ const NATAL_API = (()=>{ try { return localStorage.getItem("natal-api"); } catch
          levantan el checkout por el camino normal. */
       $$("[data-panel]").forEach(card=>card.addEventListener("click",async()=>{
         const destino=card.dataset.panel;
+        /* Ni la tarjeta ni la carta natal necesitan la app completa: las dos
+           son un <dialog> modal, y se abren igual de bien sobre el panel. Salir
+           antes de abrirlo tenia dos costos. Uno, expulsaba a la persona al
+           mockup con pestañas -la superficie que el recorrido existe para
+           evitar- sin que hubiera pedido ir ahi. Dos, al cerrar el modal ya no
+           habia panel al que volver: quedaba varada ahi. Ahora el recorrido
+           solo se abandona cuando de verdad hace falta una vista de la app, y
+           eso pasa despues de pagar, no antes de preguntar. */
         if(destino==="tarjeta"){
-          exitJourney("soy");
-          if(currentProfile)await openShareDialog({type:"soy",name:currentProfile.name,birth:currentProfile.birth});
+          // Sin perfil no se puede dibujar la tarjeta; antes esto era un `if`
+          // que no hacia nada y dejaba el toque sin ningun efecto visible.
+          if(!currentProfile&&!commitJourneyBirth())return;
+          await openShareDialog({type:"soy",name:currentProfile.name,birth:currentProfile.birth},true);
           return;
         }
-        if(destino==="carta"){ exitJourney("soy"); openCheckoutDialog("carta"); return; }
+        if(destino==="carta"){ openCheckoutDialog("carta"); return; }
         /* Estoy NO sale a la vista cruda: arranca su propio tramo guiado. Salir
            aqui era volver a dejar a la persona frente al mockup completo de
            golpe. El circulo si sale, porque es una herramienta, no una lectura
