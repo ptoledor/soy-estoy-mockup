@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="var(--paper)">
+  <meta name="theme-color" content="#f2f2f0">
   <title>Soy / Estoy · Lectura simbólica personal (demo)</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -793,6 +793,11 @@
     .share-option:hover { border-color: var(--brass); }
     .share-option strong { display: block; margin-bottom: 8px; font-family: var(--serif); font-size: 21px; font-weight: 500; }
     .share-option span { display: block; color: var(--muted); font-size: 12px; line-height: 1.5; }
+    .share-preview-frame { margin: 18px 0; padding: 14px; border: 1px solid var(--line); background: var(--paper); text-align: center; }
+    .share-preview-frame img { max-width: 100%; max-height: 46vh; height: auto; display: block; margin: 0 auto; border: 1px solid var(--line-dark); }
+    .share-preview-actions { display: grid; gap: 10px; }
+    .share-option-plain { padding: 12px; border: 1px solid var(--line-dark); background: none; font: inherit; color: var(--ink); cursor: pointer; }
+    .share-option-plain:hover { border-color: var(--brass); }
     .share-warning { margin: 16px 0 0; color: var(--red); font-family: var(--mono); font-size: 9px; letter-spacing: .04em; text-transform: uppercase; }
 
     .checkout-dialog { width: min(560px, calc(100vw - 32px)); padding: 0; border: 1px solid var(--ink); background: var(--paper-2); color: var(--ink); }
@@ -1281,7 +1286,7 @@
        fila, no se quitan filas: la de "1 de 4" es la que muestra lo que NO
        convergio, y es la que le da filo a la afirmacion. */
     .j-ledger { margin-top: 4px; background: var(--paper-2); }
-    .j-ledger .factor-summary { padding: 10px 14px; gap: 10px; }
+    .j-ledger .factor-summary { padding: 8px 14px; gap: 8px; }
     .j-ledger .factor-summary strong { font-size: 17px; }
     .j-ledger .factor-track { height: 4px; }
     .j-ledger .factor-meta { font-size: 9px; }
@@ -1741,7 +1746,7 @@
              informacion contada dos veces, una en prosa y otra en filas. -->
         <section class="j-step" data-track="soy" data-jstep="convergencia" aria-label="Tu convergencia">
           <p class="j-eyebrow">Esto es tu Soy</p>
-          <h1 id="j-cv-title">Cuatro miradas, <em>un tema</em>.</h1>
+          <h1>Convergencia de las <em>tradiciones</em>.</h1>
           <p class="j-lead" id="j-cv-intro">—</p>
           <div class="factor-ledger j-ledger" id="j-cv-ledger"></div>
         </section>
@@ -2401,6 +2406,20 @@
       </div>
       <p class="share-warning">El enlace completo incluye datos personales; compártelo solo con quien elijas.</p>
     </form>
+    <!-- Previsualizacion. Antes "compartir imagen" generaba la tarjeta y abria
+         WhatsApp de una: la persona enviaba a otros una imagen con sus datos
+         sin haberla visto nunca. Ahora la ve primero y decide. -->
+    <div class="share-panel share-preview" id="share-preview" hidden>
+      <div class="share-dialog-head">
+        <div><span class="micro-label">Así se verá</span><h2>Tu tarjeta</h2><p id="share-preview-note">Nadie la recibe hasta que tú lo decidas.</p></div>
+        <button class="share-close" id="share-preview-back" type="button">Volver</button>
+      </div>
+      <div class="share-preview-frame"><img id="share-preview-img" alt="Vista previa de la tarjeta que vas a compartir"></div>
+      <div class="share-preview-actions">
+        <button class="primary" id="share-preview-send" type="button">Enviar por WhatsApp</button>
+        <button class="share-option-plain" id="share-preview-download" type="button">Solo descargar</button>
+      </div>
+    </div>
   </dialog>
   <dialog class="checkout-dialog" id="checkout-dialog" aria-label="Simulación de pago de Estoy">
     <div class="checkout-panel" id="checkout-offer">
@@ -2492,6 +2511,23 @@
       const DAY = 86400000;
       const $ = selector => document.querySelector(selector);
       const $$ = selector => [...document.querySelectorAll(selector)];
+      /* Enganchar sin morir. Un `$("#loquesea").addEventListener` sobre un
+         elemento que ya no existe lanza TypeError y aborta el resto del IIFE
+         -incluida la linea que arranca el recorrido-, dejando la pagina en el
+         formulario crudo sin ningun sintoma visible.
+
+         Vive aqui arriba, con $ y $$, y no a mitad del archivo: siendo `const`
+         esta en zona muerta hasta su definicion, asi que usarlo antes lanza
+         ReferenceError y produce EXACTAMENTE el fallo que viene a evitar. Ya
+         paso: se llamo tres veces desde el dialogo de compartir, 130 lineas
+         antes de esta definicion. */
+      const onId=(id,evento,fn)=>{const node=document.getElementById(id);if(node)node.addEventListener(evento,fn);};
+      /* Canvas no entiende var(): fillStyle="var(--ink)" no lanza, se ignora
+         en silencio y deja el estilo anterior o negro. Al tokenizar la paleta
+         se reemplazaron tambien los colores dentro de estas cadenas y las
+         tarjetas para compartir salieron completamente negras. */
+      const cssVar=(()=>{const raiz=getComputedStyle(document.documentElement),cache={};
+        return nombre=>cache[nombre]??(cache[nombre]=raiz.getPropertyValue(nombre).trim()||"#000");})();
       if (/\/app\/(?:index\.html)?$/.test(location.pathname)) $("#landing-link").href = "../";
       const pad = value => String(value).padStart(2, "0");
       const mod = (value, divisor) => ((value % divisor) + divisor) % divisor;
@@ -2867,13 +2903,13 @@
         return y+lines.length*lineHeight;
       }
       function drawShareSignal(ctx,x,y,width,label,value,detail) {
-        ctx.fillStyle="var(--brass)";
+        ctx.fillStyle=cssVar("--brass");
         ctx.font='500 20px "Cascadia Code", Consolas, monospace';
         ctx.fillText(label.toUpperCase(),x,y);
-        ctx.fillStyle="var(--ink)";
+        ctx.fillStyle=cssVar("--ink");
         fitCanvasFont(ctx,value,width,36,28,'"Iowan Old Style", Georgia, serif');
         ctx.fillText(ellipsizeCanvasText(ctx,value,width),x,y+52);
-        ctx.fillStyle="var(--muted)";
+        ctx.fillStyle=cssVar("--muted");
         ctx.font='400 22px Inter, "Segoe UI", sans-serif';
         drawCanvasParagraph(ctx,detail,x,y+92,width,29,2);
       }
@@ -2882,8 +2918,8 @@
         try {
           const code=window.qrcode(0,"M");code.addData(text);code.make();
           const modules=code.getModuleCount(),quiet=4,cell=Math.max(2,Math.floor(maxSize/(modules+quiet*2))),size=cell*(modules+quiet*2);
-          ctx.fillStyle="var(--paper-2)";ctx.fillRect(x,y,size,size);
-          ctx.fillStyle="var(--ink)";
+          ctx.fillStyle=cssVar("--paper-2");ctx.fillRect(x,y,size,size);
+          ctx.fillStyle=cssVar("--ink");
           for(let row=0;row<modules;row++)for(let column=0;column<modules;column++){
             if(code.isDark(row,column))ctx.fillRect(x+(column+quiet)*cell,y+(row+quiet)*cell,cell,cell);
           }
@@ -2893,32 +2929,32 @@
       function buildSoyShareCanvas(snapshot,shareUrl) {
         const canvas=document.createElement("canvas");canvas.width=1080;canvas.height=1350;
         const ctx=canvas.getContext("2d");
-        ctx.fillStyle="var(--paper)";ctx.fillRect(0,0,canvas.width,canvas.height);
+        ctx.fillStyle=cssVar("--paper");ctx.fillRect(0,0,canvas.width,canvas.height);
         ctx.textBaseline="alphabetic";
 
-        ctx.fillStyle="var(--ink)";ctx.font='500 25px "Cascadia Code", Consolas, monospace';ctx.fillText("SOY",72,92);
-        ctx.fillStyle="var(--brass)";ctx.fillText("/",142,92);
-        ctx.fillStyle="var(--ink)";ctx.fillText("ESTOY",172,92);
-        ctx.textAlign="right";ctx.fillStyle="var(--muted)";ctx.font='500 17px "Cascadia Code", Consolas, monospace';ctx.fillText("LECTURA SIMBÓLICA",1008,92);ctx.textAlign="left";
-        ctx.strokeStyle="var(--line-dark)";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(72,126);ctx.lineTo(1008,126);ctx.stroke();
+        ctx.fillStyle=cssVar("--ink");ctx.font='500 25px "Cascadia Code", Consolas, monospace';ctx.fillText("SOY",72,92);
+        ctx.fillStyle=cssVar("--brass");ctx.fillText("/",142,92);
+        ctx.fillStyle=cssVar("--ink");ctx.fillText("ESTOY",172,92);
+        ctx.textAlign="right";ctx.fillStyle=cssVar("--muted");ctx.font='500 17px "Cascadia Code", Consolas, monospace';ctx.fillText("LECTURA SIMBÓLICA",1008,92);ctx.textAlign="left";
+        ctx.strokeStyle=cssVar("--line-dark");ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(72,126);ctx.lineTo(1008,126);ctx.stroke();
 
-        ctx.fillStyle="var(--muted)";ctx.font='500 18px "Cascadia Code", Consolas, monospace';ctx.fillText("TU FECHA EN DISTINTAS TRADICIONES",72,174);
-        ctx.fillStyle="var(--ink)";fitCanvasFont(ctx,snapshot.name,936,64,38,'"Iowan Old Style", Georgia, serif');ctx.fillText(ellipsizeCanvasText(ctx,snapshot.name,936),72,242);
-        ctx.fillStyle="var(--brass)";ctx.font='500 18px "Cascadia Code", Consolas, monospace';ctx.fillText(snapshot.synthesis.label.toUpperCase(),72,326);
-        ctx.fillStyle="var(--ink)";ctx.font='500 46px "Iowan Old Style", Georgia, serif';ctx.fillText(snapshot.synthesis.title,72,386);
-        ctx.fillStyle="var(--ink-soft)";ctx.font='400 28px Inter, "Segoe UI", sans-serif';drawCanvasParagraph(ctx,snapshot.synthesis.copy,72,438,936,38,4);
+        ctx.fillStyle=cssVar("--muted");ctx.font='500 18px "Cascadia Code", Consolas, monospace';ctx.fillText("TU FECHA EN DISTINTAS TRADICIONES",72,174);
+        ctx.fillStyle=cssVar("--ink");fitCanvasFont(ctx,snapshot.name,936,64,38,'"Iowan Old Style", Georgia, serif');ctx.fillText(ellipsizeCanvasText(ctx,snapshot.name,936),72,242);
+        ctx.fillStyle=cssVar("--brass");ctx.font='500 18px "Cascadia Code", Consolas, monospace';ctx.fillText(snapshot.synthesis.label.toUpperCase(),72,326);
+        ctx.fillStyle=cssVar("--ink");ctx.font='500 46px "Iowan Old Style", Georgia, serif';ctx.fillText(snapshot.synthesis.title,72,386);
+        ctx.fillStyle=cssVar("--ink-soft");ctx.font='400 28px Inter, "Segoe UI", sans-serif';drawCanvasParagraph(ctx,snapshot.synthesis.copy,72,438,936,38,4);
 
-        ctx.strokeStyle="var(--line-dark)";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(72,640);ctx.lineTo(1008,640);ctx.moveTo(540,640);ctx.lineTo(540,1060);ctx.moveTo(72,850);ctx.lineTo(1008,850);ctx.moveTo(72,1060);ctx.lineTo(1008,1060);ctx.stroke();
+        ctx.strokeStyle=cssVar("--line-dark");ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(72,640);ctx.lineTo(1008,640);ctx.moveTo(540,640);ctx.lineTo(540,1060);ctx.moveTo(72,850);ctx.lineTo(1008,850);ctx.moveTo(72,1060);ctx.lineTo(1008,1060);ctx.stroke();
         drawShareSignal(ctx,72,688,410,"Numerología",`Camino de vida ${snapshot.life.number}`,snapshot.profile.gift);
         drawShareSignal(ctx,580,688,428,"Zodíaco tropical",`${snapshot.sun[0]} · ${snapshot.sun[1]} · ${snapshot.sun[2]}`,snapshot.sun[5].slice(0,2).join(", "));
         drawShareSignal(ctx,72,898,410,"Zodíaco chino",`${snapshot.chin.animal} de ${snapshot.chin.element} · ${snapshot.chin.polarity}`,chineseAnimalTone(snapshot.chin.animal));
         drawShareSignal(ctx,580,898,428,snapshot.tarotSameCard?"Arcano de nacimiento":"Arcanos de nacimiento",snapshot.tarotSameCard?`${snapshot.tarot[0]} · ${snapshot.tarotNumber}`:`${snapshot.tarotSoul[0]} · ${snapshot.tarot[0]}`,snapshot.tarot[1]);
 
-        ctx.strokeStyle="var(--line-dark)";ctx.beginPath();ctx.moveTo(72,1110);ctx.lineTo(1008,1110);ctx.stroke();
+        ctx.strokeStyle=cssVar("--line-dark");ctx.beginPath();ctx.moveTo(72,1110);ctx.lineTo(1008,1110);ctx.stroke();
         const qrSize=drawShareQr(ctx,shareUrl,72,1128,204),footerX=qrSize?72+qrSize+34:72;
-        ctx.fillStyle="var(--ink)";ctx.font='500 29px "Iowan Old Style", Georgia, serif';ctx.fillText("Crea tu propio Soy",footerX,1182);
-        ctx.fillStyle="var(--brass)";ctx.font='500 20px "Cascadia Code", Consolas, monospace';ctx.fillText(SHARE_DISPLAY_URL,footerX,1226);
-        ctx.fillStyle="var(--muted)";ctx.font='400 18px Inter, "Segoe UI", sans-serif';drawCanvasParagraph(ctx,"Lectura simbólica: no define tu personalidad ni predice tu futuro.",footerX,1270,1008-footerX,27,2);
+        ctx.fillStyle=cssVar("--ink");ctx.font='500 29px "Iowan Old Style", Georgia, serif';ctx.fillText("Crea tu propio Soy",footerX,1182);
+        ctx.fillStyle=cssVar("--brass");ctx.font='500 20px "Cascadia Code", Consolas, monospace';ctx.fillText(SHARE_DISPLAY_URL,footerX,1226);
+        ctx.fillStyle=cssVar("--muted");ctx.font='400 18px Inter, "Segoe UI", sans-serif';drawCanvasParagraph(ctx,"Lectura simbólica: no define tu personalidad ni predice tu futuro.",footerX,1270,1008-footerX,27,2);
         return canvas;
       }
       function estoyShareUrl(target) {
@@ -2945,35 +2981,35 @@
       function buildEstoyShareCanvas(snapshot,shareUrl) {
         const canvas=document.createElement("canvas");canvas.width=1080;canvas.height=1350;
         const ctx=canvas.getContext("2d");
-        ctx.fillStyle="var(--paper)";ctx.fillRect(0,0,canvas.width,canvas.height);ctx.textBaseline="alphabetic";
+        ctx.fillStyle=cssVar("--paper");ctx.fillRect(0,0,canvas.width,canvas.height);ctx.textBaseline="alphabetic";
 
-        ctx.fillStyle="var(--ink)";ctx.font='500 25px "Cascadia Code", Consolas, monospace';ctx.fillText("SOY",72,92);
-        ctx.fillStyle="var(--brass)";ctx.fillText("/",142,92);
-        ctx.fillStyle="var(--ink)";ctx.fillText("ESTOY",172,92);
-        ctx.textAlign="right";ctx.fillStyle="var(--muted)";ctx.font='500 17px "Cascadia Code", Consolas, monospace';ctx.fillText(`FECHA FIJADA · ${isoDate(snapshot.target)}`,1008,92);ctx.textAlign="left";
-        ctx.strokeStyle="var(--line-dark)";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(72,126);ctx.lineTo(1008,126);ctx.stroke();
+        ctx.fillStyle=cssVar("--ink");ctx.font='500 25px "Cascadia Code", Consolas, monospace';ctx.fillText("SOY",72,92);
+        ctx.fillStyle=cssVar("--brass");ctx.fillText("/",142,92);
+        ctx.fillStyle=cssVar("--ink");ctx.fillText("ESTOY",172,92);
+        ctx.textAlign="right";ctx.fillStyle=cssVar("--muted");ctx.font='500 17px "Cascadia Code", Consolas, monospace';ctx.fillText(`FECHA FIJADA · ${isoDate(snapshot.target)}`,1008,92);ctx.textAlign="left";
+        ctx.strokeStyle=cssVar("--line-dark");ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(72,126);ctx.lineTo(1008,126);ctx.stroke();
 
-        ctx.fillStyle="var(--muted)";ctx.font='500 18px "Cascadia Code", Consolas, monospace';ctx.fillText("TU MOMENTO",72,174);
-        ctx.fillStyle="var(--ink)";fitCanvasFont(ctx,snapshot.name,936,58,38,'"Iowan Old Style", Georgia, serif');ctx.fillText(ellipsizeCanvasText(ctx,snapshot.name,936),72,236);
-        ctx.fillStyle="var(--brass)";ctx.font='500 18px "Cascadia Code", Consolas, monospace';ctx.fillText(`AÑO PERSONAL ${snapshot.py.number} · ${snapshot.centralKey.toUpperCase()}`,72,320);
-        ctx.fillStyle="var(--ink)";ctx.font='500 48px "Iowan Old Style", Georgia, serif';ctx.fillText(snapshot.moment[0],72,382);
-        ctx.fillStyle="var(--ink-soft)";ctx.font='400 28px Inter, "Segoe UI", sans-serif';drawCanvasParagraph(ctx,snapshot.synthesis.explanation,72,434,936,38,4);
+        ctx.fillStyle=cssVar("--muted");ctx.font='500 18px "Cascadia Code", Consolas, monospace';ctx.fillText("TU MOMENTO",72,174);
+        ctx.fillStyle=cssVar("--ink");fitCanvasFont(ctx,snapshot.name,936,58,38,'"Iowan Old Style", Georgia, serif');ctx.fillText(ellipsizeCanvasText(ctx,snapshot.name,936),72,236);
+        ctx.fillStyle=cssVar("--brass");ctx.font='500 18px "Cascadia Code", Consolas, monospace';ctx.fillText(`AÑO PERSONAL ${snapshot.py.number} · ${snapshot.centralKey.toUpperCase()}`,72,320);
+        ctx.fillStyle=cssVar("--ink");ctx.font='500 48px "Iowan Old Style", Georgia, serif';ctx.fillText(snapshot.moment[0],72,382);
+        ctx.fillStyle=cssVar("--ink-soft");ctx.font='400 28px Inter, "Segoe UI", sans-serif';drawCanvasParagraph(ctx,snapshot.synthesis.explanation,72,434,936,38,4);
 
-        ctx.fillStyle="var(--ink)";ctx.fillRect(72,630,936,164);
-        ctx.fillStyle="var(--gold-light)";ctx.font='500 18px "Cascadia Code", Consolas, monospace';ctx.fillText("PERÍODO FIJADO",106,676);
-        ctx.fillStyle="var(--paper-2)";ctx.font='500 36px "Iowan Old Style", Georgia, serif';ctx.fillText(`${formatDate(snapshot.current.start,true)} — ${formatDate(snapshot.current.end,true)}`,106,731);
-        ctx.fillStyle="var(--line-soft)";ctx.font='400 21px Inter, "Segoe UI", sans-serif';ctx.fillText(`${snapshot.phase.name} · ${snapshot.current.days} días · consultado para ${formatDate(snapshot.target,true)}`,106,768);
+        ctx.fillStyle=cssVar("--ink");ctx.fillRect(72,630,936,164);
+        ctx.fillStyle=cssVar("--gold-light");ctx.font='500 18px "Cascadia Code", Consolas, monospace';ctx.fillText("PERÍODO FIJADO",106,676);
+        ctx.fillStyle=cssVar("--paper-2");ctx.font='500 36px "Iowan Old Style", Georgia, serif';ctx.fillText(`${formatDate(snapshot.current.start,true)} — ${formatDate(snapshot.current.end,true)}`,106,731);
+        ctx.fillStyle=cssVar("--line-soft");ctx.font='400 21px Inter, "Segoe UI", sans-serif';ctx.fillText(`${snapshot.phase.name} · ${snapshot.current.days} días · consultado para ${formatDate(snapshot.target,true)}`,106,768);
 
-        ctx.strokeStyle="var(--line-dark)";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(72,842);ctx.lineTo(1008,842);ctx.moveTo(384,842);ctx.lineTo(384,1068);ctx.moveTo(696,842);ctx.lineTo(696,1068);ctx.moveTo(72,1068);ctx.lineTo(1008,1068);ctx.stroke();
+        ctx.strokeStyle=cssVar("--line-dark");ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(72,842);ctx.lineTo(1008,842);ctx.moveTo(384,842);ctx.lineTo(384,1068);ctx.moveTo(696,842);ctx.lineTo(696,1068);ctx.moveTo(72,1068);ctx.lineTo(1008,1068);ctx.stroke();
         drawShareSignal(ctx,72,884,270,"Prioriza",snapshot.synthesis.title,snapshot.synthesis.copy);
         drawShareSignal(ctx,414,884,252,"Cuida",snapshot.synthesis.watch,snapshot.synthesis.watchCopy);
         drawShareSignal(ctx,726,884,282,"Después",snapshot.synthesis.later,snapshot.synthesis.laterCopy);
 
-        ctx.strokeStyle="var(--line-dark)";ctx.beginPath();ctx.moveTo(72,1110);ctx.lineTo(1008,1110);ctx.stroke();
+        ctx.strokeStyle=cssVar("--line-dark");ctx.beginPath();ctx.moveTo(72,1110);ctx.lineTo(1008,1110);ctx.stroke();
         const qrSize=drawShareQr(ctx,shareUrl,72,1128,204),footerX=qrSize?72+qrSize+34:72;
-        ctx.fillStyle="var(--ink)";ctx.font='500 28px "Iowan Old Style", Georgia, serif';ctx.fillText("Lee este período con tu propia fecha",footerX,1182);
-        ctx.fillStyle="var(--brass)";ctx.font='500 20px "Cascadia Code", Consolas, monospace';ctx.fillText(SHARE_DISPLAY_URL,footerX,1226);
-        ctx.fillStyle="var(--muted)";ctx.font='400 18px Inter, "Segoe UI", sans-serif';drawCanvasParagraph(ctx,"El enlace conserva la fecha consultada, no la fecha de nacimiento.",footerX,1270,1008-footerX,27,2);
+        ctx.fillStyle=cssVar("--ink");ctx.font='500 28px "Iowan Old Style", Georgia, serif';ctx.fillText("Lee este período con tu propia fecha",footerX,1182);
+        ctx.fillStyle=cssVar("--brass");ctx.font='500 20px "Cascadia Code", Consolas, monospace';ctx.fillText(SHARE_DISPLAY_URL,footerX,1226);
+        ctx.fillStyle=cssVar("--muted");ctx.font='400 18px Inter, "Segoe UI", sans-serif';drawCanvasParagraph(ctx,"El enlace conserva la fecha consultada, no la fecha de nacimiento.",footerX,1270,1008-footerX,27,2);
         return canvas;
       }
       function canvasPngBlob(canvas) {
@@ -4110,12 +4146,65 @@ const NATAL_API = (()=>{ try { return localStorage.getItem("natal-api"); } catch
         const target=parseDate($("#target").value);
         await openShareDialog({type:"estoy",name:currentProfile.name,birth:currentProfile.birth,target});
       });
+      /* Compartir imagen ya no dispara el envio: primero muestra la tarjeta.
+         Enviar una imagen con tus datos a un tercero sin haberla visto es una
+         decision que la persona nunca llego a tomar. */
+      let previewPendiente=null;
+      function mostrarPrevisualizacion(payload){
+        const esEstoy=payload.type==="estoy";
+        const snapshot=esEstoy
+          ? buildEstoySnapshot(payload.name,payload.birth,payload.target)
+          : buildSoySnapshot(payload.name,payload.birth);
+        const canvas=esEstoy
+          ? buildEstoyShareCanvas(snapshot,estoyShareUrl(payload.target))
+          : buildSoyShareCanvas(snapshot,SHARE_TRACKED_URL);
+        $("#share-preview-img").src=canvas.toDataURL("image/png");
+        previewPendiente=payload;
+        $("#share-dialog form").hidden=true;
+        $("#share-preview").hidden=false;
+      }
+      function cerrarPrevisualizacion(){
+        previewPendiente=null;
+        $("#share-preview").hidden=true;
+        $("#share-dialog form").hidden=false;
+        $("#share-preview-img").removeAttribute("src");
+      }
       $("#share-dialog").addEventListener("click",async event=>{
         const button=event.target.closest("[data-share-mode]");if(!button||!pendingShare)return;
-        const payload=pendingShare,mode=button.dataset.shareMode;pendingShare=null;$("#share-dialog").close();
+        const payload=pendingShare,mode=button.dataset.shareMode;
+        /* La imagen NO consume pendingShare: el dialogo sigue abierto y se
+           puede volver y entrar de nuevo. Nulificarlo aqui dejaba la segunda
+           entrada sin payload y la previsualizacion no reabria. */
+        if(mode==="image"){mostrarPrevisualizacion(payload);return;}
+        pendingShare=null;
+        $("#share-dialog").close();
         await executeShare(payload,mode);
       });
-      $("#share-dialog").addEventListener("close",()=>{pendingShare=null;});
+      onId("share-preview-back","click",cerrarPrevisualizacion);
+      onId("share-preview-send","click",async()=>{
+        const payload=previewPendiente; if(!payload)return;
+        pendingShare=null; cerrarPrevisualizacion(); $("#share-dialog").close();
+        await executeShare(payload,"image");
+      });
+      /* Descargar sin abrir WhatsApp: no todo el mundo comparte por ahi, y
+         obligar a pasar por el envio para quedarse la imagen es empujar. */
+      onId("share-preview-download","click",()=>{
+        const payload=previewPendiente; if(!payload)return;
+        const esEstoy=payload.type==="estoy";
+        const snapshot=esEstoy
+          ? buildEstoySnapshot(payload.name,payload.birth,payload.target)
+          : buildSoySnapshot(payload.name,payload.birth);
+        const canvas=esEstoy
+          ? buildEstoyShareCanvas(snapshot,estoyShareUrl(payload.target))
+          : buildSoyShareCanvas(snapshot,SHARE_TRACKED_URL);
+        const nombre=esEstoy
+          ? `estoy-${shareFileSlug(payload.name)}-${isoDate(payload.target)}-resumen.png`
+          : `soy-${shareFileSlug(payload.name)}-resumen.png`;
+        downloadShareImage(canvasPngBlob(canvas),nombre);
+        pendingShare=null; cerrarPrevisualizacion(); $("#share-dialog").close();
+        toast("Imagen descargada. No se envió a nadie.");
+      });
+      $("#share-dialog").addEventListener("close",()=>{pendingShare=null;cerrarPrevisualizacion();});
       $("#trial-button").addEventListener("click",()=>{
         openWhatsAppMessage("Hola, quiero conocer la prueba de 28 días de Soy / Estoy.");
         toast("Abrimos un mensaje borrador en WhatsApp. Tú decides si enviarlo.");
@@ -4214,14 +4303,6 @@ const NATAL_API = (()=>{ try { return localStorage.getItem("natal-api"); } catch
       const journeyKey=()=>journeySteps[journeyIndex]?.dataset.jstep;
 
 
-
-      /* Enganchar sin morir. Un `$("#loquesea").addEventListener` sobre un
-         elemento que ya no existe lanza TypeError y aborta el resto del IIFE
-         -incluida la linea que arranca el recorrido-, dejando la pagina en el
-         formulario crudo sin ningun sintoma visible. Paso exactamente eso al
-         reestructurar: se movio un boton y la app quedo rota en produccion.
-         Con esto, un elemento ausente cuesta su funcion, no la pagina. */
-      const onId=(id,evento,fn)=>{const node=document.getElementById(id);if(node)node.addEventListener(evento,fn);};
 
       const jSet=(id,text)=>{const node=document.getElementById(id);if(node)node.textContent=text;};
       /* Fila de atributo: término en serif, glosa debajo. Sólo se usa en los
@@ -4364,7 +4445,10 @@ const NATAL_API = (()=>{ try { return localStorage.getItem("natal-api"); } catch
         jSet("j-panel-title",`${s.name}, esto es lo que se repite en ti.`);
         jSet("j-panel-lead",`${s.synthesis.title} · ${s.synthesis.label.replace("Convergencia · ","")}. Tu Soy queda guardado en esta pantalla; desde aquí eliges qué abrir.`);
 
-        $("#j-cv-ledger").innerHTML=factorLedgerHTML(s,s.factors.find(f=>f.traditionCount>=2)?.key);
+        /* Sin segundo argumento: ya no hay prosa arriba que repita el tema
+           principal, asi que su fila debe traer su explicacion como las demas.
+           La app SI sigue pasandolo, porque alli el resumen sigue encima. */
+        $("#j-cv-ledger").innerHTML=factorLedgerHTML(s);
         jSet("j-cv-gift",s.profile.gift);
         jSet("j-cv-gift-copy",s.profile.giftCopy);
         jSet("j-cv-shadow",s.profile.shadow);
@@ -4381,9 +4465,6 @@ const NATAL_API = (()=>{ try { return localStorage.getItem("natal-api"); } catch
            titular si el segundo también pasa de ese mínimo; si no, sigue
            visible con su cifra, pero como lo que es: más débil. */
         const segundoFuerte=Boolean(second)&&second.count>=3;
-        $("#j-cv-title").innerHTML=!converged
-          ? "Cuatro miradas, <em>cuatro temas</em>."
-          : segundoFuerte ? "Cuatro miradas, <em>dos temas</em>." : "Cuatro miradas, <em>un tema</em>.";
         /* Nombra las cuatro señales que venías acumulando en el contador de los
            pasos anteriores. Sin esto, el acumulador se llena y no se gasta: la
            convergencia aparece como un resultado nuevo en vez del destino de lo
@@ -4392,9 +4473,12 @@ const NATAL_API = (()=>{ try { return localStorage.getItem("natal-api"); } catch
         /* Intro corta: lo que juntaste y como leer la tabla. El detalle -que
            tema, con cuanto respaldo, sostenido por que senal- lo dice la tabla
            misma, fila por fila. */
-        jSet("j-cv-intro",`${juntadas} ${!converged
-          ? "Cada una apuntó a algo distinto: no forzamos una conclusión común."
-          : "Los de arriba se repiten en más tradiciones; ábrelos para ver qué los sostiene."}`);
+        /* La intro decia que hacer -"abrelos para ver"- pero no QUE es una
+           convergencia. Sin eso la tabla es una lista de palabras con barras.
+           Ahora dice de donde salen las filas y por que unas pesan mas. */
+        jSet("j-cv-intro",`Cada tradición leyó tu fecha por separado: ${juntadas} `+(!converged
+          ? "Ninguno de sus temas coincidió con otro: no forzamos una conclusión común."
+          : "Estos son los temas donde coincidieron. Cuantas más lo sostienen, más arriba; los de una sola tradición no convergen."));
 
         /* Los chips agrupados por tradicion salieron del desplegable: ahora
            cada fila de la tabla trae sus propias senales, donde significan
