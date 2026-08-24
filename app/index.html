@@ -1797,6 +1797,10 @@
                propósito: es para quien ya sabe lo que busca, no el destino por
                defecto. Ese era el problema de antes. -->
           <p class="j-panel-foot"><button class="login-link" type="button" data-panel="todo">Ver la lectura completa, con todas las secciones</button></p>
+          <!-- Estaba en el ultimo paso de Estoy y se perdio al reestructurar.
+               Su sitio es el panel: "otra fecha" es empezar de nuevo, y el
+               panel es desde donde se empieza. -->
+          <p class="j-panel-foot"><button class="login-link" type="button" id="j-restart">Volver a empezar con otra fecha</button></p>
         </section>
 
         <!-- TRAMO ESTOY. No es continuacion del Soy: se lanza desde el panel.
@@ -4187,6 +4191,14 @@ const NATAL_API = (()=>{ try { return localStorage.getItem("natal-api"); } catch
 
 
 
+      /* Enganchar sin morir. Un `$("#loquesea").addEventListener` sobre un
+         elemento que ya no existe lanza TypeError y aborta el resto del IIFE
+         -incluida la linea que arranca el recorrido-, dejando la pagina en el
+         formulario crudo sin ningun sintoma visible. Paso exactamente eso al
+         reestructurar: se movio un boton y la app quedo rota en produccion.
+         Con esto, un elemento ausente cuesta su funcion, no la pagina. */
+      const onId=(id,evento,fn)=>{const node=document.getElementById(id);if(node)node.addEventListener(evento,fn);};
+
       const jSet=(id,text)=>{const node=document.getElementById(id);if(node)node.textContent=text;};
       /* Fila de atributo: término en serif, glosa debajo. Sólo se usa en los
          atributos que el titular NO nombra, para no leer lo mismo dos veces. */
@@ -4573,7 +4585,7 @@ const NATAL_API = (()=>{ try { return localStorage.getItem("natal-api"); } catch
 
       journeyNext.addEventListener("click",()=>journeyGo(1));
       journeyBack.addEventListener("click",()=>journeyGo(-1));
-      $("#j-skip").addEventListener("click",()=>exitJourney("soy"));
+      onId("j-skip","click",()=>exitJourney("soy"));
 
       /* Cada tarjeta sale del recorrido hacia su destino. El muro no se evalúa
          aquí: setView ya decide, así que las gratis abren y las pagadas
@@ -4598,13 +4610,13 @@ const NATAL_API = (()=>{ try { return localStorage.getItem("natal-api"); } catch
       /* Retorno sin cuenta: se envía a sí misma el enlace reconstruible. Abre
          un borrador; nada se envía hasta que la persona lo confirme, igual que
          el resto de los flujos de WhatsApp del producto. */
-      $("#j-save-link").addEventListener("click",()=>{
+      onId("j-save-link","click",()=>{
         if(!currentProfile){pedirFechaPrimero("armar el enlace de tu lectura");return;}
         const url=fullReadingShareUrl(currentProfile.name,currentProfile.birth,parseDate($("#target").value),"estoy");
         openWhatsAppMessage(`Mi lectura en Soy/Estoy — para volver sin escribir la fecha de nuevo:\n${url}`);
         toast("Abrimos un borrador en WhatsApp con tu enlace. Tú decides si lo envías.");
       });
-      $("#j-restart").addEventListener("click",()=>{
+      onId("j-restart","click",()=>{
         journeyBirth.value="";journeyName.value="";journeyBirthError.textContent="";
         journeyIndex=0;renderJourney();
       });
