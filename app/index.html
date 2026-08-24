@@ -4438,13 +4438,23 @@ const NATAL_API = (()=>{ try { return localStorage.getItem("natal-api"); } catch
          Reemplaza el texto en su línea en vez de agregar una tira nueva: el
          paso de arcanos tiene 3px de holgura a 390×730 y no aguanta más alto. */
       function paintJourneyTally(s){
-        const señales=[s.life.number,s.sun[0],s.chin.animal,s.tarot[0]];
+        /* Las otras tres se nombran solas -Virgo, Mono, La Rueda son sustantivos
+           reconocibles-. El numero no: suelto y primero en la fila se lee como
+           el numeral de una lista, no como un valor.
+
+           Lleva "Camino" y no "Numerologia" por ancho medido: la tira da 258px
+           con las barras en su minimo, y "Numerologia 1 · Virgo · Mono · La
+           Rueda" pide 260. Con un numero maestro -11, 22, 33- son 266 y se
+           pasa siempre, lo que dispararia el recorte de abajo y borraria
+           justamente la etiqueta. "Camino" pide 226 y ademas es el nombre
+           propio del valor: la tarjeta de ese paso se rotula CAMINO DE VIDA. */
+        const señales=[`Camino ${s.life.number}`,s.sun[0],s.chin.animal,s.tarot[0]];
         /* Presupuesto en caracteres y no en píxeles medidos: el paso todavía
            está oculto cuando esto corre, así que scrollWidth daría 0. Son 354px
-           de tira menos 89 de barras con su piso, sobre 6,8px por carácter en
-           mono 10px. Al pasarse suelta lo más viejo: el valor del paso actual
-           es el que no se puede perder. */
-        const TOPE=36;
+           de tira menos 96 de barras con su piso y sus huecos, sobre 6,6px por
+           caracter en mono 10px, con un carecter de margen. Al pasarse suelta
+           lo mas viejo: el valor del paso actual es el que no se puede perder. */
+        const TOPE=38;
         for(let i=1;i<=4;i++){
           let visibles=señales.slice(0,i);
           let texto=visibles.join(" · ");
