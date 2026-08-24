@@ -4470,15 +4470,17 @@ const NATAL_API = (()=>{ try { return localStorage.getItem("natal-api"); } catch
            convergencia aparece como un resultado nuevo en vez del destino de lo
            que la persona fue juntando. */
         const juntadas=`${s.life.number} · ${s.sun[0]} · ${s.chin.animal} · ${s.tarot[0]}.`;
-        /* Intro corta: lo que juntaste y como leer la tabla. El detalle -que
-           tema, con cuanto respaldo, sostenido por que senal- lo dice la tabla
-           misma, fila por fila. */
-        /* La intro decia que hacer -"abrelos para ver"- pero no QUE es una
-           convergencia. Sin eso la tabla es una lista de palabras con barras.
-           Ahora dice de donde salen las filas y por que unas pesan mas. */
-        jSet("j-cv-intro",`Cada tradición leyó tu fecha por separado: ${juntadas} `+(!converged
-          ? "Ninguno de sus temas coincidió con otro: no forzamos una conclusión común."
-          : "Estos son los temas donde coincidieron. Cuantas más lo sostienen, más arriba; los de una sola tradición no convergen."));
+        /* La intro anterior mentia sobre lo que hay debajo: decia "estos son
+           los temas donde coincidieron" con una tabla que muestra seis filas,
+           incluidas las de 1 de 4. Ademas repetia la premisa -cada tradicion
+           lee por separado- que el paso 1 y el cierre de numerologia ya dicen,
+           y gastaba su ultima frase explicando el ORDEN de las filas, que es
+           mecanica de pantalla y no significado. Ahora recoge lo acumulado y
+           describe lo que de verdad se ve: unos temas se repiten y otros no.
+           El cuanto y el que lo sostiene los dice cada fila. */
+        jSet("j-cv-intro",`Lo que venías reuniendo: ${juntadas} `+(!converged
+          ? "Al cruzarlas, ningún tema se repite: cada tradición apunta a lo suyo."
+          : "Al cruzarlas, algunos temas se repiten entre tradiciones y otros aparecen en una sola."));
 
         /* Los chips agrupados por tradicion salieron del desplegable: ahora
            cada fila de la tabla trae sus propias senales, donde significan
