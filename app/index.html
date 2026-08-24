@@ -1543,7 +1543,7 @@
       <main class="j-stage" id="j-stage">
 
         <!-- 1 · Nadie avanza sin entender qué separa Soy de Estoy. -->
-        <section class="j-step active" data-jstep="intro" aria-label="Qué es Soy Estoy">
+        <section class="j-step active" data-track="soy" data-jstep="intro" aria-label="Qué es Soy Estoy">
           <p class="j-eyebrow">Antes de empezar</p>
           <h1>Cuatro tradiciones miran <em>la misma fecha</em>.</h1>
           <!-- "Ese es el corazón de Soy" salió en dos rondas de crítica como
@@ -1564,7 +1564,7 @@
         </section>
 
         <!-- 2 · Un solo dato obligatorio. Sin hora, sin lugar. -->
-        <section class="j-step" data-jstep="fecha" aria-label="Tu fecha de nacimiento">
+        <section class="j-step" data-track="soy" data-jstep="fecha" aria-label="Tu fecha de nacimiento">
           <p class="j-eyebrow">Tus datos · lo único que pedimos</p>
           <h1>¿Cuándo naciste?</h1>
           <p class="j-lead">Con la fecha basta. <strong>No pedimos hora ni lugar</strong>: sin hora exacta no se pueden calcular ascendente ni casas, y mostrarlos igual sería inventar precisión.</p>
@@ -1580,7 +1580,7 @@
         </section>
 
         <!-- 3-6 · Una tradición por pantalla, cada una con su cuenta. -->
-        <section class="j-step" data-jstep="numerologia" aria-label="Numerología">
+        <section class="j-step" data-track="soy" data-jstep="numerologia" aria-label="Numerología">
           <div class="j-tally"><i class="done"></i><i></i><i></i><i></i><p id="j-tally-1">—</p></div>
           <p class="j-eyebrow">Numerología</p>
           <h1>Primero, <em>sumamos</em> tu fecha.</h1>
@@ -1601,7 +1601,7 @@
           <p class="j-lead">Cada tradición que viene mira la misma fecha desde otro ángulo. Al final vemos qué se repite.</p>
         </section>
 
-        <section class="j-step" data-jstep="occidental" aria-label="Zodíaco occidental">
+        <section class="j-step" data-track="soy" data-jstep="occidental" aria-label="Zodíaco occidental">
           <div class="j-tally"><i class="done"></i><i class="done"></i><i></i><i></i><p id="j-tally-2">—</p></div>
           <p class="j-eyebrow">Zodíaco occidental</p>
           <h1>El día del año en que <em>naciste</em>.</h1>
@@ -1627,7 +1627,7 @@
           <p class="j-lead">Esto es <strong>signo solar</strong>, no una carta natal. La carta completa necesita hora y lugar.</p>
         </section>
 
-        <section class="j-step" data-jstep="chino" aria-label="Zodíaco chino">
+        <section class="j-step" data-track="soy" data-jstep="chino" aria-label="Zodíaco chino">
           <div class="j-tally"><i class="done"></i><i class="done"></i><i class="done"></i><i></i><p id="j-tally-3">—</p></div>
           <p class="j-eyebrow">Zodíaco chino</p>
           <h1>El año, contado <em>a la manera lunisolar</em>.</h1>
@@ -1660,7 +1660,7 @@
           <p class="j-lead" id="j-c-lead">El año chino cambia con el <strong>Año Nuevo lunisolar</strong>, no el 1 de enero.</p>
         </section>
 
-        <section class="j-step" data-jstep="tarot" aria-label="Arcanos de nacimiento">
+        <section class="j-step" data-track="soy" data-jstep="tarot" aria-label="Arcanos de nacimiento">
           <div class="j-tally"><i class="done"></i><i class="done"></i><i class="done"></i><i class="done"></i><p id="j-tally-4">—</p></div>
           <p class="j-eyebrow">Arcanos de nacimiento</p>
           <!-- Decía "La misma suma": era cierto con la regla anterior. Arrien
@@ -1698,7 +1698,7 @@
         </section>
 
         <!-- 7 · El pago del recorrido: por qué existe el producto. -->
-        <section class="j-step" data-jstep="convergencia" aria-label="Tu convergencia">
+        <section class="j-step" data-track="soy" data-jstep="convergencia" aria-label="Tu convergencia">
           <p class="j-eyebrow">Esto es tu Soy</p>
           <h1 id="j-cv-title">Cuatro miradas, <em>un tema</em>.</h1>
           <p class="j-lead" id="j-cv-intro">Las cuatro tradiciones observaron tu fecha por separado. Esto es lo que se repitió.</p>
@@ -1733,7 +1733,7 @@
         </section>
 
         <!-- 8 · El tema baja a tierra. Separado a propósito: es otra idea. -->
-        <section class="j-step" data-jstep="aterrizaje" aria-label="Qué hacer con esto">
+        <section class="j-step" data-track="soy" data-jstep="aterrizaje" aria-label="Qué hacer con esto">
           <p class="j-eyebrow">Para llevar</p>
           <h1>Un tema sirve cuando <em>se puede usar</em>.</h1>
           <div class="j-takeaways">
@@ -1763,7 +1763,7 @@
              cosas pendientes. Las cuatro tarjetas ya existen —la imagen, la
              carta natal, Estoy y el círculo—; lo que cambia es que la persona
              elige, en vez de que el producto la empuje. -->
-        <section class="j-step" data-jstep="panel" aria-label="Tu Soy está listo">
+        <section class="j-step" data-track="soy" data-jstep="panel" aria-label="Tu Soy está listo">
           <p class="j-eyebrow">Tu Soy está listo</p>
           <h1 id="j-panel-title">—</h1>
           <p class="j-lead" id="j-panel-lead">—</p>
@@ -1793,6 +1793,99 @@
                es el unico modo de volver a la lectura, asi que sigue aqui: el
                panel es exactamente la superficie a la que se vuelve. -->
           <p class="j-panel-foot"><button class="login-link" type="button" id="j-save-link">Enviarme el enlace para volver</button></p>
+        </section>
+
+        <!-- TRAMO ESTOY. No es continuacion del Soy: se lanza desde el panel.
+             Se habian borrado al hacer el panel, y con ellos se perdio lo
+             guiado justo en la mitad que mas lo necesita. El Soy sigue paso a
+             paso y aterriza en el panel; desde ahi Estoy tiene el suyo. -->
+        <!-- 9 · Qué es Estoy. El paso puente "tu Soy está completo" se eliminó:
+             repetía la distinción que ya hacen el paso 1 y este mismo, y al
+             escanear su titular no decía nada. -->
+        <section class="j-step" data-track="estoy" data-jstep="estoy-intro" aria-label="Qué es Estoy">
+          <p class="j-eyebrow">La otra mitad</p>
+          <h1>Estoy no dice quién eres. Dice <em>qué pide atención ahora</em>.</h1>
+          <p class="j-lead" id="j-estoy-intro-copy">—</p>
+          <div class="j-takeaways">
+            <article class="j-takeaway"><span>Tema</span><b>El año personal</b><p>Cambia una vez al año y define de qué se trata este ciclo.</p></article>
+            <article class="j-takeaway"><span>Ritmo</span><b>El cuarto lunar</b><p>Cambia cada siete días y sugiere cómo trabajar ese tema.</p></article>
+            <article class="j-takeaway"><span>Contexto</span><b>Año chino y temporada solar</b><p>Clima de fondo: matizan el tema, no lo reemplazan.</p></article>
+          </div>
+          <!-- Anticipa el muro. Sin esto, el precio del paso 11 sorprendía:
+               "hasta entonces parece un recorrido gratuito y no se anticipa
+               claramente un límite de pago". Decirlo antes es más honesto que
+               dejar que aparezca de golpe. -->
+          <p class="j-lead">El tema y el período los ves ahora, gratis. El detalle del ritmo va en el pase de 30 días.</p>
+        </section>
+
+        <!-- 10 · La lectura real de Estoy, ANTES del precio y gratis.
+             Iba después del muro y no funcionaba: se pedían USD 5 por algo que
+             la persona sólo había visto descrito. Ahora el tema, el período y
+             el foco se entregan de verdad, y el muro protege el detalle. -->
+        <section class="j-step" data-track="estoy" data-jstep="estoy-momento" aria-label="Tu momento">
+          <p class="j-eyebrow">Estoy · tu momento</p>
+          <h1 id="j-e-title">—</h1>
+          <p class="j-lead" id="j-e-copy">—</p>
+          <div class="j-summary">
+            <div class="j-summary-item"><span>Tu momento</span><strong id="j-e-moment">—</strong><p id="j-e-moment-note">—</p></div>
+            <div class="j-summary-item"><span>Tu período</span><strong id="j-e-period">—</strong><p id="j-e-period-note">—</p></div>
+            <div class="j-summary-item"><span>Tu foco</span><strong id="j-e-focus">—</strong></div>
+          </div>
+          <details class="j-disclosure">
+            <summary>Ver el cálculo del año personal</summary>
+            <div class="j-calc"><b>La cuenta</b><span id="j-e-py-calc">—</span></div>
+          </details>
+        </section>
+
+        <!-- 11 · El muro, ya con una lectura entregada detrás.
+             Pantalla propia y no diálogo: el <dialog> tiene un fallback que no
+             concede acceso y dejaría el recorrido sin salida. -->
+        <section class="j-step" data-track="estoy" data-jstep="acceso" aria-label="Acceso simulado a Estoy">
+          <p class="j-eyebrow">Pago simulado · demo</p>
+          <h1>Eso fue <em>un</em> período. El pase cubre <em>los que vienen</em>.</h1>
+          <p class="j-lead" id="j-acceso-copy">—</p>
+          <div class="j-offer">
+            <div class="j-offer-head">
+              <div><h2>Acceso completo · 30 días</h2></div>
+              <strong>USD 5</strong>
+            </div>
+            <ul>
+              <li><b>Estoy completo</b>, con el ritmo lunar y la sugerencia del día, en cada período de estos 30.</li>
+              <li><b>Mi círculo</b>: la misma lectura para alguien más, y qué comparten o no.</li>
+              <li><b>Aprende</b>: de dónde sale cada regla que acabas de ver.</li>
+            </ul>
+            <p class="j-note">Demo: no se cobra, no pedimos tarjeta y no se envían datos a Mercado Pago.</p>
+            <!-- Quien ya pagó choca justo acá. Enlace y no botón: el paso ya
+                 tiene su acción principal y competir con ella sería empujar a
+                 pagar de nuevo a quien no debe. -->
+            <p class="j-note"><button class="login-link" type="button" data-open-login>Ya tengo cuenta · entrar con mi correo o SMS</button></p>
+          </div>
+        </section>
+
+        <!-- 12 · Lo que el pase desbloquea, y la entrega a la app completa.
+             El antiguo paso "cierre" se fusionó acá: su titular no decía nada
+             al escanear y era una pantalla entera para un botón. -->
+        <section class="j-step" data-track="estoy" data-jstep="estoy-ritmo" aria-label="El ritmo de estos días">
+          <!-- El diálogo de checkout deja una confirmación permanente en
+               pantalla; el toast del recorrido se desvanece. Esto la devuelve. -->
+          <p class="j-paid-note">Pago simulado · no hubo ningún cobro real</p>
+          <p class="j-eyebrow">Estoy · el ritmo</p>
+          <h1>La Luna marca el <em>ritmo</em>, no el tema.</h1>
+          <div class="j-moon-row">
+            <div class="j-moon" id="j-moon" aria-hidden="true"></div>
+            <div class="j-moon-copy">
+              <strong id="j-e-phase">—</strong>
+              <span id="j-e-phase-value">—</span>
+            </div>
+          </div>
+          <div class="j-takeaways">
+            <article class="j-takeaway"><span>Prioriza</span><b id="j-e-focus-title">—</b><p id="j-e-focus-copy">—</p></article>
+            <article class="j-takeaway"><span>Cuida</span><b id="j-e-watch-title">—</b><p id="j-e-watch-copy">—</p></article>
+          </div>
+          <!-- El aviso de aproximación baja a la línea del día para que el
+               paso final no acumule dos párrafos sueltos: es el paso más
+               cargado y el bloque de retorno tiene que quedar visible. -->
+          <p class="j-daily-line"><b id="j-e-daily-title">—</b><span id="j-e-daily-copy">—</span> <em>La fase se estima por fecha: aproximación etiquetada.</em></p>
         </section>
 
       </main>
@@ -4050,7 +4143,15 @@ const NATAL_API = (()=>{ try { return localStorage.getItem("natal-api"); } catch
          funciones puras que alimentan `renderSoy` / `renderEstoy` — así que no
          existe una segunda implementación del cálculo que pueda divergir. */
 
-      const journeySteps=$$("#journey .j-step");
+      /* Dos tramos, no uno. El Soy va paso a paso y aterriza en el panel; el
+         Estoy tiene su propio paso a paso que se lanza DESDE el panel. Al hacer
+         el panel borre los pasos de Estoy y con ellos se perdio lo guiado justo
+         en la mitad que mas lo necesita: quien llega a Estoy sin recorrido cae
+         en el mockup completo de golpe, que es exactamente el problema que
+         origino todo este trabajo. */
+      const stepsOfTrack = track => $$(`#journey .j-step[data-track="${track}"]`);
+      let journeyTrack = "soy";
+      let journeySteps = stepsOfTrack(journeyTrack);
       const journeyNext=$("#j-next"),journeyBack=$("#j-back"),journeyActions=$("#j-actions");
       const journeyBirth=$("#j-birth"),journeyName=$("#j-name"),journeyBirthError=$("#j-birth-error");
       const journeyProgress=$("#journey .j-progress"),journeyProgressFill=$("#j-progress-fill");
@@ -4068,15 +4169,19 @@ const NATAL_API = (()=>{ try { return localStorage.getItem("natal-api"); } catch
         tarot:"Ver qué se repite",
         convergencia:"Para qué me sirve",
         aterrizaje:"Ver todo lo que puedo hacer",
-        // El panel es el final: su botón sale del recorrido a la app completa.
-        panel:"Abrir mi lectura completa"
+        // El panel es el final del tramo Soy: su botón sale a la app completa.
+        panel:"Abrir mi lectura completa",
+        "estoy-intro":"Ver mi Estoy de hoy",
+        "estoy-momento":"Ver el pase de 30 días",
+        // Etiqueta explícita: nadie desbloquea sin leer que es una simulación.
+        acceso:"Simular pago con Mercado Pago",
+        "estoy-ritmo":"Abrir mi lectura completa"
       };
 
       let journeyIndex=0;
       const journeyKey=()=>journeySteps[journeyIndex]?.dataset.jstep;
 
 
-      journeyProgress.setAttribute("aria-valuemax",journeySteps.length);
 
       const jSet=(id,text)=>{const node=document.getElementById(id);if(node)node.textContent=text;};
       /* Fila de atributo: término en serif, glosa debajo. Sólo se usa en los
@@ -4115,6 +4220,34 @@ const NATAL_API = (()=>{ try { return localStorage.getItem("natal-api"); } catch
           }
           jSet(`j-tally-${i}`,texto);
         }
+      }
+
+      function paintJourneyEstoy(s){
+        jSet("j-e-title",`${s.name}, tu tema de fondo es ${s.moment[0].toLowerCase()}.`);
+        jSet("j-e-copy",s.synthesis.explanation);
+        jSet("j-e-moment",s.moment[0]);
+        const prenatal=s.target.getTime()<s.birth.getTime()?"La fecha consultada es anterior al nacimiento declarado: esta lectura describe el período, no a la persona. ":"";
+        jSet("j-e-moment-note",`${prenatal}Año personal ${s.py.number}; las demás capas solo lo matizan.`);
+        jSet("j-e-period",`${formatDate(s.current.start)} — ${formatDate(s.current.end)}`);
+        jSet("j-e-period-note",`${s.phase.name} · ${s.current.days} días`);
+        jSet("j-e-focus",s.synthesis.title);
+        jSet("j-e-py-calc",s.py.expression);
+
+        $("#j-moon").style.setProperty("--j-moon-shift",`${-85+(s.value/28)*170}%`);
+        jSet("j-e-phase",s.phase.name);
+        jSet("j-e-phase-value",`fase ${s.value.toFixed(2)} / 28 · aproximación diaria`);
+        jSet("j-e-focus-title",s.synthesis.title);
+        jSet("j-e-focus-copy",s.synthesis.copy);
+        jSet("j-e-watch-title",s.synthesis.watch);
+        jSet("j-e-watch-copy",s.synthesis.watchCopy);
+        jSet("j-e-daily-title",`${s.weekday[0]} · ${s.weekday[1]}`);
+        jSet("j-e-daily-copy",`La correspondencia tradicional propone ${s.weekday[2]}. Úsalo como foco breve, no como mandato.`);
+        /* `synthesis.title` viene en imperativo ("Observa lo nuevo…"), así que
+           no puede colgar de una preposición: "tu Estoy apunta a observa…" no
+           es español. Se le da su propia oración. */
+        /* El muro habla de lo que la persona acaba de recibir, no de una
+           promesa abstracta: nombra su período y qué sigue después de él. */
+        jSet("j-acceso-copy",`El tema y el período de ${formatDate(s.current.start)} a ${formatDate(s.current.end)} ya son tuyos. El pase agrega el ritmo lunar, la sugerencia diaria y los períodos que siguen durante 30 días.`);
       }
 
       function paintJourneySoy(s){
@@ -4299,9 +4432,18 @@ const NATAL_API = (()=>{ try { return localStorage.getItem("natal-api"); } catch
 
 
       function renderJourney(){
-        journeySteps.forEach((step,i)=>step.classList.toggle("active",i===journeyIndex));
+        /* Limpiar TODOS los pasos, no solo los del tramo actual: al cambiar de
+           tramo el paso activo del anterior -el panel- queda fuera de
+           journeySteps y su clase `active` nunca se quitaba, asi que el tramo
+           nuevo no se veia. */
+        $$("#journey .j-step").forEach(step=>step.classList.remove("active"));
+        journeySteps.forEach((step,i)=>{if(i===journeyIndex)step.classList.add("active");});
         const key=journeyKey();
-        $("#j-counter-text").textContent=journeyIndex===0?"2 min":`${journeyIndex+1} / ${journeySteps.length}`;
+        /* "2 min" es la promesa de duracion del primer paso del Soy, no una
+           etiqueta de indice cero: en el tramo Estoy hay que contar desde 1. */
+        $("#j-counter-text").textContent=(journeyIndex===0&&journeyTrack==="soy")
+          ? "2 min"
+          : `${journeyIndex+1} / ${journeySteps.length}`;
         journeyProgress.setAttribute("aria-valuenow",journeyIndex+1);
         journeyProgressFill.style.width=`${((journeyIndex+1)/journeySteps.length)*100}%`;
         journeyBack.hidden=journeyIndex===0;
@@ -4347,6 +4489,7 @@ const NATAL_API = (()=>{ try { return localStorage.getItem("natal-api"); } catch
         const person=$("#name").value.trim()||"Tu lectura",birthDate=parseDate(value);
         const soySnapshot=buildSoySnapshot(person,birthDate);
         paintJourneySoy(soySnapshot);
+        paintJourneyEstoy(buildEstoySnapshot(person,birthDate,parseDate($("#target").value)));
         return true;
       }
 
@@ -4355,7 +4498,7 @@ const NATAL_API = (()=>{ try { return localStorage.getItem("natal-api"); } catch
         if(next<0)return;
         // Avanzar desde el último paso entrega al modo completo: así la salida
         // usa la misma barra fija que el resto y nunca queda fuera de pantalla.
-        if(next>=journeySteps.length){ if(delta>0)exitJourney("soy"); return; }
+        if(next>=journeySteps.length){ if(delta>0)exitJourney(journeyTrack==="estoy"?"estoy":"soy"); return; }
         if(delta>0){
           const key=journeyKey();
           // El único paso que bloquea el avance es la fecha.
@@ -4371,11 +4514,18 @@ const NATAL_API = (()=>{ try { return localStorage.getItem("natal-api"); } catch
         renderJourney();
       }
 
-      function startJourney(){
+      function startJourney(track="soy"){
+        journeyTrack=track;
+        journeySteps=stepsOfTrack(track);
+        /* Los pasos del otro tramo no se ocultan con hidden: renderJourney solo
+           marca `active` dentro de journeySteps, y el CSS muestra unicamente el
+           activo. Basta con que la lista sea la del tramo. */
+        journeyProgress.setAttribute("aria-valuemax",journeySteps.length);
         document.body.classList.add("journey-mode");
         $("#journey").hidden=false;
         journeyIndex=0;
         renderJourney();
+        window.scrollTo({top:0,behavior:"auto"});
       }
 
       /* Sale al modo completo. `renderAll()` y `revealProduct()` van antes de
@@ -4408,7 +4558,12 @@ const NATAL_API = (()=>{ try { return localStorage.getItem("natal-api"); } catch
           return;
         }
         if(destino==="carta"){ exitJourney("soy"); openCheckoutDialog("carta"); return; }
-        exitJourney(destino==="circulo"?"circulo":"estoy");
+        /* Estoy NO sale a la vista cruda: arranca su propio tramo guiado. Salir
+           aqui era volver a dejar a la persona frente al mockup completo de
+           golpe. El circulo si sale, porque es una herramienta, no una lectura
+           que se revele de a poco. */
+        if(destino==="estoy"){ startJourney("estoy"); return; }
+        exitJourney("circulo");
       }));
 
       /* Retorno sin cuenta: se envía a sí misma el enlace reconstruible. Abre
