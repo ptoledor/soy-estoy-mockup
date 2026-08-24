@@ -1769,11 +1769,23 @@
 
         <section class="j-step" data-track="soy" data-jstep="tarot" aria-label="Arcanos de nacimiento">
           <div class="j-tally"><i class="done"></i><i class="done"></i><i class="done"></i><i class="done"></i><p id="j-tally-4">—</p></div>
-          <p class="j-eyebrow">Arcanos de nacimiento</p>
+          <!-- El sombrero nombra la TRADICION, como los otros tres pasos
+               ("Numerologia", "Zodiaco occidental", "Zodiaco chino"). Decia
+               "Arcanos de nacimiento", que es lo que la tradicion ENTREGA, y
+               eso va en el rotulo de la tarjeta. Ademas "Tarot de nacimiento"
+               es como lo nombra el motor Python, asi que las dos superficies
+               dejan de llamarlo distinto. -->
+          <p class="j-eyebrow">Tarot de nacimiento</p>
           <!-- Decía "La misma suma": era cierto con la regla anterior. Arrien
                suma día, mes y año como números; numerología suma los dígitos
-               sueltos. Son dos cuentas distintas sobre la misma fecha. -->
-          <h1>La misma fecha, ahora en <em>imágenes</em>.</h1>
+               sueltos. Son dos cuentas distintas sobre la misma fecha.
+
+               Y despues decia "ahora en imagenes": se entendia que hablaba de
+               cartas, pero habia que traducirlo. La metafora no aporta nada que
+               la palabra literal no diga, y el numero de cartas SI es
+               informacion -cambia con la fecha y confunde ver una donde otro ve
+               dos-, asi que el titular lo adelanta. -->
+          <h1 id="j-t-title">—</h1>
           <div class="j-reveal">
             <!-- Decía "Arcano mayor": nombra el grupo de 22 como si fuera la
                  carta, y deja al lector sin saber si la del alma es otra cosa. -->
@@ -2082,7 +2094,7 @@
               <details><summary>Ver cuenta y criterio</summary><p class="calculation" id="life-calc">—</p><p>Método utilizado: sumamos los dígitos de la fecha completa y conservamos 11, 22 y 33. Goodwin reduce mes, día y año por separado y conserva 11 y 22; por eso no presentamos esta regla como universal.</p></details>
             </article>
             <article class="evidence">
-              <div class="evidence-top"><div><span class="micro-label">Arcanos de nacimiento</span><h3 id="tarot-label">—</h3></div><span class="kind">Regla</span></div>
+              <div class="evidence-top"><div><span class="micro-label">Tarot de nacimiento</span><h3 id="tarot-label">—</h3></div><span class="kind">Regla</span></div>
               <p class="meaning" id="tarot-meaning">—</p>
               <details><summary>Ver cuenta y criterio</summary><p class="calculation" id="tarot-calc">—</p><p id="tarot-metodo">—</p><p>Es una correspondencia simbólica: no es una tirada ni una predicción. Otras escuelas reducen la fecha de otra forma y llegan a cartas distintas.</p></details>
             </article>
@@ -4582,10 +4594,25 @@ const NATAL_API = (()=>{ try { return localStorage.getItem("natal-api"); } catch
           jSet("j-t-soul-gloss",`Habla de ${s.tarotSoul[1]}.`);
           jSet("j-t-soul-calc",tarotCrit.cuentaAlma);
         }
-        /* El epígrafe del paso ya dice "Arcanos de nacimiento"; la cabecera
-           repetía la misma frase. Como en los otros pasos, nombra lo que hay
-           dentro y en el orden en que aparece. */
-        jSet("j-t-head",s.tarotSameCard?"Una sola carta":"Alma y personalidad");
+        /* Decia "Alma y personalidad": enumeraba los dos papeles que las filas
+           de abajo ya rotulan una por una (CARTA DEL ALMA, CARTA DE
+           PERSONALIDAD). Mismo defecto que tenia el paso chino con "Animal,
+           elemento y polaridad". El rotulo nombra lo que la tarjeta entrega, en
+           el singular o plural que corresponda, igual que la tarjeta para
+           compartir. */
+        jSet("j-t-head",s.tarotSameCard?"Arcano de nacimiento":"Arcanos de nacimiento");
+        /* El conteo es dato, no adorno: ver una carta donde otra persona ve dos
+           es motivo de duda real, y el titular lo contesta antes de que surja.
+
+           Cuenta PAPELES, no eslabones de la cadena. En el caso 19-10-1 la
+           fecha pasa por tres arcanos, pero el del medio no lleva papel propio
+           y no tiene bloque: decir "tres cartas" sobre una tarjeta que muestra
+           dos seria prometer lo que la pantalla desmiente. Ese caso lo explica
+           el metodo, que es donde cabe el matiz. */
+        const titulo=$("#j-t-title");
+        if(titulo)titulo.innerHTML=s.tarotSameCard
+          ? `A tu fecha le toca <em>una sola carta</em>.`
+          : `A tu fecha le tocan <em>dos cartas</em>.`;
         jSet("j-t-pers-role",tarotCrit.rolPersona);
         jSet("j-t-pers-name",s.tarot[0]);
         jSet("j-t-pers-gloss",`Habla de ${s.tarot[1]}.`);
