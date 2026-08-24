@@ -3,31 +3,48 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#ebe7dc">
+  <meta name="theme-color" content="var(--paper)">
   <title>Soy / Estoy · Lectura simbólica personal (demo)</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --paper: #ebe7dc;
-      --paper-2: #f4f1e9;
-      --ink: #171812;
-      --muted: #606157;
-      --line: #c9c5b8;
-      --line-dark: #9c988c;
-      --brass: #8d6417;
-      /* Superficie oscura. El bloque de convergencia se inventaba su propio
-         cafe (#2f2418) y era el UNICO oscuro distinto de --ink en todo el
-         producto -80 usos contra 2-, sentado justo encima de un boton --ink.
-         Sus cinco colores derivados estaban sueltos y sin declarar. */
-      --on-dark: #f2ede1;
-      --on-dark-soft: var(--on-dark-soft);
-      --on-dark-faint: var(--on-dark-faint);
-      --brass-on-dark: var(--brass-on-dark);
-      --line-on-dark: var(--line-on-dark);
-      --green: #234b3d;
-      --red: #8b3f32;
+      /* Paleta fria editorial. La anterior era sepia -crema #ebe7dc, tinta
+         verdosa, oro oliva #8d6417-: leia como grimorio, justo lo contrario de
+         "esoterismo aterrizado", que es un producto que muestra sus cuentas.
+         El acento pasa de oro a indigo: mismo peso visual, sin la carga
+         mistica que el contenido se pasa el dia desmintiendo. */
+      --paper: #f2f2f0;
+      --paper-2: #fafafa;
+      --ink: #14161a;
+      --muted: #5b6068;
+      --line: #d8d8d5;
+      --line-dark: #b4b4b0;
+      --brass: #3a4a9f;
+      --ink-soft: #232730;
+      --ink-muted: #3d4249;
+      --line-soft: #e6e6e3;
+      --grey-mid: #9a9a96;
+      --gold-light: #8fa0e8;
+      --gold-bright: #4a5cc0;
+
+      /* Superficie oscura. Estos cuatro quedaron auto-referenciados al
+         tokenizar -var(--x) dentro de la definicion de --x, que es invalido- y
+         el bloque de convergencia perdio sus colores secundarios sin que se
+         notara en la verificacion, porque ninguna de las sondas los usaba. */
+      --on-dark: #eceef2;
+      --on-dark-soft: #c3c7d0;
+      --on-dark-faint: #9298a4;
+      --brass-on-dark: #8fa0e8;
+      --line-on-dark: rgba(236, 238, 242, .22);
+
+      --green: #1f5c48;
+      --red: #a33a2c;
+      /* Los colores de elemento NO cambian: son semanticos del diagrama wu
+         xing -madera verde, fuego rojo, tierra ocre, metal gris, agua azul- y
+         recolorearlos romperia lo que ensenan. Tokenizar sirvio para esto:
+         compartian valor con --brass y ahora no se arrastran. */
       --matrix-direct: #8d6417;
       --el-madera: #4c6b45;
       --el-fuego: #a5483d;
@@ -131,7 +148,7 @@
     .tab:last-child { border-right: 1px solid var(--line); }
     .tab[aria-selected="true"] { background: var(--ink); color: var(--paper-2); }
     .tab:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible, summary:focus-visible {
-      outline: 3px solid #d09b2f;
+      outline: 3px solid var(--gold-bright);
       outline-offset: 3px;
     }
 
@@ -532,10 +549,10 @@
     .timeline article.current { background: var(--ink); color: var(--paper-2); }
     .timeline h3 { margin: 8px 0 5px; font-family: var(--serif); font-size: 20px; font-weight: 500; }
     .timeline p { margin: 0; color: var(--muted); font-size: 12px; }
-    .timeline .current p { color: #c9c8bf; }
+    .timeline .current p { color: var(--line-soft); }
     .timeline .dates { position: absolute; left: 20px; right: 20px; bottom: 18px; font-family: var(--mono); font-size: 10px; }
-    .today-line { position: absolute; top: 0; bottom: 0; width: 1px; background: #d6a33c; }
-    .today-line span { position: absolute; top: 8px; left: 7px; color: #e6bd69; font-family: var(--mono); font-size: 9px; text-transform: uppercase; }
+    .today-line { position: absolute; top: 0; bottom: 0; width: 1px; background: var(--gold-bright); }
+    .today-line span { position: absolute; top: 8px; left: 7px; color: var(--gold-light); font-family: var(--mono); font-size: 9px; text-transform: uppercase; }
 
     .climate-grid { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--line-dark); }
     .climate-card { min-width: 0; padding: 24px; border-right: 1px solid var(--line); background: rgba(244, 241, 233, .5); transition: background .35s ease; }
@@ -614,10 +631,10 @@
     .summary-item {
       min-width: 0;
       padding: 22px;
-      border-right: 1px solid #45463f;
+      border-right: 1px solid var(--ink-muted);
     }
     .summary-item:last-child { border-right: 0; }
-    .summary-item .micro-label { color: #aaa99f; }
+    .summary-item .micro-label { color: var(--grey-mid); }
     .summary-item strong {
       display: block;
       margin-top: 8px;
@@ -629,7 +646,7 @@
     .summary-item span:last-child {
       display: block;
       margin-top: 7px;
-      color: #c9c8bf;
+      color: var(--line-soft);
       font-size: 12px;
     }
     .ordered-climate { grid-template-columns: repeat(4, 1fr); }
@@ -714,25 +731,25 @@
     .member-card { position: relative; min-width: 0; padding: 24px; border-right: 1px solid var(--line-dark); border-bottom: 1px solid var(--line-dark); background: var(--ink); color: var(--paper-2); }
     .member-card.is-primary { background: var(--paper-2); color: var(--ink); }
     .member-card h3 { margin: 7px 0 4px; font-family: var(--serif); font-size: 28px; font-weight: 500; }
-    .member-card p { margin: 0; color: #c9c8bf; font-size: 12px; }
+    .member-card p { margin: 0; color: var(--line-soft); font-size: 12px; }
     .member-card.is-primary p { color: var(--muted); }
-    .member-signals { margin-top: 20px; border-top: 1px solid #45463f; }
+    .member-signals { margin-top: 20px; border-top: 1px solid var(--ink-muted); }
     .member-card.is-primary .member-signals { border-color: var(--line); }
-    .member-signal { display: flex; justify-content: space-between; gap: 14px; padding: 9px 0; border-bottom: 1px solid #45463f; font-size: 12px; }
+    .member-signal { display: flex; justify-content: space-between; gap: 14px; padding: 9px 0; border-bottom: 1px solid var(--ink-muted); font-size: 12px; }
     .member-card.is-primary .member-signal { border-color: var(--line); }
-    .member-signal span { color: #aaa99f; font-family: var(--mono); font-size: 9px; text-transform: uppercase; }
+    .member-signal span { color: var(--grey-mid); font-family: var(--mono); font-size: 9px; text-transform: uppercase; }
     .member-card.is-primary .member-signal span { color: var(--muted); }
     .member-actions { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 18px; }
     .member-share, .member-remove { padding: 0; border: 0; border-bottom: 1px solid currentColor; background: transparent; color: var(--muted); cursor: pointer; font-family: var(--mono); font-size: 9px; letter-spacing: .07em; text-transform: uppercase; }
-    .member-share { color: #d7b875; }
-    .member-remove { color: #c9c8bf; }
+    .member-share { color: var(--gold-light); }
+    .member-remove { color: var(--line-soft); }
     .member-card.is-primary .member-share { color: var(--brass); }
     .circle-add-card { display: grid; align-content: start; gap: 18px; }
     .circle-add-card h3 { margin-bottom: 0; }
-    .circle-add-card .field span { color: #aaa99f; }
-    .circle-add-card input { width: 100%; border: 0; border-bottom: 1px solid #67685f; background: transparent; color: var(--paper-2); }
-    .circle-add-card input:focus { border-color: #d7b875; outline: 0; }
-    .circle-add-card .recalculate { width: 100%; margin-top: 4px; border-color: #d7b875; background: #d7b875; color: var(--ink); }
+    .circle-add-card .field span { color: var(--grey-mid); }
+    .circle-add-card input { width: 100%; border: 0; border-bottom: 1px solid var(--muted); background: transparent; color: var(--paper-2); }
+    .circle-add-card input:focus { border-color: var(--gold-light); outline: 0; }
+    .circle-add-card .recalculate { width: 100%; margin-top: 4px; border-color: var(--gold-light); background: var(--gold-light); color: var(--ink); }
     .circle-add-card .recalculate:hover { background: var(--paper-2); border-color: var(--paper-2); }
     .relationship-list { display: grid; gap: 18px; }
     .relationship-card { border: 1px solid var(--line-dark); background: var(--paper-2); }
@@ -943,7 +960,7 @@
     }
 
     @media (hover: hover) {
-      .evidence:hover, .climate-card:hover { background: #f8f6ef; }
+      .evidence:hover, .climate-card:hover { background: var(--paper-2); }
       .wiki-course:hover { transform: translateY(-3px); box-shadow: 0 18px 40px -22px rgba(23, 24, 18, .45); }
     }
 
@@ -1081,7 +1098,7 @@
       .moment-hero-grid { grid-template-columns: 1fr; gap: 28px; }
       .moment-hero-grid .view-hero-art { width: min(100%, 320px); justify-self: start; }
       .summary-grid, .lunar-block, .compact-actions { grid-template-columns: 1fr; }
-      .summary-item { border-right: 0; border-bottom: 1px solid #45463f; }
+      .summary-item { border-right: 0; border-bottom: 1px solid var(--ink-muted); }
       .summary-item:last-child { border-bottom: 0; }
       .lunar-visual { border-right: 0; border-bottom: 1px solid var(--line); }
       .compact-action, .compact-action + .compact-action { padding: 15px 0; border-left: 0; border-bottom: 1px solid var(--line); }
@@ -1291,7 +1308,7 @@
     .j-tally i.done { background: var(--brass); }
     .j-tally p { flex: none; margin: 0 0 0 4px; color: var(--muted); font-family: var(--mono); font-size: 10px; letter-spacing: .08em; white-space: nowrap; }
 
-    /* Marrón cálido en vez de casi-negro. `--ink` (#171812) a esta escala se
+    /* Marrón cálido en vez de casi-negro. `--ink` (var(--ink)) a esta escala se
        lee como un bloque negro que rechaza más de lo que invita, justo en la
        pantalla que es el premio del recorrido. Este tono conserva el contraste
        (>12:1 sobre el texto claro) pero pertenece a la familia del papel y el
@@ -1316,10 +1333,10 @@
 
     .j-converge-grid { margin-top: 12px; border-top: 1px solid rgba(235, 231, 220, .18); }
     .j-converge-row { display: grid; grid-template-columns: 74px 1fr; gap: 10px; align-items: baseline; padding: 5px 0; border-bottom: 1px solid rgba(235, 231, 220, .18); }
-    .j-converge-row > span { color: #8f8b80; font-family: var(--mono); font-size: 9px; letter-spacing: .1em; text-transform: uppercase; }
+    .j-converge-row > span { color: var(--grey-mid); font-family: var(--mono); font-size: 9px; letter-spacing: .1em; text-transform: uppercase; }
     .j-converge-row > div { display: flex; flex-wrap: wrap; gap: 5px; }
     .j-chip { padding: 4px 8px; border: 1px solid rgba(235, 231, 220, .3); font-family: var(--mono); font-size: 9px; letter-spacing: .06em; text-transform: uppercase; color: var(--on-dark-soft); }
-    .j-chip.on { border-color: var(--brass-on-dark); color: #edd39a; }
+    .j-chip.on { border-color: var(--brass-on-dark); color: var(--gold-light); }
 
     .j-takeaways { display: grid; gap: 10px; margin: 0 0 24px; }
     .j-takeaway { padding: 14px 16px; border: 1px solid var(--line-dark); background: var(--paper-2); }
@@ -2877,13 +2894,13 @@
         return y+lines.length*lineHeight;
       }
       function drawShareSignal(ctx,x,y,width,label,value,detail) {
-        ctx.fillStyle="#8d6417";
+        ctx.fillStyle="var(--brass)";
         ctx.font='500 20px "Cascadia Code", Consolas, monospace';
         ctx.fillText(label.toUpperCase(),x,y);
-        ctx.fillStyle="#171812";
+        ctx.fillStyle="var(--ink)";
         fitCanvasFont(ctx,value,width,36,28,'"Iowan Old Style", Georgia, serif');
         ctx.fillText(ellipsizeCanvasText(ctx,value,width),x,y+52);
-        ctx.fillStyle="#606157";
+        ctx.fillStyle="var(--muted)";
         ctx.font='400 22px Inter, "Segoe UI", sans-serif';
         drawCanvasParagraph(ctx,detail,x,y+92,width,29,2);
       }
@@ -2892,8 +2909,8 @@
         try {
           const code=window.qrcode(0,"M");code.addData(text);code.make();
           const modules=code.getModuleCount(),quiet=4,cell=Math.max(2,Math.floor(maxSize/(modules+quiet*2))),size=cell*(modules+quiet*2);
-          ctx.fillStyle="#f4f1e9";ctx.fillRect(x,y,size,size);
-          ctx.fillStyle="#171812";
+          ctx.fillStyle="var(--paper-2)";ctx.fillRect(x,y,size,size);
+          ctx.fillStyle="var(--ink)";
           for(let row=0;row<modules;row++)for(let column=0;column<modules;column++){
             if(code.isDark(row,column))ctx.fillRect(x+(column+quiet)*cell,y+(row+quiet)*cell,cell,cell);
           }
@@ -2903,32 +2920,32 @@
       function buildSoyShareCanvas(snapshot,shareUrl) {
         const canvas=document.createElement("canvas");canvas.width=1080;canvas.height=1350;
         const ctx=canvas.getContext("2d");
-        ctx.fillStyle="#ebe7dc";ctx.fillRect(0,0,canvas.width,canvas.height);
+        ctx.fillStyle="var(--paper)";ctx.fillRect(0,0,canvas.width,canvas.height);
         ctx.textBaseline="alphabetic";
 
-        ctx.fillStyle="#171812";ctx.font='500 25px "Cascadia Code", Consolas, monospace';ctx.fillText("SOY",72,92);
-        ctx.fillStyle="#8d6417";ctx.fillText("/",142,92);
-        ctx.fillStyle="#171812";ctx.fillText("ESTOY",172,92);
-        ctx.textAlign="right";ctx.fillStyle="#606157";ctx.font='500 17px "Cascadia Code", Consolas, monospace';ctx.fillText("LECTURA SIMBÓLICA",1008,92);ctx.textAlign="left";
-        ctx.strokeStyle="#9c988c";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(72,126);ctx.lineTo(1008,126);ctx.stroke();
+        ctx.fillStyle="var(--ink)";ctx.font='500 25px "Cascadia Code", Consolas, monospace';ctx.fillText("SOY",72,92);
+        ctx.fillStyle="var(--brass)";ctx.fillText("/",142,92);
+        ctx.fillStyle="var(--ink)";ctx.fillText("ESTOY",172,92);
+        ctx.textAlign="right";ctx.fillStyle="var(--muted)";ctx.font='500 17px "Cascadia Code", Consolas, monospace';ctx.fillText("LECTURA SIMBÓLICA",1008,92);ctx.textAlign="left";
+        ctx.strokeStyle="var(--line-dark)";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(72,126);ctx.lineTo(1008,126);ctx.stroke();
 
-        ctx.fillStyle="#606157";ctx.font='500 18px "Cascadia Code", Consolas, monospace';ctx.fillText("TU FECHA EN DISTINTAS TRADICIONES",72,174);
-        ctx.fillStyle="#171812";fitCanvasFont(ctx,snapshot.name,936,64,38,'"Iowan Old Style", Georgia, serif');ctx.fillText(ellipsizeCanvasText(ctx,snapshot.name,936),72,242);
-        ctx.fillStyle="#8d6417";ctx.font='500 18px "Cascadia Code", Consolas, monospace';ctx.fillText(snapshot.synthesis.label.toUpperCase(),72,326);
-        ctx.fillStyle="#171812";ctx.font='500 46px "Iowan Old Style", Georgia, serif';ctx.fillText(snapshot.synthesis.title,72,386);
-        ctx.fillStyle="#35372f";ctx.font='400 28px Inter, "Segoe UI", sans-serif';drawCanvasParagraph(ctx,snapshot.synthesis.copy,72,438,936,38,4);
+        ctx.fillStyle="var(--muted)";ctx.font='500 18px "Cascadia Code", Consolas, monospace';ctx.fillText("TU FECHA EN DISTINTAS TRADICIONES",72,174);
+        ctx.fillStyle="var(--ink)";fitCanvasFont(ctx,snapshot.name,936,64,38,'"Iowan Old Style", Georgia, serif');ctx.fillText(ellipsizeCanvasText(ctx,snapshot.name,936),72,242);
+        ctx.fillStyle="var(--brass)";ctx.font='500 18px "Cascadia Code", Consolas, monospace';ctx.fillText(snapshot.synthesis.label.toUpperCase(),72,326);
+        ctx.fillStyle="var(--ink)";ctx.font='500 46px "Iowan Old Style", Georgia, serif';ctx.fillText(snapshot.synthesis.title,72,386);
+        ctx.fillStyle="var(--ink-soft)";ctx.font='400 28px Inter, "Segoe UI", sans-serif';drawCanvasParagraph(ctx,snapshot.synthesis.copy,72,438,936,38,4);
 
-        ctx.strokeStyle="#9c988c";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(72,640);ctx.lineTo(1008,640);ctx.moveTo(540,640);ctx.lineTo(540,1060);ctx.moveTo(72,850);ctx.lineTo(1008,850);ctx.moveTo(72,1060);ctx.lineTo(1008,1060);ctx.stroke();
+        ctx.strokeStyle="var(--line-dark)";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(72,640);ctx.lineTo(1008,640);ctx.moveTo(540,640);ctx.lineTo(540,1060);ctx.moveTo(72,850);ctx.lineTo(1008,850);ctx.moveTo(72,1060);ctx.lineTo(1008,1060);ctx.stroke();
         drawShareSignal(ctx,72,688,410,"Numerología",`Camino de vida ${snapshot.life.number}`,snapshot.profile.gift);
         drawShareSignal(ctx,580,688,428,"Zodíaco tropical",`${snapshot.sun[0]} · ${snapshot.sun[1]} · ${snapshot.sun[2]}`,snapshot.sun[5].slice(0,2).join(", "));
         drawShareSignal(ctx,72,898,410,"Zodíaco chino",`${snapshot.chin.animal} de ${snapshot.chin.element} · ${snapshot.chin.polarity}`,chineseAnimalTone(snapshot.chin.animal));
         drawShareSignal(ctx,580,898,428,snapshot.tarotSameCard?"Arcano de nacimiento":"Arcanos de nacimiento",snapshot.tarotSameCard?`${snapshot.tarot[0]} · ${snapshot.tarotNumber}`:`${snapshot.tarotSoul[0]} · ${snapshot.tarot[0]}`,snapshot.tarot[1]);
 
-        ctx.strokeStyle="#9c988c";ctx.beginPath();ctx.moveTo(72,1110);ctx.lineTo(1008,1110);ctx.stroke();
+        ctx.strokeStyle="var(--line-dark)";ctx.beginPath();ctx.moveTo(72,1110);ctx.lineTo(1008,1110);ctx.stroke();
         const qrSize=drawShareQr(ctx,shareUrl,72,1128,204),footerX=qrSize?72+qrSize+34:72;
-        ctx.fillStyle="#171812";ctx.font='500 29px "Iowan Old Style", Georgia, serif';ctx.fillText("Crea tu propio Soy",footerX,1182);
-        ctx.fillStyle="#8d6417";ctx.font='500 20px "Cascadia Code", Consolas, monospace';ctx.fillText(SHARE_DISPLAY_URL,footerX,1226);
-        ctx.fillStyle="#606157";ctx.font='400 18px Inter, "Segoe UI", sans-serif';drawCanvasParagraph(ctx,"Lectura simbólica: no define tu personalidad ni predice tu futuro.",footerX,1270,1008-footerX,27,2);
+        ctx.fillStyle="var(--ink)";ctx.font='500 29px "Iowan Old Style", Georgia, serif';ctx.fillText("Crea tu propio Soy",footerX,1182);
+        ctx.fillStyle="var(--brass)";ctx.font='500 20px "Cascadia Code", Consolas, monospace';ctx.fillText(SHARE_DISPLAY_URL,footerX,1226);
+        ctx.fillStyle="var(--muted)";ctx.font='400 18px Inter, "Segoe UI", sans-serif';drawCanvasParagraph(ctx,"Lectura simbólica: no define tu personalidad ni predice tu futuro.",footerX,1270,1008-footerX,27,2);
         return canvas;
       }
       function estoyShareUrl(target) {
@@ -2955,35 +2972,35 @@
       function buildEstoyShareCanvas(snapshot,shareUrl) {
         const canvas=document.createElement("canvas");canvas.width=1080;canvas.height=1350;
         const ctx=canvas.getContext("2d");
-        ctx.fillStyle="#ebe7dc";ctx.fillRect(0,0,canvas.width,canvas.height);ctx.textBaseline="alphabetic";
+        ctx.fillStyle="var(--paper)";ctx.fillRect(0,0,canvas.width,canvas.height);ctx.textBaseline="alphabetic";
 
-        ctx.fillStyle="#171812";ctx.font='500 25px "Cascadia Code", Consolas, monospace';ctx.fillText("SOY",72,92);
-        ctx.fillStyle="#8d6417";ctx.fillText("/",142,92);
-        ctx.fillStyle="#171812";ctx.fillText("ESTOY",172,92);
-        ctx.textAlign="right";ctx.fillStyle="#606157";ctx.font='500 17px "Cascadia Code", Consolas, monospace';ctx.fillText(`FECHA FIJADA · ${isoDate(snapshot.target)}`,1008,92);ctx.textAlign="left";
-        ctx.strokeStyle="#9c988c";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(72,126);ctx.lineTo(1008,126);ctx.stroke();
+        ctx.fillStyle="var(--ink)";ctx.font='500 25px "Cascadia Code", Consolas, monospace';ctx.fillText("SOY",72,92);
+        ctx.fillStyle="var(--brass)";ctx.fillText("/",142,92);
+        ctx.fillStyle="var(--ink)";ctx.fillText("ESTOY",172,92);
+        ctx.textAlign="right";ctx.fillStyle="var(--muted)";ctx.font='500 17px "Cascadia Code", Consolas, monospace';ctx.fillText(`FECHA FIJADA · ${isoDate(snapshot.target)}`,1008,92);ctx.textAlign="left";
+        ctx.strokeStyle="var(--line-dark)";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(72,126);ctx.lineTo(1008,126);ctx.stroke();
 
-        ctx.fillStyle="#606157";ctx.font='500 18px "Cascadia Code", Consolas, monospace';ctx.fillText("TU MOMENTO",72,174);
-        ctx.fillStyle="#171812";fitCanvasFont(ctx,snapshot.name,936,58,38,'"Iowan Old Style", Georgia, serif');ctx.fillText(ellipsizeCanvasText(ctx,snapshot.name,936),72,236);
-        ctx.fillStyle="#8d6417";ctx.font='500 18px "Cascadia Code", Consolas, monospace';ctx.fillText(`AÑO PERSONAL ${snapshot.py.number} · ${snapshot.centralKey.toUpperCase()}`,72,320);
-        ctx.fillStyle="#171812";ctx.font='500 48px "Iowan Old Style", Georgia, serif';ctx.fillText(snapshot.moment[0],72,382);
-        ctx.fillStyle="#35372f";ctx.font='400 28px Inter, "Segoe UI", sans-serif';drawCanvasParagraph(ctx,snapshot.synthesis.explanation,72,434,936,38,4);
+        ctx.fillStyle="var(--muted)";ctx.font='500 18px "Cascadia Code", Consolas, monospace';ctx.fillText("TU MOMENTO",72,174);
+        ctx.fillStyle="var(--ink)";fitCanvasFont(ctx,snapshot.name,936,58,38,'"Iowan Old Style", Georgia, serif');ctx.fillText(ellipsizeCanvasText(ctx,snapshot.name,936),72,236);
+        ctx.fillStyle="var(--brass)";ctx.font='500 18px "Cascadia Code", Consolas, monospace';ctx.fillText(`AÑO PERSONAL ${snapshot.py.number} · ${snapshot.centralKey.toUpperCase()}`,72,320);
+        ctx.fillStyle="var(--ink)";ctx.font='500 48px "Iowan Old Style", Georgia, serif';ctx.fillText(snapshot.moment[0],72,382);
+        ctx.fillStyle="var(--ink-soft)";ctx.font='400 28px Inter, "Segoe UI", sans-serif';drawCanvasParagraph(ctx,snapshot.synthesis.explanation,72,434,936,38,4);
 
-        ctx.fillStyle="#171812";ctx.fillRect(72,630,936,164);
-        ctx.fillStyle="#d7b875";ctx.font='500 18px "Cascadia Code", Consolas, monospace';ctx.fillText("PERÍODO FIJADO",106,676);
-        ctx.fillStyle="#f4f1e9";ctx.font='500 36px "Iowan Old Style", Georgia, serif';ctx.fillText(`${formatDate(snapshot.current.start,true)} — ${formatDate(snapshot.current.end,true)}`,106,731);
-        ctx.fillStyle="#c9c8bf";ctx.font='400 21px Inter, "Segoe UI", sans-serif';ctx.fillText(`${snapshot.phase.name} · ${snapshot.current.days} días · consultado para ${formatDate(snapshot.target,true)}`,106,768);
+        ctx.fillStyle="var(--ink)";ctx.fillRect(72,630,936,164);
+        ctx.fillStyle="var(--gold-light)";ctx.font='500 18px "Cascadia Code", Consolas, monospace';ctx.fillText("PERÍODO FIJADO",106,676);
+        ctx.fillStyle="var(--paper-2)";ctx.font='500 36px "Iowan Old Style", Georgia, serif';ctx.fillText(`${formatDate(snapshot.current.start,true)} — ${formatDate(snapshot.current.end,true)}`,106,731);
+        ctx.fillStyle="var(--line-soft)";ctx.font='400 21px Inter, "Segoe UI", sans-serif';ctx.fillText(`${snapshot.phase.name} · ${snapshot.current.days} días · consultado para ${formatDate(snapshot.target,true)}`,106,768);
 
-        ctx.strokeStyle="#9c988c";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(72,842);ctx.lineTo(1008,842);ctx.moveTo(384,842);ctx.lineTo(384,1068);ctx.moveTo(696,842);ctx.lineTo(696,1068);ctx.moveTo(72,1068);ctx.lineTo(1008,1068);ctx.stroke();
+        ctx.strokeStyle="var(--line-dark)";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(72,842);ctx.lineTo(1008,842);ctx.moveTo(384,842);ctx.lineTo(384,1068);ctx.moveTo(696,842);ctx.lineTo(696,1068);ctx.moveTo(72,1068);ctx.lineTo(1008,1068);ctx.stroke();
         drawShareSignal(ctx,72,884,270,"Prioriza",snapshot.synthesis.title,snapshot.synthesis.copy);
         drawShareSignal(ctx,414,884,252,"Cuida",snapshot.synthesis.watch,snapshot.synthesis.watchCopy);
         drawShareSignal(ctx,726,884,282,"Después",snapshot.synthesis.later,snapshot.synthesis.laterCopy);
 
-        ctx.strokeStyle="#9c988c";ctx.beginPath();ctx.moveTo(72,1110);ctx.lineTo(1008,1110);ctx.stroke();
+        ctx.strokeStyle="var(--line-dark)";ctx.beginPath();ctx.moveTo(72,1110);ctx.lineTo(1008,1110);ctx.stroke();
         const qrSize=drawShareQr(ctx,shareUrl,72,1128,204),footerX=qrSize?72+qrSize+34:72;
-        ctx.fillStyle="#171812";ctx.font='500 28px "Iowan Old Style", Georgia, serif';ctx.fillText("Lee este período con tu propia fecha",footerX,1182);
-        ctx.fillStyle="#8d6417";ctx.font='500 20px "Cascadia Code", Consolas, monospace';ctx.fillText(SHARE_DISPLAY_URL,footerX,1226);
-        ctx.fillStyle="#606157";ctx.font='400 18px Inter, "Segoe UI", sans-serif';drawCanvasParagraph(ctx,"El enlace conserva la fecha consultada, no la fecha de nacimiento.",footerX,1270,1008-footerX,27,2);
+        ctx.fillStyle="var(--ink)";ctx.font='500 28px "Iowan Old Style", Georgia, serif';ctx.fillText("Lee este período con tu propia fecha",footerX,1182);
+        ctx.fillStyle="var(--brass)";ctx.font='500 20px "Cascadia Code", Consolas, monospace';ctx.fillText(SHARE_DISPLAY_URL,footerX,1226);
+        ctx.fillStyle="var(--muted)";ctx.font='400 18px Inter, "Segoe UI", sans-serif';drawCanvasParagraph(ctx,"El enlace conserva la fecha consultada, no la fecha de nacimiento.",footerX,1270,1008-footerX,27,2);
         return canvas;
       }
       function canvasPngBlob(canvas) {

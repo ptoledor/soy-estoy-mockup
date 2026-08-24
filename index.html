@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#ebe7dc">
+  <meta name="theme-color" content="var(--paper)">
   <meta name="description" content="Soy/Estoy convierte tradiciones simbólicas en una lectura clara, calculable y honesta para conocerte, entender tu momento y observar tus vínculos.">
   <title>Soy / Estoy · Esoterismo aterrizado</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -11,20 +11,20 @@
   <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --paper: #ebe7dc;
-      --paper-2: #f4f1e9;
-      --ink: #171812;
-      --muted: #606157;
-      --line: #c9c5b8;
-      --line-dark: #9c988c;
-      --brass: #8d6417;
-      --brass-soft: #b08a3a;
-      --green: #234b3d;
+      --paper: #f2f2f0;
+      --paper-2: #fafafa;
+      --ink: #14161a;
+      --muted: #5b6068;
+      --line: #d8d8d5;
+      --line-dark: #b4b4b0;
+      --brass: #3a4a9f;
+      --brass-soft: #6b7ad4;
+      --green: #1f5c48;
       --serif: "Newsreader", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
       --sans: Aptos, "Segoe UI", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
       --mono: "Cascadia Code", "SFMono-Regular", Consolas, monospace;
       --max: 1120px;
-      --shadow-card: 0 1px 2px rgba(23, 24, 18, .06), 0 24px 60px -28px rgba(23, 24, 18, .38);
+      --shadow-card: 0 1px 2px rgba(20, 22, 26, .06), 0 24px 60px -28px rgba(20, 22, 26, .38);
     }
 
     * { box-sizing: border-box; }
@@ -40,7 +40,7 @@
     ::selection { background: var(--brass); color: var(--paper-2); }
     a { color: inherit; }
     button { color: inherit; font: inherit; }
-    a:focus-visible, summary:focus-visible { outline: 3px solid #d09b2f; outline-offset: 3px; }
+    a:focus-visible, summary:focus-visible { outline: 3px solid var(--brass-soft); outline-offset: 3px; }
     em { font-style: italic; }
 
     /* Grano de papel */
@@ -93,7 +93,7 @@
       -webkit-backdrop-filter: blur(14px);
       transition: box-shadow .3s ease;
     }
-    .topbar.scrolled { box-shadow: 0 14px 40px -24px rgba(23, 24, 18, .35); }
+    .topbar.scrolled { box-shadow: 0 14px 40px -24px rgba(20, 22, 26, .35); }
     .topbar-inner { min-height: 68px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
     .brand { display: inline-flex; min-height: 44px; align-items: center; gap: 8px; text-decoration: none; font-family: var(--mono); font-size: 13px; letter-spacing: .15em; text-transform: uppercase; }
     .brand i { color: var(--brass); font-style: normal; }
@@ -120,7 +120,7 @@
       transition: background .25s ease, color .25s ease, box-shadow .25s ease;
     }
     .button.primary { background: var(--ink); color: var(--paper-2); }
-    .button:hover { background: var(--paper-2); color: var(--ink); box-shadow: 0 10px 26px -16px rgba(23, 24, 18, .5); }
+    .button:hover { background: var(--paper-2); color: var(--ink); box-shadow: 0 10px 26px -16px rgba(20, 22, 26, .5); }
     .button.cta::after { content: "→"; font-family: var(--sans); transition: transform .25s ease; }
     .button.cta:hover::after { transform: translateX(4px); }
 
@@ -238,7 +238,7 @@
     .product { position: relative; min-height: 460px; padding: 32px; display: flex; flex-direction: column; transition: background .35s ease; }
     .product + .product { border-left: 1px solid var(--line-dark); }
     .product:nth-child(2) { background: var(--paper-2); }
-    .product:hover { background: #f8f6ef; }
+    .product:hover { background: var(--paper-2); }
     .product-art { aspect-ratio: 3 / 2; margin: -32px -32px 26px; overflow: hidden; border-bottom: 1px solid var(--line-dark); background: var(--ink); }
     .product-link { display: inline-block; margin-top: 18px; color: var(--ink); font-family: var(--mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; text-decoration: none; border-bottom: 1px solid var(--brass); padding-bottom: 3px; }
     .product-link:hover { color: var(--brass); }
@@ -285,7 +285,7 @@
     .honesty-copy .eyebrow { color: var(--brass-soft); }
     .honesty-copy .eyebrow::before { background: var(--brass-soft); }
     .honesty-copy h2 { position: relative; max-width: 13ch; margin: 16px 0 20px; font-family: var(--serif); font-size: clamp(38px, 5vw, 56px); font-weight: 400; line-height: 1.02; letter-spacing: -.025em; }
-    .honesty-copy p { position: relative; max-width: 48ch; margin: 0; color: #c9c5b8; }
+    .honesty-copy p { position: relative; max-width: 48ch; margin: 0; color: var(--line); }
     .constellation { position: absolute; right: -20px; bottom: -30px; width: 340px; opacity: .5; pointer-events: none; }
     .layers { padding: 26px 38px; background: var(--paper-2); }
     .layer { padding: 22px 0; border-bottom: 1px solid var(--line); }
@@ -684,11 +684,11 @@
       <div class="shell honesty reveal">
         <div class="honesty-copy">
           <svg class="constellation" viewBox="0 0 340 260" fill="none" aria-hidden="true">
-            <g stroke="#c9c5b8" stroke-width=".8" opacity=".4">
+            <g stroke="var(--line)" stroke-width=".8" opacity=".4">
               <polyline points="30,200 85,150 150,175 205,105 260,130 310,60"/>
               <polyline points="85,150 120,90 205,105"/>
             </g>
-            <g fill="#c9c5b8">
+            <g fill="var(--line)">
               <circle cx="30" cy="200" r="2.2"/>
               <circle cx="85" cy="150" r="3"/>
               <circle cx="120" cy="90" r="2"/>
