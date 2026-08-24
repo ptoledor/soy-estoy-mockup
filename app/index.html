@@ -439,11 +439,6 @@
     .affinity-gloss .trait-row { grid-template-columns: 82px 1fr; }
     .affinity-gloss .trait-row p { font-size: 13px; }
     .affinity-gloss strong { color: var(--brass); font-weight: 600; }
-    .affinity-box { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); max-width: 500px; margin: 14px auto 0; border: 1px solid var(--line-dark); }
-    .affinity-item { min-width: 0; padding: 12px 14px; border-right: 1px solid var(--line); }
-    .affinity-item:last-child { border-right: 0; }
-    .affinity-item span { display: block; margin-bottom: 7px; color: var(--muted); font-family: var(--mono); font-size: 9px; letter-spacing: .08em; text-transform: uppercase; }
-    .affinity-item strong { display: block; font-family: var(--serif); font-size: 18px; font-weight: 500; }
     .affinity-note { margin-top: 14px !important; }
     .matrix-canvas.compact-matrix { margin: 10px auto 4px; }
     .matrix-legend { display: flex; flex-wrap: wrap; gap: 18px; margin-top: 20px; font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: .06em; }
@@ -1085,10 +1080,6 @@
       .practical-grid, .period-grid, .climate-grid, .planner { grid-template-columns: 1fr; }
       .zodiac-pair { grid-template-columns: 1fr; }
       .zodiac-pair .evidence { border-right: 0; border-bottom: 1px solid var(--line); }
-      .affinity-box { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-      .affinity-item { padding: 10px 8px; border-right: 1px solid var(--line); border-bottom: 0; }
-      .affinity-item:last-child { border-right: 0; }
-      .affinity-item strong { font-size: 16px; }
       .matrix-selectors { grid-template-columns: repeat(3, minmax(0, 1fr)); }
       .practical, .period-card, .climate-card { border-right: 0; border-bottom: 1px solid var(--line); }
       .practical:last-child, .period-card:last-child, .climate-card:last-child { border-bottom: 0; }
@@ -1208,6 +1199,10 @@
 
     .j-stage { flex: 1 1 auto; display: flex; justify-content: center; padding: 34px 22px 26px; }
     .j-step { width: min(100%, 620px); margin: auto; display: none; animation: j-enter .42s cubic-bezier(.2, .65, .2, 1) both; }
+    /* El ultimo elemento de un paso arrastraba su margen inferior contra la
+       barra fija de acciones, que ya trae su propia separacion: eran 12px
+       muertos en todos los pasos. El chino los necesitaba. */
+    .j-step > *:last-child { margin-bottom: 0; }
     .j-step.active { display: block; }
     @keyframes j-enter { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
 
@@ -1303,6 +1298,21 @@
     .j-disclosure summary::after { content: "+"; color: var(--brass); font-size: 16px; line-height: 1; }
     .j-disclosure[open] summary::after { content: "−"; }
     .j-disclosure .j-calc { margin-top: 0; }
+    /* Dos desplegables seguidos comparten separacion: el borde superior del
+       segundo ya hace de linea entre ambos, y el margen extra costaba 12px que
+       el paso chino no tiene. */
+    .j-disclosure + .j-disclosure { margin-top: 0; }
+    .j-matrix .matrix-canvas { margin: 10px auto 0; }
+    .j-affinity-table { margin-top: 14px; border-top: 1px solid var(--line); }
+    .j-affinity-row { display: grid; grid-template-columns: 96px 1fr; align-items: baseline; gap: 12px; padding: 9px 0; border-bottom: 1px solid var(--line); }
+    .j-affinity-row > span { display: inline-flex; align-items: center; gap: 8px; font-family: var(--serif); font-size: 15px; }
+    .j-affinity-row i { width: 9px; height: 9px; flex: none; border-radius: 50%; }
+    .j-affinity-row b { font-family: var(--mono); font-size: 10px; font-weight: 400; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+    .j-affinity-row[data-tuyo="si"] b { color: var(--brass); }
+    .j-affinity-row p { margin: 2px 0 0; color: var(--muted); font-size: 12px; line-height: 1.4; }
+    .j-matrix .matrix-legend { margin-top: 14px; }
+    .j-matrix .j-traits { margin-top: 14px; }
+    .j-matrix-note { margin: 12px 0 2px; color: var(--muted); font-size: 12px; line-height: 1.45; }
     /* Aproximación etiquetada, nunca escondida. */
     .j-flag { margin: 14px 0 0; padding: 11px 13px; border-left: 2px solid var(--brass); background: rgba(141, 100, 23, .07); color: var(--muted); font-size: 13px; }
 
@@ -1662,6 +1672,24 @@
                 <div class="j-calc"><b>Por qué ese signo</b><span id="j-w-calc">—</span></div>
                 <div class="j-calc"><b>Por qué ese elemento y esa modalidad</b><span id="j-w-calc-conjunto">—</span></div>
               </details>
+              <!-- El diagrama de elementos existia solo en la app completa, o
+                   sea a un lado del recorrido. Aqui es donde la persona acaba
+                   de conocer su elemento, que es cuando la pregunta "y con
+                   cuales se lleva" tiene sentido. Va plegado porque es lectura
+                   opcional: el paso sigue cerrando sin abrirlo. -->
+              <details class="j-disclosure j-matrix" id="j-w-matrix-box">
+                <summary>Ver afinidades entre elementos</summary>
+                <canvas class="matrix-canvas compact-matrix" id="j-w-matrix" width="420" height="420" role="img" aria-label="Afinidades elementales del signo solar"></canvas>
+                <!-- El cuadro anterior era de tres columnas -Positivas, Neutra,
+                     En tension- y agrupaba los elementos dentro de cada una. Se
+                     leia al reves de como se pregunta: uno mira un elemento y
+                     quiere saber que es suyo, no mira una afinidad y quiere
+                     saber que elementos la componen. Ademas "Tierra · Agua"
+                     dentro de una columna angosta partia en dos lineas. Una
+                     fila por elemento contesta la pregunta directa. -->
+                <div class="j-affinity-table" id="j-w-affinity-table" aria-label="Afinidad de cada elemento con el tuyo"></div>
+                <p class="j-matrix-note">Describe lenguajes generales entre elementos; no anuncia compatibilidad ni conflicto.</p>
+              </details>
             </div>
           </div>
           <p class="j-lead">Esto es <strong>signo solar</strong>, no una carta natal. La carta completa necesita hora y lugar.</p>
@@ -1691,6 +1719,23 @@
                 <div class="j-calc"><b>Por qué ese animal</b><span id="j-c-calc-animal">—</span></div>
                 <div class="j-calc"><b>Por qué ese elemento</b><span id="j-c-calc-elemento">—</span></div>
                 <div class="j-calc"><b>Por qué esa polaridad</b><span id="j-c-calc-polaridad">—</span></div>
+              </details>
+              <!-- Las cinco fases se explican mal en prosa y bien en el
+                   diagrama dirigido: cual impulsa a cual, cual regula a cual.
+                   Estaba en la app completa; aqui esta junto al elemento que
+                   lo motiva. -->
+              <details class="j-disclosure j-matrix" id="j-c-matrix-box">
+                <summary>Ver cómo circula tu elemento</summary>
+                <canvas class="matrix-canvas" id="j-c-matrix" width="420" height="420" role="img" aria-label="Matriz de las cinco fases"></canvas>
+                <div class="matrix-legend" aria-label="Leyenda de las cinco fases">
+                  <span><i class="matrix-loop" aria-hidden="true"></i>Tu elemento</span>
+                  <span><i class="matrix-line positive" aria-hidden="true"></i>Impulsa</span>
+                  <span><i class="matrix-line neutral" aria-hidden="true"></i>Regula</span>
+                </div>
+                <div class="j-traits" aria-label="Cómo circula tu elemento">
+                  <div class="j-trait"><span>Actúas</span><p id="j-c-affinity-copy">—</p></div>
+                  <div class="j-trait"><span>Recibes</span><p id="j-c-affinity-incoming">—</p></div>
+                </div>
               </details>
             </div>
           </div>
@@ -2035,11 +2080,10 @@
               <h3 id="western-affinity-title">Afinidades de tu signo</h3>
               <p>Afinidades positivas, neutras y en tensión entre los cuatro elementos. No calcula aspectos ni define una relación completa.</p>
               <canvas class="matrix-canvas compact-matrix" id="western-affinity-matrix" width="420" height="420" role="img" aria-label="Afinidades elementales del signo solar"></canvas>
-              <div class="affinity-box" aria-label="Cuadro de afinidades del signo solar">
-                <div class="affinity-item"><span>Positivas</span><strong id="western-affinity-positive">—</strong></div>
-                <div class="affinity-item"><span>Neutra</span><strong id="western-affinity-neutral">—</strong></div>
-                <div class="affinity-item"><span>En tensión</span><strong id="western-affinity-tension">—</strong></div>
-              </div>
+              <!-- Misma tabla que el recorrido. Tenerla en dos formatos era
+                   dejar que la app y el recorrido contaran distinto la misma
+                   relacion entre elementos. -->
+              <div class="j-affinity-table" id="western-affinity-table" aria-label="Afinidad de cada elemento con el tuyo"></div>
               <p class="affinity-note">Describe lenguajes generales entre elementos solares; no anuncia compatibilidad ni conflicto.</p>
             </figure>
           </div>
@@ -3292,21 +3336,34 @@
             const ex=directed?bx-ux*trim:bx,ey=directed?by-uy*trim:by;
             ctx.beginPath(); ctx.moveTo(sx,sy);
             if(!directed){
-              const mx=(sx+ex)/2,my=(sy+ey)/2;
-              let nx=-uy,ny=ux;
-              const centerDistance=Math.hypot(mx-cx,my-cy);
-              if(centerDistance<size*.04){
-                const direction=edge[0]%2===0?1:-1;nx*=direction;ny*=direction;
-              } else if((mx+nx*10-cx)*nx+(my+ny*10-cy)*ny<0){nx*=-1;ny*=-1;}
-              const bend=type==="negative"?size*.30:size*.18;
-              const chord=Math.hypot(ex-sx,ey-sy);
-              const arcRadius=(chord*chord)/(8*bend)+bend/2;
-              const arcCx=mx-nx*(arcRadius-bend),arcCy=my-ny*(arcRadius-bend);
-              const startAngle=Math.atan2(sy-arcCy,sx-arcCx),endAngle=Math.atan2(ey-arcCy,ex-arcCx);
-              let delta=endAngle-startAngle;
-              while(delta>Math.PI)delta-=Math.PI*2;
-              while(delta<-Math.PI)delta+=Math.PI*2;
-              ctx.arc(arcCx,arcCy,arcRadius,startAngle,endAngle,delta<0);
+              /* Antes cada arista era un arco abombado hacia afuera -30% del
+                 lienzo las diagonales, 18% el resto-, calculado con un radio
+                 que no tenia nada que ver con el circulo de los nodos. Con
+                 cuatro nodos en circunferencia eso daba seis lentes que se
+                 cruzaban y se salian del aro: la figura no se leia como rueda.
+
+                 Los nodos YA estan sobre una circunferencia, asi que la unica
+                 curva que corresponde es esa misma. Vecinos: arco sobre el aro.
+                 Opuestos: recta por el centro, que es lo que un diametro es.
+                 Nada se sale del circulo y las dos familias de relacion quedan
+                 distinguibles por forma, no solo por color. */
+              const angA=Math.atan2(ay-cy,ax-cx),angB=Math.atan2(by-cy,bx-cx);
+              let separacion=Math.abs(angB-angA);
+              if(separacion>Math.PI)separacion=Math.PI*2-separacion;
+              const opuestos=separacion>Math.PI-.15;
+              if(opuestos){
+                const recorte=radius+6;
+                ctx.moveTo(ax+ux*recorte,ay+uy*recorte);
+                ctx.lineTo(bx-ux*recorte,by-uy*recorte);
+              } else {
+                let desde=angA,hasta=angB;
+                if(hasta-desde>Math.PI)hasta-=Math.PI*2;
+                if(desde-hasta>Math.PI)desde-=Math.PI*2;
+                const hueco=(radius+6)/R,adelante=hasta>desde;
+                const inicio=desde+(adelante?hueco:-hueco),fin=hasta-(adelante?hueco:-hueco);
+                ctx.moveTo(cx+R*Math.cos(inicio),cy+R*Math.sin(inicio));
+                ctx.arc(cx,cy,R,inicio,fin,!adelante);
+              }
             } else ctx.lineTo(ex,ey);
             ctx.strokeStyle=color; ctx.lineWidth=(type==="positive"?2.5:1.75)+emphasis*1.25;
             ctx.setLineDash(type==="negative"?[8,6]:type==="neutral"?[3,5]:[]); ctx.stroke();
@@ -3391,8 +3448,14 @@
       }
       function drawAffinityMatrices() {
         const western=$("#western-affinity-matrix"),chinese=$("#chinese-affinity-matrix"),wikiWestern=$("#wiki-western-matrix"),wikiChinese=$("#wiki-chinese-matrix");
+        // Los del recorrido usan los mismos datos y el mismo dibujante: si se
+        // pintaran aparte, dos superficies podrian discrepar sobre las mismas
+        // relaciones entre elementos.
+        const recorridoWestern=$("#j-w-matrix"),recorridoChinese=$("#j-c-matrix");
         if(western)drawAffinityMatrix(western,WESTERN_MATRIX.nodes,WESTERN_MATRIX.positions,WESTERN_MATRIX.edges,false,affinitySelection.western);
         if(chinese)drawAffinityMatrix(chinese,CHINESE_MATRIX.nodes,CHINESE_MATRIX.positions,CHINESE_MATRIX.edges,true,affinitySelection.chinese);
+        if(recorridoWestern)drawAffinityMatrix(recorridoWestern,WESTERN_MATRIX.nodes,WESTERN_MATRIX.positions,WESTERN_MATRIX.edges,false,affinitySelection.western);
+        if(recorridoChinese)drawAffinityMatrix(recorridoChinese,CHINESE_MATRIX.nodes,CHINESE_MATRIX.positions,CHINESE_MATRIX.edges,true,affinitySelection.chinese);
         if(wikiWestern)drawWikiMatrix("western");
         if(wikiChinese)drawWikiMatrix("chinese");
       }
@@ -3712,9 +3775,7 @@
         const westernRelations=WESTERN_ELEMENT_RELATIONS[sun[1]];
         affinitySelection={western:sun[1],chinese:chin.element};
         $("#western-affinity-title").textContent=`Afinidades de ${sun[0]}`;
-        $("#western-affinity-positive").textContent=`${sun[1]} · ${westernRelations.complement}`;
-        $("#western-affinity-neutral").textContent=westernRelations.adjust;
-        $("#western-affinity-tension").textContent=westernRelations.tension;
+        pintarTablaAfinidades(sun[1],westernRelations,"western-affinity-table");
         $("#chinese-affinity-title").textContent=`Cómo circula tu ${chin.element}`;
         $("#chinese-affinity-copy").textContent=`Actúas desde ${chin.element}: tu movimiento natural es ${CHINESE_ELEMENT_ACTION[chin.element]}. Hacia afuera, alimentas a ${CHINESE_IMPULSE[chin.element]} —${CHINESE_IMPULSE_PRACTICE[chin.element].toLowerCase().replace(/\.$/,"")}— y regulas a ${CHINESE_REGULATION[chin.element]} —${CHINESE_REGULATION_PRACTICE[chin.element].toLowerCase().replace(/\.$/,"")}—.`;
         $("#chinese-affinity-incoming").textContent=CHINESE_INCOMING_PRACTICE[chin.element];
@@ -4279,6 +4340,14 @@ const NATAL_API = (()=>{ try { return localStorage.getItem("natal-api"); } catch
         });
       });
       window.addEventListener("resize",drawAffinityMatrices);
+      /* Un <canvas> dentro de un <details> cerrado no tiene ancho: el dibujante
+         mide `parentElement.clientWidth` y ahi vale 0, asi que cae en su tamaño
+         por defecto y sale con la escala equivocada. Se redibuja al abrir, que
+         es el primer momento en que hay ancho real. */
+      ["j-w-matrix-box","j-c-matrix-box"].forEach(id=>{
+        const caja=document.getElementById(id);
+        if(caja)caja.addEventListener("toggle",()=>{if(caja.open)requestAnimationFrame(drawAffinityMatrices);});
+      });
 
       /* ═══ RECORRIDO GUIADO ═══════════════════════════════════════════════
          Máquina de pasos que entrega Soy y Estoy de a una idea por pantalla.
@@ -4393,8 +4462,41 @@ const NATAL_API = (()=>{ try { return localStorage.getItem("natal-api"); } catch
         jSet("j-acceso-copy",`El tema y el período de ${formatDate(s.current.start)} a ${formatDate(s.current.end)} ya son tuyos. El pase agrega el ritmo lunar, la sugerencia diaria y los períodos que siguen durante 30 días.`);
       }
 
+      /* Una fila por elemento, en el orden tradicional Fuego-Tierra-Aire-Agua.
+         Se deriva de `WESTERN_ELEMENT_RELATIONS`, la misma tabla que alimenta
+         el diagrama de arriba: si se escribiera a mano, dibujo y tabla podrian
+         terminar diciendo cosas distintas sobre la misma relacion. */
+      const ORDEN_ELEMENTOS=["Fuego","Tierra","Aire","Agua"];
+      function pintarTablaAfinidades(propio,relaciones,destino="j-w-affinity-table"){
+        const caja=$(`#${destino}`);
+        if(!caja)return;
+        const relacionDe=elemento=>
+          elemento===propio?["Tu elemento","Es desde donde funcionas."]
+          :elemento===relaciones.complement?["Afinidad positiva","Lenguaje parecido: se entienden sin traducir."]
+          :elemento===relaciones.tension?["En tensión","Piden cosas opuestas; cuesta más y enseña más."]
+          :["Neutra","Ni empuja ni frena: convive."];
+        caja.innerHTML=ORDEN_ELEMENTOS.map(elemento=>{
+          const [etiqueta,glosa]=relacionDe(elemento);
+          return `<div class="j-affinity-row" data-tuyo="${elemento===propio?"si":"no"}">`
+            +`<span><i style="background:var(--el-${elemento.toLowerCase()})"></i>${elemento}</span>`
+            +`<div><b>${etiqueta}</b><p>${glosa}</p></div></div>`;
+        }).join("");
+      }
+
       function paintJourneySoy(s){
         paintJourneyTally(s);
+        /* `affinitySelection` decide que nodo va resaltado. Lo fijaba solo
+           `renderSoy()`, o sea la app completa: quien nunca salio del recorrido
+           llegaba a los diagramas sin eleccion y sin resaltado. */
+        affinitySelection={western:s.sun[1],chinese:s.chin.element};
+        const relacionesW=WESTERN_ELEMENT_RELATIONS[s.sun[1]];
+        pintarTablaAfinidades(s.sun[1],relacionesW);
+        jSet("j-c-affinity-copy",`Actúas desde ${s.chin.element}: tu movimiento natural es ${CHINESE_ELEMENT_ACTION[s.chin.element]}. Hacia afuera, alimentas a ${CHINESE_IMPULSE[s.chin.element]} y regulas a ${CHINESE_REGULATION[s.chin.element]}.`);
+        jSet("j-c-affinity-incoming",CHINESE_INCOMING_PRACTICE[s.chin.element]);
+        const etiquetaW=$("#j-w-matrix");
+        if(etiquetaW)etiquetaW.setAttribute("aria-label",`Afinidades de ${s.sun[0]}. ${s.sun[1]} está marcado: afinidad positiva con ${s.sun[1]} y ${relacionesW.complement}, neutra con ${relacionesW.adjust} y en tensión con ${relacionesW.tension}. No son aspectos calculados.`);
+        const etiquetaC=$("#j-c-matrix");
+        if(etiquetaC)etiquetaC.setAttribute("aria-label",`Las cinco fases para ${s.chin.animal} de ${s.chin.element}. ${s.chin.element} es tu elemento y está marcado. Las flechas muestran qué fases impulsa y regula.`);
         jSet("j-n-value",s.life.number);
         jSet("j-n-meaning",`Habla de ${s.profile.meaning}.`);
         jSet("j-n-calc",s.life.expression);
