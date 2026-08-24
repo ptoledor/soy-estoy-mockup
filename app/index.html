@@ -1249,6 +1249,16 @@
     .j-upsell-top i { color: var(--brass); font-family: var(--mono); font-size: 12px; font-style: normal; letter-spacing: .06em; }
     .j-upsell-copy { display: block; color: var(--muted); font-size: 13px; line-height: 1.5; }
 
+    .j-ledger-intro { margin: 14px 0 8px; color: #aaa69b; font-size: 12px; line-height: 1.5; }
+    .j-disclosure .factor-ledger { border-color: rgba(235, 231, 220, .22); }
+    .j-disclosure .factor-row { border-color: rgba(235, 231, 220, .22); }
+    .j-disclosure .factor-summary strong { color: var(--paper); }
+    .j-disclosure .factor-meta b { color: #c99b46; }
+    .j-disclosure .factor-meta i { color: #aaa69b; }
+    .j-disclosure .source-card { border-color: rgba(235, 231, 220, .22); }
+    .j-disclosure .source-card strong { color: var(--paper); }
+    .j-disclosure .source-card small { color: #aaa69b; }
+
     .j-discarded { margin: 10px 0 0; color: rgba(235, 231, 220, .58); font-family: var(--mono); font-size: 10px; line-height: 1.65; letter-spacing: .04em; }
     .j-discarded b { color: rgba(235, 231, 220, .82); font-weight: 400; }
 
@@ -1724,8 +1734,15 @@
                 <p id="j-cv-second-copy">—</p>
               </div>
               <details class="j-disclosure">
-                <summary>Ver interpretación y todas las señales</summary>
+                <summary>Ver interpretación y todos los temas</summary>
                 <p class="j-full-copy" id="j-cv-copy-full">—</p>
+                <!-- El recuento completo: por qué ganaron estos temas y no
+                     otros. Va plegado porque el paso a paso existe para que no
+                     haya tanta información delante como para scrollear rápido;
+                     abrirlo es una decisión de quien quiere el detalle. -->
+                <p class="j-ledger-intro">Todos los temas que aparecieron, y en cuántas de las cuatro tradiciones. Los de arriba son los que se afirmaron; ábrelos para ver qué señal sostiene cada uno.</p>
+                <div class="factor-ledger" id="j-cv-ledger"></div>
+                <p class="j-ledger-intro">Y las señales de tu fecha, agrupadas por tradición:</p>
                 <div class="j-converge-grid" id="j-cv-chips"></div>
               </details>
             </div>
@@ -3613,16 +3630,15 @@
         }
       }
 
-      function renderSoy(birth, name) {
-        const snapshot=buildSoySnapshot(name,birth);
-        const {life,profile,sun,chin,tarot,tarotNumber,synthesis}=snapshot;
-        /* El recuento de atributos se renderizaba en renderSoyPlus porque vivía
-           en esa vista. Al moverlo a la convergencia, el render lo sigue. */
+      /* El recuento se pinta en dos superficies: la convergencia de la app y
+         el paso de convergencia del recorrido. Es la misma evidencia del mismo
+         tema, asi que se genera una vez para que no puedan separarse. */
+      function factorLedgerHTML(snapshot){
         /* Misma unidad que la convergencia: tradiciones. Estas filas ordenaban
            y medían por "N de 8 fuentes" mientras la síntesis, dos bloques más
            arriba, decía "N de 4 tradiciones". Dos varas para lo mismo. */
         const visibleFactors=[...snapshot.factors].sort((a,b)=>b.traditionCount-a.traditionCount||b.score-a.score||b.sourceCount-a.sourceCount).slice(0,6);
-        $("#factor-ledger").innerHTML=visibleFactors.map(factor=>{
+        return visibleFactors.map(factor=>{
           const strength=Math.round(factor.traditionCount/4*100);
           const sources=[...new Map(factor.sources.map(source=>[source.key,source])).values()];
           const sourceCards=sources.map(source=>{
@@ -3631,6 +3647,14 @@
           }).join("");
           return `<details class="factor-row"><summary class="factor-summary"><strong>${escapeHTML(SOY_FACTORS[factor.key].label)}</strong><div class="factor-track" aria-label="${factor.traditionCount} de 4 tradiciones"><i style="--factor-strength:${strength}%"></i></div><span class="factor-meta"><b>${factor.traditionCount} de 4 tradiciones</b><i>Ver señales</i></span></summary><div class="factor-sources">${sourceCards}</div></details>`;
         }).join("");
+      }
+
+      function renderSoy(birth, name) {
+        const snapshot=buildSoySnapshot(name,birth);
+        const {life,profile,sun,chin,tarot,tarotNumber,synthesis}=snapshot;
+        /* El recuento de atributos se renderizaba en renderSoyPlus porque vivía
+           en esa vista. Al moverlo a la convergencia, el render lo sigue. */
+        $("#factor-ledger").innerHTML=factorLedgerHTML(snapshot);
 
         $("#soy-convergence-label").textContent=synthesis.label;
         const soySecond=$("#soy-second");
@@ -4340,6 +4364,7 @@ const NATAL_API = (()=>{ try { return localStorage.getItem("natal-api"); } catch
         jSet("j-panel-title",`${s.name}, esto es lo que se repite en ti.`);
         jSet("j-panel-lead",`${s.synthesis.title} · ${s.synthesis.label.replace("Convergencia · ","")}. Tu Soy queda guardado en esta pantalla; desde aquí eliges qué abrir.`);
 
+        $("#j-cv-ledger").innerHTML=factorLedgerHTML(s);
         jSet("j-cv-label",s.synthesis.label);
         jSet("j-cv-theme",s.synthesis.title);
         jSet("j-cv-sources",s.synthesis.sourcesBreve);
