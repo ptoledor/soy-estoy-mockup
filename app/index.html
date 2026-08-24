@@ -1282,9 +1282,15 @@
     .j-disclosure .factor-summary strong { color: var(--paper); }
     .j-disclosure .factor-meta b { color: var(--brass-on-dark); }
     .j-disclosure .factor-meta i { color: var(--on-dark-faint); }
-    .j-disclosure .source-card { border-color: var(--line-on-dark); }
-    .j-disclosure .source-card strong { color: var(--paper); }
+    /* Faltaba el FONDO. .source-card y .factor-sources nacen para la
+       superficie clara de la app; aqui solo se les habia cambiado el color del
+       texto, asi que quedaban titulos claros sobre tarjeta clara: ilegibles. */
+    .j-disclosure .factor-sources { border-top-color: var(--line-on-dark); background: var(--ink-soft); }
+    .j-disclosure .source-card { border-color: var(--line-on-dark); background: var(--ink); }
+    .j-disclosure .source-card strong { color: var(--on-dark); }
     .j-disclosure .source-card small { color: var(--on-dark-faint); }
+    .j-disclosure .factor-summary { color: var(--on-dark-soft); }
+    .j-disclosure .factor-track { background: var(--line-on-dark); }
 
     .j-discarded { margin: 10px 0 0; color: rgba(235, 231, 220, .58); font-family: var(--mono); font-size: 10px; line-height: 1.65; letter-spacing: .04em; }
     .j-discarded b { color: rgba(235, 231, 220, .82); font-weight: 400; }
@@ -3657,7 +3663,10 @@
       /* El recuento se pinta en dos superficies: la convergencia de la app y
          el paso de convergencia del recorrido. Es la misma evidencia del mismo
          tema, asi que se genera una vez para que no puedan separarse. */
-      function factorLedgerHTML(snapshot){
+      /* `yaExplicado` es el tema que la pantalla ya desarrollo arriba: su fila
+         repetiria el mismo parrafo palabra por palabra a cuatro centimetros de
+         distancia. Las demas filas si lo traen, porque para ellas es nuevo. */
+      function factorLedgerHTML(snapshot, yaExplicado){
         /* Misma unidad que la convergencia: tradiciones. Estas filas ordenaban
            y medían por "N de 8 fuentes" mientras la síntesis, dos bloques más
            arriba, decía "N de 4 tradiciones". Dos varas para lo mismo. */
@@ -3669,7 +3678,7 @@
             const matches=(source.matchedAttributes||[]).join(", ")||SOY_FACTORS[factor.key].label.toLowerCase();
             return `<div class="source-card"><strong>${escapeHTML(contextualSoySourceLabel(source))}</strong><small>Coincide en: ${escapeHTML(matches)}</small></div>`;
           }).join("");
-          return `<details class="factor-row"><summary class="factor-summary"><strong>${escapeHTML(SOY_FACTORS[factor.key].label)}</strong><div class="factor-track" aria-label="${factor.traditionCount} de 4 tradiciones"><i style="--factor-strength:${strength}%"></i></div><span class="factor-meta"><b>${factor.traditionCount} de 4 tradiciones</b><i>Ver señales</i></span></summary><div class="factor-sources"><p class="factor-analysis">${escapeHTML(SOY_FACTORS[factor.key].analysis)}</p>${sourceCards}</div></details>`;
+          return `<details class="factor-row"><summary class="factor-summary"><strong>${escapeHTML(SOY_FACTORS[factor.key].label)}</strong><div class="factor-track" aria-label="${factor.traditionCount} de 4 tradiciones"><i style="--factor-strength:${strength}%"></i></div><span class="factor-meta"><b>${factor.traditionCount} de 4 tradiciones</b><i>Ver señales</i></span></summary><div class="factor-sources">${factor.key===yaExplicado?"":`<p class="factor-analysis">${escapeHTML(SOY_FACTORS[factor.key].analysis)}</p>`}${sourceCards}</div></details>`;
         }).join("");
       }
 
@@ -3678,7 +3687,7 @@
         const {life,profile,sun,chin,tarot,tarotNumber,synthesis}=snapshot;
         /* El recuento de atributos se renderizaba en renderSoyPlus porque vivía
            en esa vista. Al moverlo a la convergencia, el render lo sigue. */
-        $("#factor-ledger").innerHTML=factorLedgerHTML(snapshot);
+        $("#factor-ledger").innerHTML=factorLedgerHTML(snapshot,snapshot.factors.find(f=>f.traditionCount>=2)?.key);
 
         $("#soy-convergence-label").textContent=synthesis.label;
         const soySecond=$("#soy-second");
@@ -4388,7 +4397,7 @@ const NATAL_API = (()=>{ try { return localStorage.getItem("natal-api"); } catch
         jSet("j-panel-title",`${s.name}, esto es lo que se repite en ti.`);
         jSet("j-panel-lead",`${s.synthesis.title} · ${s.synthesis.label.replace("Convergencia · ","")}. Tu Soy queda guardado en esta pantalla; desde aquí eliges qué abrir.`);
 
-        $("#j-cv-ledger").innerHTML=factorLedgerHTML(s);
+        $("#j-cv-ledger").innerHTML=factorLedgerHTML(s,s.factors.find(f=>f.traditionCount>=2)?.key);
         jSet("j-cv-label",s.synthesis.label);
         jSet("j-cv-theme",s.synthesis.title);
         jSet("j-cv-sources",s.synthesis.sourcesBreve);
