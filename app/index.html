@@ -961,6 +961,11 @@
     .archetype-pair p { margin: 0; color: var(--muted); font-size: 11px; line-height: 1.5; }
     .archetype-question { margin: 22px 0 0; color: var(--muted); font-size: 13px; }
     .archetype-question strong { color: var(--ink); }
+    .circle-privacy { grid-column: 1 / -1; margin: 10px 0 0; color: var(--muted); font-family: var(--mono); font-size: 9px; line-height: 1.6; letter-spacing: .04em; }
+    .circle-locked { padding: 30px; border: 1px dashed var(--line-dark); background: var(--paper); text-align: center; }
+    .circle-locked strong { display: block; max-width: 28ch; margin: 8px auto 10px; font-family: var(--serif); font-size: clamp(22px, 2.6vw, 28px); font-weight: 460; line-height: 1.15; }
+    .circle-locked p { max-width: 54ch; margin: 0 auto 18px; color: var(--muted); font-size: 14px; line-height: 1.55; }
+
     .ledger-head { margin-top: 34px; }
     .ledger-head h3 { max-width: 30ch; margin: 0 0 8px; font-family: var(--serif); font-size: clamp(22px, 2.6vw, 28px); font-weight: 460; line-height: 1.15; letter-spacing: -.015em; }
     .ledger-head p { max-width: 62ch; margin: 0 0 16px; color: var(--muted); font-size: 14px; line-height: 1.55; }
@@ -1227,6 +1232,15 @@
     .j-reveal-body p.j-arcana-name { margin: 0 0 4px; color: var(--ink); font-family: var(--serif); font-size: clamp(28px, 6.6vw, 36px); font-weight: 420; line-height: 1.05; letter-spacing: -.02em; }
     .j-reveal-body p.j-arcana-gloss { margin: 0; font-size: 14px; }
     .j-arcana .j-calc { margin-top: 12px; }
+
+    .j-panel-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 4px 0 0; }
+    .j-panel-card { display: flex; flex-direction: column; gap: 4px; padding: 14px; border: 1px solid var(--line-dark); background: var(--paper); text-align: left; cursor: pointer; font: inherit; color: inherit; }
+    .j-panel-card:hover { border-color: var(--brass); }
+    .j-panel-kind { color: var(--brass); font-family: var(--mono); font-size: 9px; letter-spacing: .08em; text-transform: uppercase; }
+    .j-panel-card b { font-family: var(--serif); font-size: 19px; font-weight: 500; line-height: 1.15; letter-spacing: -.01em; }
+    .j-panel-card i { color: var(--muted); font-style: normal; font-size: 12px; line-height: 1.4; }
+    .j-panel-foot { margin: 14px 0 0; text-align: center; }
+    @media (max-width: 380px) { .j-panel-grid { grid-template-columns: 1fr; } }
 
     .j-upsell { display: block; width: 100%; margin: 16px 0 0; padding: 14px 16px; border: 1px dashed var(--line-dark); background: var(--paper); text-align: left; cursor: pointer; font: inherit; color: inherit; }
     .j-upsell:hover { border-color: var(--brass); }
@@ -1737,108 +1751,48 @@
           </button>
         </section>
 
-        <!-- 9 · Cierra Soy antes de abrir Estoy. Una idea por vez. -->
-        <!-- 9 · Qué es Estoy. El paso puente "tu Soy está completo" se eliminó:
-             repetía la distinción que ya hacen el paso 1 y este mismo, y al
-             escanear su titular no decía nada. -->
-        <section class="j-step" data-jstep="estoy-intro" aria-label="Qué es Estoy">
-          <p class="j-eyebrow">La otra mitad</p>
-          <h1>Estoy no dice quién eres. Dice <em>qué pide atención ahora</em>.</h1>
-          <p class="j-lead" id="j-estoy-intro-copy">—</p>
-          <div class="j-takeaways">
-            <article class="j-takeaway"><span>Tema</span><b>El año personal</b><p>Cambia una vez al año y define de qué se trata este ciclo.</p></article>
-            <article class="j-takeaway"><span>Ritmo</span><b>El cuarto lunar</b><p>Cambia cada siete días y sugiere cómo trabajar ese tema.</p></article>
-            <article class="j-takeaway"><span>Contexto</span><b>Año chino y temporada solar</b><p>Clima de fondo: matizan el tema, no lo reemplazan.</p></article>
-          </div>
-          <!-- Anticipa el muro. Sin esto, el precio del paso 11 sorprendía:
-               "hasta entonces parece un recorrido gratuito y no se anticipa
-               claramente un límite de pago". Decirlo antes es más honesto que
-               dejar que aparezca de golpe. -->
-          <p class="j-lead">El tema y el período los ves ahora, gratis. El detalle del ritmo va en el pase de 30 días.</p>
-        </section>
+        <!-- 9 · El panel. El recorrido cubre SOLO Soy y aterriza aquí.
 
-        <!-- 10 · La lectura real de Estoy, ANTES del precio y gratis.
-             Iba después del muro y no funcionaba: se pedían USD 5 por algo que
-             la persona sólo había visto descrito. Ahora el tema, el período y
-             el foco se entregan de verdad, y el muro protege el detalle. -->
-        <section class="j-step" data-jstep="estoy-momento" aria-label="Tu momento">
-          <p class="j-eyebrow">Estoy · tu momento</p>
-          <h1 id="j-e-title">—</h1>
-          <p class="j-lead" id="j-e-copy">—</p>
-          <div class="j-summary">
-            <div class="j-summary-item"><span>Tu momento</span><strong id="j-e-moment">—</strong><p id="j-e-moment-note">—</p></div>
-            <div class="j-summary-item"><span>Tu período</span><strong id="j-e-period">—</strong><p id="j-e-period-note">—</p></div>
-            <div class="j-summary-item"><span>Tu foco</span><strong id="j-e-focus">—</strong></div>
-          </div>
-          <details class="j-disclosure">
-            <summary>Ver el cálculo del año personal</summary>
-            <div class="j-calc"><b>La cuenta</b><span id="j-e-py-calc">—</span></div>
-          </details>
-        </section>
+             Antes seguía en línea recta hasta el ritmo lunar, y eso tenía dos
+             costos: el crítico ciego cerraba en la pantalla 5 por cansancio, y
+             el muro caía en mitad de una caminata, donde se sintió "brusco y
+             prematuro". Un recorrido lineal además se consume una vez y no deja
+             a dónde volver, que es justo lo que este producto necesita medir.
 
-        <!-- 11 · El muro, ya con una lectura entregada detrás.
-             Pantalla propia y no diálogo: el <dialog> tiene un fallback que no
-             concede acceso y dejaría el recorrido sin salida. -->
-        <section class="j-step" data-jstep="acceso" aria-label="Acceso simulado a Estoy">
-          <p class="j-eyebrow">Pago simulado · demo</p>
-          <h1>Eso fue <em>un</em> período. El pase cubre <em>los que vienen</em>.</h1>
-          <p class="j-lead" id="j-acceso-copy">—</p>
-          <div class="j-offer">
-            <div class="j-offer-head">
-              <div><h2>Acceso completo · 30 días</h2></div>
-              <strong>USD 5</strong>
-            </div>
-            <ul>
-              <li><b>Estoy completo</b>, con el ritmo lunar y la sugerencia del día, en cada período de estos 30.</li>
-              <li><b>Mi círculo</b>: la misma lectura para alguien más, y qué comparten o no.</li>
-              <li><b>Aprende</b>: de dónde sale cada regla que acabas de ver.</li>
-            </ul>
-            <p class="j-note">Demo: no se cobra, no pedimos tarjeta y no se envían datos a Mercado Pago.</p>
-            <!-- Quien ya pagó choca justo acá. Enlace y no botón: el paso ya
-                 tiene su acción principal y competir con ella sería empujar a
-                 pagar de nuevo a quien no debe. -->
-            <p class="j-note"><button class="login-link" type="button" data-open-login>Ya tengo cuenta · entrar con mi correo o SMS</button></p>
+             El panel no agrega contenido: convierte lo mismo en un lugar con
+             cosas pendientes. Las cuatro tarjetas ya existen —la imagen, la
+             carta natal, Estoy y el círculo—; lo que cambia es que la persona
+             elige, en vez de que el producto la empuje. -->
+        <section class="j-step" data-jstep="panel" aria-label="Tu Soy está listo">
+          <p class="j-eyebrow">Tu Soy está listo</p>
+          <h1 id="j-panel-title">—</h1>
+          <p class="j-lead" id="j-panel-lead">—</p>
+          <div class="j-panel-grid">
+            <button class="j-panel-card" type="button" data-panel="tarjeta">
+              <span class="j-panel-kind">Gratis</span>
+              <b>Tu tarjeta</b>
+              <i>Una imagen con tu lectura, para guardar o compartir.</i>
+            </button>
+            <button class="j-panel-card" type="button" data-panel="circulo">
+              <span class="j-panel-kind">Gratis</span>
+              <b>El Soy de alguien más</b>
+              <i>Hazlo para quien quieras. Queda guardado y listo para comparar.</i>
+            </button>
+            <button class="j-panel-card" type="button" data-panel="carta">
+              <span class="j-panel-kind">USD 1,99</span>
+              <b>Tu carta natal</b>
+              <i>Ascendente y casas. Necesita tu hora y lugar de nacimiento.</i>
+            </button>
+            <button class="j-panel-card" type="button" data-panel="estoy">
+              <span class="j-panel-kind">USD 5</span>
+              <b>Tu Estoy</b>
+              <i>Qué pide atención ahora, y cómo se mueve con la Luna.</i>
+            </button>
           </div>
-        </section>
-
-        <!-- 12 · Lo que el pase desbloquea, y la entrega a la app completa.
-             El antiguo paso "cierre" se fusionó acá: su titular no decía nada
-             al escanear y era una pantalla entera para un botón. -->
-        <section class="j-step" data-jstep="estoy-ritmo" aria-label="El ritmo de estos días">
-          <!-- El diálogo de checkout deja una confirmación permanente en
-               pantalla; el toast del recorrido se desvanece. Esto la devuelve. -->
-          <p class="j-paid-note">Pago simulado · no hubo ningún cobro real</p>
-          <p class="j-eyebrow">Estoy · el ritmo</p>
-          <h1>La Luna marca el <em>ritmo</em>, no el tema.</h1>
-          <div class="j-moon-row">
-            <div class="j-moon" id="j-moon" aria-hidden="true"></div>
-            <div class="j-moon-copy">
-              <strong id="j-e-phase">—</strong>
-              <span id="j-e-phase-value">—</span>
-            </div>
-          </div>
-          <div class="j-takeaways">
-            <article class="j-takeaway"><span>Prioriza</span><b id="j-e-focus-title">—</b><p id="j-e-focus-copy">—</p></article>
-            <article class="j-takeaway"><span>Cuida</span><b id="j-e-watch-title">—</b><p id="j-e-watch-copy">—</p></article>
-          </div>
-          <!-- El aviso de aproximación baja a la línea del día para que el
-               paso final no acumule dos párrafos sueltos: es el paso más
-               cargado y el bloque de retorno tiene que quedar visible. -->
-          <p class="j-daily-line"><b id="j-e-daily-title">—</b><span id="j-e-daily-copy">—</span> <em>La fase se estima por fecha: aproximación etiquetada.</em></p>
-          <!-- Retorno sin cuenta. `fullReadingShareUrl()` ya reconstruye la
-               lectura completa desde el fragmento, así que enviarse el enlace
-               es un magic link sin backend: no hay registro, contraseña, base
-               de datos ni credenciales que custodiar. El plan bloquea
-               autenticación hasta el gate 14; esto entrega el mismo trabajo
-               —volver sin reescribir la fecha— sin cruzarlo.
-               El enlace lleva nombre y fecha natal en el fragmento, nunca en
-               el query (invariante 4), y por eso se advierte antes de enviar. -->
-          <div class="j-return">
-            <span>Para volver sin escribir la fecha</span>
-            <button class="j-btn" type="button" id="j-save-link">Enviarme mi enlace por WhatsApp</button>
-            <small>No hay cuenta ni contraseña: tu lectura vive en el enlace. Incluye tu nombre y fecha natal, así que guárdalo donde solo tú lo veas.</small>
-          </div>
-          <p class="j-skip"><button class="j-btn quiet" type="button" id="j-restart">Volver a empezar con otra fecha</button></p>
+          <!-- El enlace de retorno vivia en el ultimo paso de Estoy. Sin cuenta
+               es el unico modo de volver a la lectura, asi que sigue aqui: el
+               panel es exactamente la superficie a la que se vuelve. -->
+          <p class="j-panel-foot"><button class="login-link" type="button" id="j-save-link">Enviarme el enlace para volver</button></p>
         </section>
 
       </main>
@@ -2433,7 +2387,32 @@
       const SHARE_LANDING_URL = "https://ptoledor.github.io/soy-estoy-mockup/";
       const SHARE_TRACKED_URL = `${SHARE_LANDING_URL}?utm_source=soy_card&utm_medium=whatsapp&utm_campaign=organic_share`;
       const SHARE_DISPLAY_URL = "ptoledor.github.io/soy-estoy-mockup";
-      let circleMembers = [];
+      /* El circulo persiste en este navegador. "Guardado" aqui significa
+         local: son fechas de nacimiento de OTRAS personas, asi que no viajan a
+         ningun servidor y la pantalla lo dice. Tampoco van al enlace
+         compartible: ese enlace se pega en WhatsApp y llevaria los datos de
+         terceros a la conversacion. */
+      const CIRCLE_KEY = "soy-estoy:circulo";
+      const safeStorage = (() => {
+        try { const probe="soy-estoy:probe"; localStorage.setItem(probe,"1"); localStorage.removeItem(probe); return localStorage; }
+        catch { return null; }
+      })();
+      function loadCircle() {
+        if(!safeStorage)return [];
+        try {
+          const crudo=JSON.parse(safeStorage.getItem(CIRCLE_KEY)||"[]");
+          if(!Array.isArray(crudo))return [];
+          return crudo
+            .filter(m=>m&&typeof m.name==="string"&&/^\d{4}-\d{2}-\d{2}$/.test(m.birth))
+            .slice(0,5)
+            .map(m=>({name:m.name.slice(0,40),birth:m.birth}));
+        } catch { return []; }
+      }
+      function saveCircle() {
+        if(!safeStorage)return;
+        try { safeStorage.setItem(CIRCLE_KEY,JSON.stringify(circleMembers)); } catch { /* cuota llena o modo privado */ }
+      }
+      let circleMembers = loadCircle();
       let currentProfile = null;
       let pendingShare = null;
       let pendingPaidView = "estoy";
@@ -3485,7 +3464,7 @@
       }
       function circleAddCard() {
         if(circleMembers.length>=5)return "";
-        return `<form class="member-card circle-add-card" id="circle-form"><div><span class="micro-label">Nueva persona · ${circleMembers.length+1} de 5</span><h3>Agregar al círculo</h3></div><label class="field"><span>Nombre o apodo</span><input id="circle-name" maxlength="40" autocomplete="off" required></label><label class="field"><span>Fecha de nacimiento</span><input id="circle-birth" type="date" min="1900-01-01" required></label><button class="recalculate" type="submit">Agregar persona</button></form>`;
+        return `<form class="member-card circle-add-card" id="circle-form"><div><span class="micro-label">Nueva persona · ${circleMembers.length+1} de 5</span><h3>Agregar al círculo</h3></div><label class="field"><span>Nombre o apodo</span><input id="circle-name" maxlength="40" autocomplete="off" required></label><label class="field"><span>Fecha de nacimiento</span><input id="circle-birth" type="date" min="1900-01-01" required></label><button class="recalculate" type="submit">Agregar persona</button><p class="circle-privacy">Se guarda en este navegador. Las fechas de otras personas no salen de aquí: no van a ningún servidor ni al enlace que compartes.</p></form>`;
       }
       function relationshipCard(primary,member) {
         const westernRelation=westernPair(primary,member),animalRelation=chineseAnimalPair(primary.chin,member.chin),phaseRelation=chinesePhasePair(primary.chin,member.chin),numberRelation=numerologyPair(primary,member);
@@ -3497,7 +3476,12 @@
         const additional=circleMembers.map(member=>personSnapshot(member.name,parseDate(member.birth)));
         const people=[primary,...additional];
         $("#circle-members").innerHTML=people.map((person,index)=>memberCard(person,index-1)).join("")+circleAddCard();
-        $("#circle-relations").innerHTML=additional.length?additional.map(member=>relationshipCard(primary,member)).join(""):`<div class="circle-empty"><strong>Tu perfil ya es el punto de partida.</strong><br>Agrega a otra persona para abrir una comparación sin puntaje.</div>`;
+        /* Aqui va el muro ahora: las fichas de relacion son el analisis pagado.
+           El roster de arriba queda visible y completo. */
+        const comparacionBloqueada=additional.length&&!mockAccessGranted;
+        $("#circle-relations").innerHTML=comparacionBloqueada
+          ? `<div class="circle-locked"><span class="micro-label">Análisis entre personas</span><strong>${escapeHTML(additional.length===1?`Qué comparten ${primary.name} y ${additional[0].name}`:`Qué comparten ${primary.name} y las ${additional.length} personas de tu círculo`)}</strong><p>Las lecturas de cada persona son gratis y ya las tienes arriba. Lo que se paga es el cruce: qué temas comparten, dónde difieren y qué conversación abre eso.</p><button class="primary" type="button" data-open-circulo>Ver el análisis · USD 5</button></div>`
+          : additional.length?additional.map(member=>relationshipCard(primary,member)).join(""):`<div class="circle-empty"><strong>Tu perfil ya es el punto de partida.</strong><br>Agrega a otra persona para abrir una comparación sin puntaje.</div>`;
       }
 
       function contextualSoySourceLabel(source) {
@@ -3701,7 +3685,11 @@
           $$(".main-tabs, .mobile-tabs").forEach(nav=>nav.hidden=true);
           history.replaceState(null,"",`${location.search}#soy`);if(scroll)window.scrollTo({top:0,behavior:"smooth"});return;
         }
-        if(["estoy","circulo","aprende"].includes(view)&&!mockAccessGranted){openCheckoutDialog(view);return;}
+        /* "circulo" sale de la lista: entrar, agregar personas y ver el Soy de
+           cada una es gratis. Lo que se cobra es el analisis ENTRE dos, que es
+           lo unico que no se puede obtener en otra parte. Tenerlo al reves
+           dejaba el mecanismo de crecimiento del producto detras del muro. */
+        if(["estoy","aprende"].includes(view)&&!mockAccessGranted){openCheckoutDialog(view);return;}
         document.body.classList.toggle("learning-mode",view==="aprende");
         if(view==="aprende"){$("#content").hidden=false;$$(".main-tabs, .mobile-tabs").forEach(nav=>nav.hidden=false);}
         $$(".view").forEach(panel=>panel.hidden=panel.id!==`${view}-view`);
@@ -3785,7 +3773,9 @@
         const facts=$("#checkout-facts");
         facts.textContent="";
         oferta.facts.forEach(text=>{const li=document.createElement("li");li.textContent=text;facts.append(li);});
-        $("#checkout-title").textContent=esCarta?"Completa tu Soy":pendingPaidView==="aprende"?"Accede a Aprende":"Continúa con Estoy";
+        $("#checkout-title").textContent=esCarta?"Completa tu Soy"
+          :pendingPaidView==="aprende"?"Accede a Aprende"
+          :pendingPaidView==="circulo"?"Compara tu círculo":"Continúa con Estoy";
         $("#checkout-done").textContent=esCarta?"Volver a mi Soy":pendingPaidView==="circulo"?"Entrar a Mi círculo":pendingPaidView==="aprende"?"Entrar a Aprende":"Entrar a Estoy";
         $("#checkout-offer").hidden=false;$("#checkout-success").hidden=true;
         const dialog=$("#checkout-dialog");
@@ -3816,6 +3806,12 @@
         const dialog=$("#login-dialog");
         $$("[data-open-login]").forEach(node=>node.addEventListener("click",event=>{event.preventDefault();openLoginDialog();}));
         $$("[data-open-carta]").forEach(node=>node.addEventListener("click",event=>{event.preventDefault();openCheckoutDialog("carta");}));
+        /* Delegado: el bloque de comparacion se re-renderiza con cada persona
+           que se agrega, asi que un listener directo moriria en el primer
+           renderCircle. */
+        $("#circle-relations").addEventListener("click",event=>{
+          if(event.target.closest("[data-open-circulo]"))openCheckoutDialog("circulo");
+        });
         $("#login-close").addEventListener("click",()=>dialog.close());
         $("#login-back").addEventListener("click",()=>{$("#login-identify").hidden=false;$("#login-code").hidden=true;});
         $("#login-form").addEventListener("submit",event=>{
@@ -3885,7 +3881,7 @@
         if(circleMembers.length>=5){toast("Tu círculo ya tiene el máximo de 6 personas contigo.");return;}
         const name=$("#circle-name").value.trim(),birth=$("#circle-birth").value;
         if(!name||!/^\d{4}-\d{2}-\d{2}$/.test(birth))return;
-        circleMembers.push({name,birth});renderCircle();
+        circleMembers.push({name,birth});saveCircle();renderCircle();
         toast(`${name} fue agregado a tu círculo.`);
       });
       $("#circle-members").addEventListener("click",async event=>{
@@ -3898,7 +3894,7 @@
         }
         const removeButton=event.target.closest("[data-circle-remove]");if(!removeButton)return;
         const index=Number(removeButton.dataset.circleRemove),removed=circleMembers[index];
-        if(!removed)return;circleMembers.splice(index,1);renderCircle();toast(`${removed.name} fue quitado del círculo.`);
+        if(!removed)return;circleMembers.splice(index,1);saveCircle();renderCircle();toast(`${removed.name} fue quitado del círculo.`);
       });
 const NATAL_API = (()=>{ try { return localStorage.getItem("natal-api"); } catch { return null; } })() || "http://127.0.0.1:8020";
       const NATAL_PLACES = {
@@ -4018,7 +4014,12 @@ const NATAL_API = (()=>{ try { return localStorage.getItem("natal-api"); } catch
         /* La carta natal es un complemento del Soy, no el pase de Estoy: si
            concediera acceso, comprar el complemento abriría por accidente todo
            lo que cuesta USD 5. */
-        if(!ofertaEsCarta)mockAccessGranted=true;
+        if(!ofertaEsCarta){
+          mockAccessGranted=true;
+          /* El bloque de comparacion se pinta segun mockAccessGranted; sin
+             repintar, se paga y sigue bloqueado. */
+          if(currentProfile)renderCircle();
+        }
         $("#checkout-offer").hidden=true;$("#checkout-success").hidden=false;
         $("#checkout-done").focus();
       });
@@ -4027,10 +4028,6 @@ const NATAL_API = (()=>{ try { return localStorage.getItem("natal-api"); } catch
          almacenamiento. Sin guardas, esa excepción abortaba el resto del
          script —incluido todo el recorrido guiado— y dejaba la página muerta.
          Si no se puede guardar, la nota lo dice en vez de mentir. */
-      const safeStorage = (() => {
-        try { const probe="soy-estoy:probe"; localStorage.setItem(probe,"1"); localStorage.removeItem(probe); return localStorage; }
-        catch { return null; }
-      })();
       $$(".plan-field textarea").forEach(area=>{
         const key=`soy-estoy:${area.id}`;
         const note=area.parentElement.querySelector(".saved");
@@ -4070,12 +4067,9 @@ const NATAL_API = (()=>{ try { return localStorage.getItem("natal-api"); } catch
         chino:"Última tradición",
         tarot:"Ver qué se repite",
         convergencia:"Para qué me sirve",
-        aterrizaje:"Ver mi momento actual",
-        "estoy-intro":"Ver mi Estoy de hoy",
-        "estoy-momento":"Ver el pase de 30 días",
-        // Etiqueta explícita: nadie desbloquea sin leer que es una simulación.
-        acceso:"Simular pago con Mercado Pago",
-        "estoy-ritmo":"Abrir mi lectura completa"
+        aterrizaje:"Ver todo lo que puedo hacer",
+        // El panel es el final: su botón sale del recorrido a la app completa.
+        panel:"Abrir mi lectura completa"
       };
 
       let journeyIndex=0;
@@ -4191,6 +4185,12 @@ const NATAL_API = (()=>{ try { return localStorage.getItem("natal-api"); } catch
         jSet("j-t-pers-calc",tarotCrit.cuentaPersona);
         jSet("j-t-metodo",tarotCrit.metodo);
 
+        /* El panel repite el resultado antes de ofrecer los siguientes pasos:
+           sin eso, la última pantalla es un menú y la lectura se olvidó dos
+           pantallas atrás. */
+        jSet("j-panel-title",`${s.name}, esto es lo que se repite en ti.`);
+        jSet("j-panel-lead",`${s.synthesis.title} · ${s.synthesis.label.replace("Convergencia · ","")}. Tu Soy queda guardado en esta pantalla; desde aquí eliges qué abrir.`);
+
         jSet("j-cv-label",s.synthesis.label);
         jSet("j-cv-theme",s.synthesis.title);
         jSet("j-cv-sources",s.synthesis.sourcesBreve);
@@ -4297,33 +4297,6 @@ const NATAL_API = (()=>{ try { return localStorage.getItem("natal-api"); } catch
         jSet("j-estoy-intro-copy",`${greeting} Soy apunta a ${s.synthesis.title.toLowerCase()} y no va a cambiar: sale de una fecha fija. Estoy mira la fecha de hoy y cruza ambas en tres niveles, cada uno con su cuenta a la vista.`);
       }
 
-      function paintJourneyEstoy(s){
-        jSet("j-e-title",`${s.name}, tu tema de fondo es ${s.moment[0].toLowerCase()}.`);
-        jSet("j-e-copy",s.synthesis.explanation);
-        jSet("j-e-moment",s.moment[0]);
-        const prenatal=s.target.getTime()<s.birth.getTime()?"La fecha consultada es anterior al nacimiento declarado: esta lectura describe el período, no a la persona. ":"";
-        jSet("j-e-moment-note",`${prenatal}Año personal ${s.py.number}; las demás capas solo lo matizan.`);
-        jSet("j-e-period",`${formatDate(s.current.start)} — ${formatDate(s.current.end)}`);
-        jSet("j-e-period-note",`${s.phase.name} · ${s.current.days} días`);
-        jSet("j-e-focus",s.synthesis.title);
-        jSet("j-e-py-calc",s.py.expression);
-
-        $("#j-moon").style.setProperty("--j-moon-shift",`${-85+(s.value/28)*170}%`);
-        jSet("j-e-phase",s.phase.name);
-        jSet("j-e-phase-value",`fase ${s.value.toFixed(2)} / 28 · aproximación diaria`);
-        jSet("j-e-focus-title",s.synthesis.title);
-        jSet("j-e-focus-copy",s.synthesis.copy);
-        jSet("j-e-watch-title",s.synthesis.watch);
-        jSet("j-e-watch-copy",s.synthesis.watchCopy);
-        jSet("j-e-daily-title",`${s.weekday[0]} · ${s.weekday[1]}`);
-        jSet("j-e-daily-copy",`La correspondencia tradicional propone ${s.weekday[2]}. Úsalo como foco breve, no como mandato.`);
-        /* `synthesis.title` viene en imperativo ("Observa lo nuevo…"), así que
-           no puede colgar de una preposición: "tu Estoy apunta a observa…" no
-           es español. Se le da su propia oración. */
-        /* El muro habla de lo que la persona acaba de recibir, no de una
-           promesa abstracta: nombra su período y qué sigue después de él. */
-        jSet("j-acceso-copy",`El tema y el período de ${formatDate(s.current.start)} a ${formatDate(s.current.end)} ya son tuyos. El pase agrega el ritmo lunar, la sugerencia diaria y los períodos que siguen durante 30 días.`);
-      }
 
       function renderJourney(){
         journeySteps.forEach((step,i)=>step.classList.toggle("active",i===journeyIndex));
@@ -4374,7 +4347,6 @@ const NATAL_API = (()=>{ try { return localStorage.getItem("natal-api"); } catch
         const person=$("#name").value.trim()||"Tu lectura",birthDate=parseDate(value);
         const soySnapshot=buildSoySnapshot(person,birthDate);
         paintJourneySoy(soySnapshot);
-        paintJourneyEstoy(buildEstoySnapshot(person,birthDate,parseDate($("#target").value)));
         return true;
       }
 
@@ -4424,6 +4396,20 @@ const NATAL_API = (()=>{ try { return localStorage.getItem("natal-api"); } catch
       journeyNext.addEventListener("click",()=>journeyGo(1));
       journeyBack.addEventListener("click",()=>journeyGo(-1));
       $("#j-skip").addEventListener("click",()=>exitJourney("soy"));
+
+      /* Cada tarjeta sale del recorrido hacia su destino. El muro no se evalúa
+         aquí: setView ya decide, así que las gratis abren y las pagadas
+         levantan el checkout por el camino normal. */
+      $$("[data-panel]").forEach(card=>card.addEventListener("click",async()=>{
+        const destino=card.dataset.panel;
+        if(destino==="tarjeta"){
+          exitJourney("soy");
+          if(currentProfile)await openShareDialog({type:"soy",name:currentProfile.name,birth:currentProfile.birth});
+          return;
+        }
+        if(destino==="carta"){ exitJourney("soy"); openCheckoutDialog("carta"); return; }
+        exitJourney(destino==="circulo"?"circulo":"estoy");
+      }));
 
       /* Retorno sin cuenta: se envía a sí misma el enlace reconstruible. Abre
          un borrador; nada se envía hasta que la persona lo confirme, igual que
