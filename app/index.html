@@ -1276,6 +1276,15 @@
     .j-upsell-top i { color: var(--brass); font-family: var(--mono); font-size: 12px; font-style: normal; letter-spacing: .06em; }
     .j-upsell-copy { display: block; color: var(--muted); font-size: 13px; line-height: 1.5; }
 
+    /* La tabla es el cuerpo del paso, no un anexo: seis filas a la altura
+       original cortaban la ultima contra la barra de acciones. Se comprime la
+       fila, no se quitan filas: la de "1 de 4" es la que muestra lo que NO
+       convergio, y es la que le da filo a la afirmacion. */
+    .j-ledger { margin-top: 4px; background: var(--paper-2); }
+    .j-ledger .factor-summary { padding: 10px 14px; gap: 10px; }
+    .j-ledger .factor-summary strong { font-size: 17px; }
+    .j-ledger .factor-track { height: 4px; }
+    .j-ledger .factor-meta { font-size: 9px; }
     .factor-analysis { margin: 0 0 12px; color: var(--muted); font-size: 13px; line-height: 1.55; }
 
     .j-discarded { margin: 10px 0 0; color: var(--muted); font-family: var(--mono); font-size: 10px; line-height: 1.65; letter-spacing: .04em; }
@@ -1724,42 +1733,17 @@
         </section>
 
         <!-- 7 · El pago del recorrido: por qué existe el producto. -->
+        <!-- Intro corta y la tabla, directo. Antes: un bloque grande con el
+             tema, sus fuentes, la linea de descartes, el segundo tema, y la
+             tabla plegada abajo. Todo eso lo dice ya la tabla -su primera fila
+             es el tema, la segunda el que tambien se repite, y las de "1 de 4"
+             son las que no convergen-, asi que el bloque era la misma
+             informacion contada dos veces, una en prosa y otra en filas. -->
         <section class="j-step" data-track="soy" data-jstep="convergencia" aria-label="Tu convergencia">
           <p class="j-eyebrow">Esto es tu Soy</p>
           <h1 id="j-cv-title">Cuatro miradas, <em>un tema</em>.</h1>
-          <p class="j-lead" id="j-cv-intro">Las cuatro tradiciones observaron tu fecha por separado. Esto es lo que se repitió.</p>
-          <div class="j-converge">
-            <div class="j-converge-head"><span id="j-cv-label">—</span></div>
-            <div class="j-converge-body">
-              <h2 id="j-cv-theme">—</h2>
-              <p class="j-sources" id="j-cv-sources">—</p>
-              <!-- Lo que NO convergió. El escéptico: "se cubren para acertar;
-                   dos temas amplían las posibilidades de que reconozca algo
-                   propio" y "necesitaría alternativas que la app descarte
-                   claramente". El dato ya existía —los temas con una sola
-                   tradición detrás— pero solo se veía como chips grises dentro
-                   del detalle, sin decir qué significaban. -->
-              <p class="j-discarded" id="j-cv-discarded" hidden>—</p>
-              <p class="j-copy" id="j-cv-copy">—</p>
-              <!-- Solo aparece si un segundo tema alcanza dos tradiciones por
-                   su cuenta. Si no, no se muestra: rellenar con el siguiente
-                   de la lista seria fabricar una coincidencia. -->
-              <div class="j-second" id="j-cv-second" hidden>
-                <span id="j-cv-second-label">—</span>
-                <strong id="j-cv-second-theme">—</strong>
-                <p id="j-cv-second-copy">—</p>
-              </div>
-              <details class="j-disclosure">
-                <summary>Ver interpretación y todos los temas</summary>
-                <!-- Solo la tabla. Se leia con dos parrafos introductorios y la
-                     interpretacion larga encima: explicaciones para algo que ya
-                     se explica solo -tema, cuantas tradiciones, barra-. Lo que
-                     hacia falta no era presentarla sino que cada fila, al
-                     abrirse, diera su explicacion y despues sus senales. -->
-                <div class="factor-ledger" id="j-cv-ledger"></div>
-              </details>
-            </div>
-          </div>
+          <p class="j-lead" id="j-cv-intro">—</p>
+          <div class="factor-ledger j-ledger" id="j-cv-ledger"></div>
         </section>
 
         <!-- 8 · El tema baja a tierra. Separado a propósito: es otra idea. -->
@@ -4381,17 +4365,6 @@ const NATAL_API = (()=>{ try { return localStorage.getItem("natal-api"); } catch
         jSet("j-panel-lead",`${s.synthesis.title} · ${s.synthesis.label.replace("Convergencia · ","")}. Tu Soy queda guardado en esta pantalla; desde aquí eliges qué abrir.`);
 
         $("#j-cv-ledger").innerHTML=factorLedgerHTML(s,s.factors.find(f=>f.traditionCount>=2)?.key);
-        jSet("j-cv-label",s.synthesis.label);
-        jSet("j-cv-theme",s.synthesis.title);
-        jSet("j-cv-sources",s.synthesis.sourcesBreve);
-        /* La frase visible era sólo la primera del análisis, que es la
-           favorable; el límite quedaba plegado. Todo lo que se leía sin abrir
-           nada era halago, y eso es exactamente lo que hace que una lectura
-           simbólica se sienta genérica: nadie rechazaría ninguna. Se muestra
-           también la frase del exceso o la sombra, que ya existe en el motor. */
-        const frases=(s.synthesis.copy.match(/[^.!?]+[.!?]+/g)||[]).map(f=>f.trim());
-        const limite=frases.find(f=>/\bexceso\b|\bsombra\b/i.test(f));
-        jSet("j-cv-copy",[frases[0],limite].filter(Boolean).join(" ")||s.synthesis.copy);
         jSet("j-cv-gift",s.profile.gift);
         jSet("j-cv-gift-copy",s.profile.giftCopy);
         jSet("j-cv-shadow",s.profile.shadow);
@@ -4416,46 +4389,13 @@ const NATAL_API = (()=>{ try { return localStorage.getItem("natal-api"); } catch
            convergencia aparece como un resultado nuevo en vez del destino de lo
            que la persona fue juntando. */
         const juntadas=`${s.life.number} · ${s.sun[0]} · ${s.chin.animal} · ${s.tarot[0]}.`;
-        jSet("j-cv-intro",!converged
-          ? `${juntadas} Cada una apuntó a un tema distinto, así que no forzamos una conclusión común.`
-          : segundoFuerte
-            ? `${juntadas} Dos temas se repitieron en tres tradiciones o más.`
-            : `${juntadas} Esto es lo que más se repitió.`);
-        const secondBox=$("#j-cv-second");
-        secondBox.hidden=!second;
-        if(second){
-          jSet("j-cv-second-label",`${segundoFuerte?"También se repite":"Más débil"} · ${second.count} de 4 tradiciones`);
-          jSet("j-cv-second-theme",second.title);
-          // `practice` viene en minúscula porque en el tema principal va tras
-          // dos puntos ("En concreto: elige un frente…"). Acá abre oración.
-          jSet("j-cv-second-copy",`Se repite en ${second.sources}. ${second.copy.charAt(0).toUpperCase()}${second.copy.slice(1)}.`);
-        }
+        /* Intro corta: lo que juntaste y como leer la tabla. El detalle -que
+           tema, con cuanto respaldo, sostenido por que senal- lo dice la tabla
+           misma, fila por fila. */
+        jSet("j-cv-intro",`${juntadas} ${!converged
+          ? "Cada una apuntó a algo distinto: no forzamos una conclusión común."
+          : "Los de arriba se repiten en más tradiciones; ábrelos para ver qué los sostiene."}`);
 
-        // Las señales agrupadas en las 4 tradiciones ya recorridas: cierra el
-        // circuito con exactamente los atributos que la persona acaba de ver.
-        /* Los temas que una sola tradición levantó y ninguna otra respaldó.
-           Nombrarlos es lo que convierte la convergencia en una afirmación con
-           filo: si todo lo que aparece se presenta como señal, nada se
-           descarta y acertar deja de significar algo. */
-        /* Dos y no tres, nombres cortos y sin frase de cierre: con la versión
-           larga el paso desbordaba 41px. Lo que no se sacrifica es el dato
-           —qué tema y de qué tradición—, que es lo que lo hace verificable. */
-        const sueltos=s.factors.filter(f=>f.traditionCount===1&&SOY_FACTORS[f.key]).slice(0,2);
-        const descartada=$("#j-cv-discarded");
-        descartada.hidden=!sueltos.length;
-        if(sueltos.length){
-          descartada.textContent="";
-          descartada.append(document.createTextNode("Sin respaldo cruzado: "));
-          sueltos.forEach((f,i)=>{
-            const fuerte=document.createElement("b");
-            fuerte.textContent=SOY_FACTORS[f.key].label.toLowerCase();
-            descartada.append(fuerte);
-            const origen=f.sources[0]?TRADITION_OF(f.sources[0].key):null;
-            descartada.append(document.createTextNode(origen?` (${origen})`:""));
-            if(i<sueltos.length-1)descartada.append(document.createTextNode(", "));
-          });
-          descartada.append(document.createTextNode("."));
-        }
         /* Los chips agrupados por tradicion salieron del desplegable: ahora
            cada fila de la tabla trae sus propias senales, donde significan
            algo -que sostiene ESE tema- en vez de una lista suelta al final. */
