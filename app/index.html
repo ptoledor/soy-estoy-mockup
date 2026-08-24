@@ -29,10 +29,11 @@
       --gold-light: #8fa0e8;
       --gold-bright: #4a5cc0;
 
-      /* Superficie oscura. Estos cuatro quedaron auto-referenciados al
-         tokenizar -var(--x) dentro de la definicion de --x, que es invalido- y
-         el bloque de convergencia perdio sus colores secundarios sin que se
-         notara en la verificacion, porque ninguna de las sondas los usaba. */
+      /* Escala para superficie oscura. Hoy NO la consume nadie: el bloque de
+         convergencia era su unico cliente y paso a superficie clara. Se
+         conserva porque esta razonada y cualquier bloque oscuro futuro deberia
+         salir de aqui en vez de inventarse la suya, que es como empezo todo
+         esto. Si sigue sin uso en la proxima revision, borrarla. */
       --on-dark: #eceef2;
       --on-dark-soft: #c3c7d0;
       --on-dark-faint: #9298a4;
@@ -1276,24 +1277,9 @@
     .j-upsell-copy { display: block; color: var(--muted); font-size: 13px; line-height: 1.5; }
 
     .factor-analysis { margin: 0 0 12px; color: var(--muted); font-size: 13px; line-height: 1.55; }
-    .j-disclosure .factor-analysis { color: var(--on-dark-soft); }
-    .j-disclosure .factor-ledger { border-color: var(--line-on-dark); }
-    .j-disclosure .factor-row { border-color: var(--line-on-dark); }
-    .j-disclosure .factor-summary strong { color: var(--paper); }
-    .j-disclosure .factor-meta b { color: var(--brass-on-dark); }
-    .j-disclosure .factor-meta i { color: var(--on-dark-faint); }
-    /* Faltaba el FONDO. .source-card y .factor-sources nacen para la
-       superficie clara de la app; aqui solo se les habia cambiado el color del
-       texto, asi que quedaban titulos claros sobre tarjeta clara: ilegibles. */
-    .j-disclosure .factor-sources { border-top-color: var(--line-on-dark); background: var(--ink-soft); }
-    .j-disclosure .source-card { border-color: var(--line-on-dark); background: var(--ink); }
-    .j-disclosure .source-card strong { color: var(--on-dark); }
-    .j-disclosure .source-card small { color: var(--on-dark-faint); }
-    .j-disclosure .factor-summary { color: var(--on-dark-soft); }
-    .j-disclosure .factor-track { background: var(--line-on-dark); }
 
-    .j-discarded { margin: 10px 0 0; color: rgba(235, 231, 220, .58); font-family: var(--mono); font-size: 10px; line-height: 1.65; letter-spacing: .04em; }
-    .j-discarded b { color: rgba(235, 231, 220, .82); font-weight: 400; }
+    .j-discarded { margin: 10px 0 0; color: var(--muted); font-family: var(--mono); font-size: 10px; line-height: 1.65; letter-spacing: .04em; }
+    .j-discarded b { color: var(--ink); font-weight: 400; }
 
     .j-calc { margin: 16px 0 0; padding: 12px 14px; border: 1px dashed var(--line-dark); background: var(--paper); color: var(--muted); font-family: var(--mono); font-size: 11px; line-height: 1.7; overflow-wrap: anywhere; }
     .j-calc b { display: block; margin-bottom: 4px; color: var(--ink); font-weight: 400; letter-spacing: .06em; text-transform: uppercase; font-size: 9px; }
@@ -1319,30 +1305,27 @@
        pantalla que es el premio del recorrido. Este tono conserva el contraste
        (>12:1 sobre el texto claro) pero pertenece a la familia del papel y el
        latón, no al gris. */
-    .j-converge { margin: 20px 0 24px; border: 1px solid var(--ink); background: var(--ink); color: var(--on-dark); }
-    .j-converge-head { padding: 16px 20px; border-bottom: 1px solid var(--line-on-dark); }
-    .j-converge-head span { color: var(--brass-on-dark); font-family: var(--mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; }
+    /* Era una losa negra en medio de una pagina clara: un recurso heredado
+       de la paleta calida, donde el bloque oscuro leia como recuadro tibio.
+       En editorial frio el enfasis se hace con filete y tipografia. */
+    .j-converge { margin: 20px 0 24px; border: 1px solid var(--line-dark); border-top: 3px solid var(--brass); background: #eef0f8; color: var(--ink); }
+    .j-converge-head { padding: 16px 20px; border-bottom: 1px solid var(--line); }
+    .j-converge-head span { color: var(--brass); font-family: var(--mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; }
     .j-converge-body { padding: 22px 20px 24px; }
     .j-converge-body h2 { margin: 0 0 8px; font-family: var(--serif); font-size: clamp(30px, 7vw, 42px); font-weight: 420; line-height: 1.05; letter-spacing: -.02em; }
-    .j-converge-body .j-sources { margin: 0 0 10px; color: var(--brass-on-dark); font-size: 13px; }
-    .j-converge-body .j-copy { margin: 0; color: var(--on-dark-soft); font-size: 15px; line-height: 1.45; }
-    .j-converge .j-disclosure { border-color: rgba(235, 231, 220, .18); }
-    .j-converge .j-disclosure summary { color: var(--on-dark-faint); }
-    .j-converge .j-disclosure summary::after { color: var(--brass-on-dark); }
-    .j-converge .j-full-copy { margin: 0 0 14px; color: var(--on-dark-soft); font-size: 14px; line-height: 1.48; }
+    .j-converge-body .j-sources { margin: 0 0 10px; color: var(--brass); font-size: 13px; }
+    .j-converge-body .j-copy { margin: 0; color: var(--ink-muted); font-size: 15px; line-height: 1.45; }
+    .j-converge .j-disclosure { border-color: var(--line); }
+    .j-converge .j-disclosure summary { color: var(--muted); }
+    .j-converge .j-disclosure summary::after { color: var(--brass); }
+    .j-converge .j-full-copy { margin: 0 0 14px; color: var(--ink-muted); font-size: 14px; line-height: 1.48; }
     /* El segundo tema: presente pero subordinado. Mismo bloque, media línea
        de jerarquía menos, para que no compita con la conclusión principal. */
-    .j-second { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--line-on-dark); }
-    .j-second > span { display: block; margin-bottom: 3px; color: var(--brass-on-dark); font-family: var(--mono); font-size: 9px; letter-spacing: .1em; text-transform: uppercase; }
+    .j-second { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--line); }
+    .j-second > span { display: block; margin-bottom: 3px; color: var(--brass); font-family: var(--mono); font-size: 9px; letter-spacing: .1em; text-transform: uppercase; }
     .j-second strong { display: block; font-family: var(--serif); font-size: 22px; font-weight: 500; line-height: 1.15; }
-    .j-second p { margin: 3px 0 0; color: var(--on-dark-soft); font-size: 13px; line-height: 1.45; }
+    .j-second p { margin: 3px 0 0; color: var(--ink-muted); font-size: 13px; line-height: 1.45; }
 
-    .j-converge-grid { margin-top: 12px; border-top: 1px solid rgba(235, 231, 220, .18); }
-    .j-converge-row { display: grid; grid-template-columns: 74px 1fr; gap: 10px; align-items: baseline; padding: 5px 0; border-bottom: 1px solid rgba(235, 231, 220, .18); }
-    .j-converge-row > span { color: var(--grey-mid); font-family: var(--mono); font-size: 9px; letter-spacing: .1em; text-transform: uppercase; }
-    .j-converge-row > div { display: flex; flex-wrap: wrap; gap: 5px; }
-    .j-chip { padding: 4px 8px; border: 1px solid rgba(235, 231, 220, .3); font-family: var(--mono); font-size: 9px; letter-spacing: .06em; text-transform: uppercase; color: var(--on-dark-soft); }
-    .j-chip.on { border-color: var(--brass-on-dark); color: var(--gold-light); }
 
     .j-takeaways { display: grid; gap: 10px; margin: 0 0 24px; }
     .j-takeaway { padding: 14px 16px; border: 1px solid var(--line-dark); background: var(--paper-2); }
