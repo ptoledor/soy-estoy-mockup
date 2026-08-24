@@ -1763,7 +1763,7 @@
              cosas pendientes. Las cuatro tarjetas ya existen —la imagen, la
              carta natal, Estoy y el círculo—; lo que cambia es que la persona
              elige, en vez de que el producto la empuje. -->
-        <section class="j-step" data-track="soy" data-jstep="panel" aria-label="Tu Soy está listo">
+        <section class="j-step" data-track="panel" data-jstep="panel" aria-label="Tu Soy está listo">
           <p class="j-eyebrow">Tu Soy está listo</p>
           <h1 id="j-panel-title">—</h1>
           <p class="j-lead" id="j-panel-lead">—</p>
@@ -1793,6 +1793,10 @@
                es el unico modo de volver a la lectura, asi que sigue aqui: el
                panel es exactamente la superficie a la que se vuelve. -->
           <p class="j-panel-foot"><button class="login-link" type="button" id="j-save-link">Enviarme el enlace para volver</button></p>
+          <!-- Salida al mockup completo, con sus pestañas. Discreta a
+               propósito: es para quien ya sabe lo que busca, no el destino por
+               defecto. Ese era el problema de antes. -->
+          <p class="j-panel-foot"><button class="login-link" type="button" data-panel="todo">Ver la lectura completa, con todas las secciones</button></p>
         </section>
 
         <!-- TRAMO ESTOY. No es continuacion del Soy: se lanza desde el panel.
@@ -4446,10 +4450,17 @@ const NATAL_API = (()=>{ try { return localStorage.getItem("natal-api"); } catch
           : `${journeyIndex+1} / ${journeySteps.length}`;
         journeyProgress.setAttribute("aria-valuenow",journeyIndex+1);
         journeyProgressFill.style.width=`${((journeyIndex+1)/journeySteps.length)*100}%`;
+        const enPanel=journeyTrack==="panel";
+        /* En el panel no hay "paso siguiente": lo que sigue lo eligen las
+           tarjetas. Dejar la barra con un boton de avanzar sugeriria que el
+           recorrido continua, y el recorrido termino. */
+        journeyActions.hidden=enPanel;
+        journeyProgress.hidden=enPanel;
+        $("#j-counter-text").parentElement.hidden=enPanel;
         journeyBack.hidden=journeyIndex===0;
-        // La barra nunca se oculta: es lo que garantiza que la acción siguiente
-        // esté siempre visible, incluso cuando el paso desborda.
-        journeyActions.hidden=false;
+        // Dentro de un tramo la barra nunca se oculta: es lo que garantiza que
+        // la acción siguiente esté siempre visible, incluso si el paso desborda.
+        if(!enPanel)journeyActions.hidden=false;
         if(JOURNEY_LABELS[key])journeyNext.textContent=JOURNEY_LABELS[key];
         window.scrollTo(0,0);
         if(key==="fecha"){
@@ -4498,7 +4509,11 @@ const NATAL_API = (()=>{ try { return localStorage.getItem("natal-api"); } catch
         if(next<0)return;
         // Avanzar desde el último paso entrega al modo completo: así la salida
         // usa la misma barra fija que el resto y nunca queda fuera de pantalla.
-        if(next>=journeySteps.length){ if(delta>0)exitJourney(journeyTrack==="estoy"?"estoy":"soy"); return; }
+        /* Ningun tramo entrega a la app con pestanas. Terminar un recorrido
+           lleva al panel, que es el destino: sin barra de secciones, con lo
+           siguiente a elegir. Exponer las cinco vistas de golpe es justo lo que
+           hace que la gente scrollee rapido sin leer. */
+        if(next>=journeySteps.length){ if(delta>0)showPanel(); return; }
         if(delta>0){
           const key=journeyKey();
           // El único paso que bloquea el avance es la fecha.
@@ -4512,6 +4527,19 @@ const NATAL_API = (()=>{ try { return localStorage.getItem("natal-api"); } catch
         }
         journeyIndex=next;
         renderJourney();
+      }
+
+      /* El panel no es un paso: es el lugar al que se vuelve. Vive dentro de
+         #journey para heredar journey-mode, que es lo que mantiene ocultas las
+         pestanas de seccion. */
+      function showPanel(){
+        journeyTrack="panel";
+        journeySteps=stepsOfTrack("panel");
+        journeyIndex=0;
+        document.body.classList.add("journey-mode");
+        $("#journey").hidden=false;
+        renderJourney();
+        window.scrollTo({top:0,behavior:"auto"});
       }
 
       function startJourney(track="soy"){
@@ -4563,6 +4591,7 @@ const NATAL_API = (()=>{ try { return localStorage.getItem("natal-api"); } catch
            golpe. El circulo si sale, porque es una herramienta, no una lectura
            que se revele de a poco. */
         if(destino==="estoy"){ startJourney("estoy"); return; }
+        if(destino==="todo"){ exitJourney("soy"); return; }
         exitJourney("circulo");
       }));
 
