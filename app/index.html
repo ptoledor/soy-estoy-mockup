@@ -961,6 +961,9 @@
     .archetype-pair p { margin: 0; color: var(--muted); font-size: 11px; line-height: 1.5; }
     .archetype-question { margin: 22px 0 0; color: var(--muted); font-size: 13px; }
     .archetype-question strong { color: var(--ink); }
+    .ledger-head { margin-top: 34px; }
+    .ledger-head h3 { max-width: 30ch; margin: 0 0 8px; font-family: var(--serif); font-size: clamp(22px, 2.6vw, 28px); font-weight: 460; line-height: 1.15; letter-spacing: -.015em; }
+    .ledger-head p { max-width: 62ch; margin: 0 0 16px; color: var(--muted); font-size: 14px; line-height: 1.55; }
     .factor-ledger { border: 1px solid var(--line-dark); }
     .factor-row { margin: 0; padding: 0; border: 0; border-bottom: 1px solid var(--line); }
     .factor-row:last-child { border-bottom: 0; }
@@ -1889,6 +1892,17 @@
             <article class="practical"><span class="micro-label">Una recomendación</span><b id="shadow-title">—</b><p id="shadow-copy">—</p></article>
             <article class="practical"><span class="micro-label">Una pregunta</span><b>Para reflexionar</b><p id="soy-question">—</p></article>
           </div>
+          <!-- Este recuento vivía en Soy+, bajo el título "Antes del arquetipo,
+               aparecen estos atributos": un apéndice de la función de
+               arquetipos, detrás del muro. Pero es la evidencia del tema que
+               Soy acaba de afirmar —los mismos `factors`—, así que afirmar
+               arriba y guardar el respaldo en otra vista deja la afirmación sin
+               sostén donde se hace. -->
+          <div class="ledger-head">
+            <h3 id="factor-ledger-title">Todos los atributos, y cuántas tradiciones sostienen cada uno.</h3>
+            <p>El tema de arriba es el primero de esta lista. La barra muestra en cuántas de las cuatro tradiciones aparece cada atributo; los que aparecen en más van primero y, si empatan, decide la profundidad de sus coincidencias. Ábrelos para ver qué señal lo sostiene.</p>
+          </div>
+          <div class="factor-ledger" id="factor-ledger"></div>
         </section>
 
         <section class="section rule" aria-labelledby="components-title">
@@ -1995,14 +2009,6 @@
             <p class="section-intro" id="archetype-intro">El orden combina la fuerza relativa de cada atributo y cuántas tradiciones lo sostienen.</p>
           </div>
           <div class="archetype-grid" id="archetype-cards" aria-live="polite"></div>
-        </section>
-
-        <section class="section rule" aria-labelledby="factor-ledger-title">
-          <div class="section-head">
-            <div><p class="section-kicker">02 · Resumen intermedio</p><h2 class="section-title" id="factor-ledger-title">Antes del arquetipo, aparecen estos atributos.</h2></div>
-            <p class="section-intro">La barra muestra en cuántas de las cuatro tradiciones aparece cada atributo. Los que aparecen en más tradiciones van primero; si empatan, la profundidad de sus coincidencias define el orden. Ábrela para ver el detalle.</p>
-          </div>
-          <div class="factor-ledger" id="factor-ledger"></div>
         </section>
 
         <details class="soyplus-method">
@@ -3483,6 +3489,13 @@
             return `<article class="archetype-card"><div class="archetype-card-head"><div><span class="micro-label">Pearson · ${escapeHTML(archetype.pearson)}</span><h3>${escapeHTML(archetype.label)}</h3>${alias}</div><span class="archetype-rank">0${index+1}</span></div><p class="archetype-support">${archetype.strength}/100 relativo · ${archetype.sourceCount} de ${snapshot.signals.length} señales</p><p class="archetype-thesis">${escapeHTML(archetype.thesis)}</p><div class="archetype-pair"><div><span class="micro-label">Recurso</span><strong>${escapeHTML(archetype.resource)}</strong></div><div><span class="micro-label">Exceso posible</span><strong>${escapeHTML(archetype.risk)}</strong></div></div><details class="archetype-sources"><summary>Ver señales</summary><ul class="archetype-evidence" aria-label="Fuentes y atributos que sostienen ${escapeHTML(archetype.label)}">${evidence}</ul></details><p class="archetype-question"><strong>Para contrastar:</strong> ${escapeHTML(archetype.question)}</p></article>`;
           }).join("");
         }
+      }
+
+      function renderSoy(birth, name) {
+        const snapshot=buildSoySnapshot(name,birth);
+        const {life,profile,sun,chin,tarot,tarotNumber,synthesis}=snapshot;
+        /* El recuento de atributos se renderizaba en renderSoyPlus porque vivía
+           en esa vista. Al moverlo a la convergencia, el render lo sigue. */
         /* Misma unidad que la convergencia: tradiciones. Estas filas ordenaban
            y medían por "N de 8 fuentes" mientras la síntesis, dos bloques más
            arriba, decía "N de 4 tradiciones". Dos varas para lo mismo. */
@@ -3496,11 +3509,7 @@
           }).join("");
           return `<details class="factor-row"><summary class="factor-summary"><strong>${escapeHTML(SOY_FACTORS[factor.key].label)}</strong><div class="factor-track" aria-label="${factor.traditionCount} de 4 tradiciones"><i style="--factor-strength:${strength}%"></i></div><span class="factor-meta"><b>${factor.traditionCount} de 4 tradiciones</b><i>Ver señales</i></span></summary><div class="factor-sources">${sourceCards}</div></details>`;
         }).join("");
-      }
 
-      function renderSoy(birth, name) {
-        const snapshot=buildSoySnapshot(name,birth);
-        const {life,profile,sun,chin,tarot,tarotNumber,synthesis}=snapshot;
         $("#soy-convergence-label").textContent=synthesis.label;
         const soySecond=$("#soy-second");
         soySecond.hidden=!synthesis.second;
