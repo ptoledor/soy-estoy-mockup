@@ -964,6 +964,30 @@
     .ledger-head { margin-top: 34px; }
     .ledger-head h3 { max-width: 30ch; margin: 0 0 8px; font-family: var(--serif); font-size: clamp(22px, 2.6vw, 28px); font-weight: 460; line-height: 1.15; letter-spacing: -.015em; }
     .ledger-head p { max-width: 62ch; margin: 0 0 16px; color: var(--muted); font-size: 14px; line-height: 1.55; }
+    /* Carta natal. Recuperada del commit e802b1c del mirror: existia desde
+       el 16 de julio y la borre el 22 de agosto al publicar el recorrido
+       copiando el archivo fuente encima del destino, que tenia contenido que
+       la fuente nunca tuvo. Estaba anotado como deuda y no lo mire. */
+    .natal-form { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr) auto; gap: 16px; align-items: end; margin-bottom: 30px; }
+    .natal-badge { display: inline-flex; align-items: center; gap: 7px; padding: 5px 10px; border: 1px solid var(--line-dark); font-family: var(--mono); font-size: 10px; letter-spacing: .06em; text-transform: uppercase; }
+    .natal-badge::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--green); }
+    .natal-badge.fallback::before { background: var(--brass); }
+    .natal-summary { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; margin: 22px 0 0; border: 1px solid var(--line-dark); background: var(--line-dark); }
+    .natal-summary > div { min-width: 0; padding: 16px 18px; background: var(--paper-2); }
+    .natal-summary span { display: block; margin-bottom: 5px; color: var(--muted); font-family: var(--mono); font-size: 9px; letter-spacing: .08em; text-transform: uppercase; }
+    .natal-summary strong { font-family: var(--serif); font-size: 22px; font-weight: 500; }
+    .natal-table { width: 100%; margin-top: 22px; border-collapse: collapse; font-size: 13px; }
+    .natal-table th { padding: 9px 10px; border-bottom: 1px solid var(--line-dark); color: var(--muted); font-family: var(--mono); font-size: 9px; font-weight: 400; letter-spacing: .08em; text-transform: uppercase; text-align: left; }
+    .natal-table td { padding: 9px 10px; border-bottom: 1px solid var(--line); }
+    .natal-table td:first-child { font-family: var(--serif); font-size: 15px; }
+    .natal-table .retro { color: var(--red); font-family: var(--mono); font-size: 10px; }
+    .natal-note { margin: 18px 0 0; color: var(--muted); font-size: 12px; line-height: 1.55; }
+    .natal-empty { margin: 0; padding: 30px; border: 1px dashed var(--line-dark); color: var(--muted); text-align: center; font-size: 14px; }
+    .natal-empty code { font-family: var(--mono); font-size: 12px; color: var(--ink); }
+    .natal-form { grid-template-columns: 1fr; }
+    .natal-summary { grid-template-columns: 1fr 1fr; }
+    .natal-table th:nth-child(4), .natal-table td:nth-child(4) { display: none; }
+
     .factor-ledger { border: 1px solid var(--line-dark); }
     .factor-row { margin: 0; padding: 0; border: 0; border-bottom: 1px solid var(--line); }
     .factor-row:last-child { border-bottom: 0; }
@@ -2009,6 +2033,19 @@
             <p class="section-intro" id="archetype-intro">El orden combina la fuerza relativa de cada atributo y cuántas tradiciones lo sostienen.</p>
           </div>
           <div class="archetype-grid" id="archetype-cards" aria-live="polite"></div>
+        </section>
+
+        <section class="section rule" id="natal" aria-labelledby="natal-title">
+          <div class="section-head">
+            <div><p class="section-kicker">Carta natal · motor Swiss</p><h2 class="section-title" id="natal-title">El cielo exacto de tu nacimiento.</h2></div>
+            <p class="section-intro">A diferencia del resto, esto no se calcula en tu navegador: lo resuelve el motor con efemérides Swiss Ephemeris. Sin hora exacta mostramos los planetas por signo, pero omitimos ascendente y casas porque sin ella no significan nada.</p>
+          </div>
+          <form class="natal-form" id="natal-form">
+            <label class="field"><span>Hora de nacimiento (opcional)</span><input id="natal-time" type="time"></label>
+            <label class="field"><span>Lugar</span><select id="natal-place"></select></label>
+            <button class="recalculate" type="submit">Calcular carta natal</button>
+          </form>
+          <div id="natal-result"><p class="natal-empty">Ingresa hora y lugar y calcula tu carta con el motor.</p></div>
         </section>
 
         <details class="soyplus-method">
@@ -3709,12 +3746,12 @@
           sub:"Compra única. Se agrega a tu Soy y no vence.",
           item:"Carta natal · ascendente y casas", precio:"USD 1,99", total:"USD 1,99 total",
           cta:"Simular compra con Mercado Pago",
-          exito:"Tu carta natal estaría lista.",
-          exitoCopy:"En producción pediríamos tu hora y lugar de nacimiento y calcularíamos la carta con efemérides.",
-          facts:["Ascendente: el signo que subía en el horizonte a tu hora.",
-                 "Las doce casas y en cuál cae cada planeta.",
-                 "Los aspectos entre planetas, con su orbe.",
-                 "Requiere hora y lugar de nacimiento exactos.",
+          exito:"Ahora ingresa tu hora y lugar.",
+          exitoCopy:"La carta se calcula en el motor con efemérides Swiss, no en tu navegador. Te llevamos al formulario.",
+          facts:["Ascendente y medio cielo, si declaras la hora exacta.",
+                 "Cada planeta con su signo, grado y casa.",
+                 "Elemento y modalidad dominantes de la carta completa.",
+                 "Sin hora: los planetas por signo son válidos y se omite el resto.",
                  "Se suma a tu Soy: no reemplaza nada de lo que ya viste."]}
       };
       function pedirFechaPrimero(queCosa) {
@@ -3863,6 +3900,55 @@
         const index=Number(removeButton.dataset.circleRemove),removed=circleMembers[index];
         if(!removed)return;circleMembers.splice(index,1);renderCircle();toast(`${removed.name} fue quitado del círculo.`);
       });
+const NATAL_API = (()=>{ try { return localStorage.getItem("natal-api"); } catch { return null; } })() || "http://127.0.0.1:8020";
+      const NATAL_PLACES = {
+        "Santiago de Chile": [-33.4489, -70.6693, "America/Santiago"],
+        "Ciudad de México": [19.4326, -99.1332, "America/Mexico_City"],
+        "Buenos Aires": [-34.6037, -58.3816, "America/Argentina/Buenos_Aires"],
+        "Bogotá": [4.7110, -74.0721, "America/Bogota"],
+        "Lima": [-12.0464, -77.0428, "America/Lima"],
+        "Madrid": [40.4168, -3.7038, "Europe/Madrid"],
+      };
+      const NATAL_SIGNS = ["Aries","Tauro","Géminis","Cáncer","Leo","Virgo","Libra","Escorpio","Sagitario","Capricornio","Acuario","Piscis"];
+      (function(){ const sel=$("#natal-place"); if(!sel) return; for(const name of Object.keys(NATAL_PLACES)){ const o=document.createElement("option"); o.value=name; o.textContent=name; sel.appendChild(o); } })();
+      const natalDMS = deg => { const d=Math.floor(deg), m=Math.round((deg-d)*60); return `${d}°${String(m).padStart(2,"0")}′`; };
+      const natalSignOf = lon => `${NATAL_SIGNS[Math.floor(((lon%360)+360)%360/30)]} ${natalDMS(((lon%30)+30)%30)}`;
+      function renderNatalHTML(d){
+        const known=d.birth_time_known;
+        const badge=`<span class="natal-badge${d.is_fallback?" fallback":""}">${d.is_fallback?"Motor aproximado":"Swiss Ephemeris"}</span>`;
+        const angles=known
+          ? `<div><span>Ascendente</span><strong>${natalSignOf(d.ascendant_longitude)}</strong></div><div><span>Medio cielo</span><strong>${natalSignOf(d.midheaven_longitude)}</strong></div>`
+          : `<div><span>Ascendente</span><strong>Sin hora</strong></div><div><span>Medio cielo</span><strong>Sin hora</strong></div>`;
+        const rows=d.placements.map(p=>`<tr><td>${p.name}</td><td>${p.sign} ${natalDMS(p.degree_in_sign)}</td><td>${known?"casa "+p.house:"—"}</td><td>${p.is_retrograde?'<span class="retro">℞ retrógrado</span>':""}</td></tr>`).join("");
+        const note=known
+          ? `Efemérides ${d.is_fallback?"aproximadas":"Swiss ("+d.house_system+")"}. Ascendente y casas dependen de la hora declarada.`
+          : `Sin hora de nacimiento: los planetas por signo son válidos, pero ascendente, casas y medio cielo se omiten porque exigen la hora exacta.`;
+        return `<div style="display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap">${badge}<span class="micro-label">${d.location_name||""}</span></div>
+          <div class="natal-summary"><div><span>Elemento dominante</span><strong>${d.dominant_element}</strong></div><div><span>Modalidad dominante</span><strong>${d.dominant_modality}</strong></div>${angles}</div>
+          <table class="natal-table"><thead><tr><th>Punto</th><th>Signo · grado</th><th>Casa</th><th></th></tr></thead><tbody>${rows}</tbody></table>
+          <p class="natal-note">${note}</p>`;
+      }
+      async function renderNatal(){
+        const birth=$("#birth").value;
+        const out=$("#natal-result");
+        if(!birth){ toast("Primero ingresa tu fecha de nacimiento en Soy."); return; }
+        const place=$("#natal-place").value, [lat,lon,tz]=NATAL_PLACES[place]||[];
+        const time=$("#natal-time").value;
+        const body={ date:birth, latitude:lat, longitude:lon, timezone:tz, place };
+        if(time) body.time=time;
+        out.innerHTML=`<p class="natal-empty">Calculando en el motor…</p>`;
+        try{
+          const res=await fetch(`${NATAL_API}/natal`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
+          if(!res.ok) throw new Error("status "+res.status);
+          out.innerHTML=renderNatalHTML(await res.json());
+        }catch(err){
+          const dev=["127.0.0.1","localhost"].includes(location.hostname);
+          out.innerHTML=dev
+            ? `<p class="natal-empty">Motor no disponible. Levántalo con <code>uvicorn api.main:app --port 8020</code> o apúntalo con <code>localStorage.natal-api</code>.</p>`
+            : `<p class="natal-empty">Tu carta natal completa —planetas, casas y ascendente con efemérides reales— llega en la versión con el motor conectado. El resto de tu lectura ya está disponible aquí.</p>`;
+        }
+      }
+      $("#natal-form").addEventListener("submit",event=>{event.preventDefault();renderNatal();});
       wireLoginDialog();
       mountWikiModules();
       updateWikiMatrixUI("western",wikiMatrixSelection.western);
@@ -3916,7 +4002,17 @@
       $("#access-estoy").addEventListener("click",()=>openCheckoutDialog("estoy"));
       $("#checkout-button").addEventListener("click",()=>openCheckoutDialog("estoy"));
       $("#checkout-close").addEventListener("click",()=>$("#checkout-dialog").close());
-      $("#checkout-done").addEventListener("click",()=>{$("#checkout-dialog").close();setView(ofertaEsCarta?"soy":pendingPaidView);});
+      $("#checkout-done").addEventListener("click",()=>{
+        $("#checkout-dialog").close();
+        /* Volvia a Soy, donde no hay nada de carta natal: se pagaba y no
+           aparecia nada. La seccion vive en Soy+, asi que ahi va. */
+        setView(ofertaEsCarta?"soyplus":pendingPaidView);
+        if(ofertaEsCarta)setTimeout(()=>{
+          const sec=$("#natal");
+          if(sec)sec.scrollIntoView({block:"start",behavior:"smooth"});
+          const hora=$("#natal-time"); if(hora)hora.focus({preventScroll:true});
+        },260);
+      });
       $("#checkout-form").addEventListener("submit",event=>{
         event.preventDefault();
         /* La carta natal es un complemento del Soy, no el pase de Estoy: si
