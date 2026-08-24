@@ -1258,7 +1258,8 @@
     .j-upsell-top i { color: var(--brass); font-family: var(--mono); font-size: 12px; font-style: normal; letter-spacing: .06em; }
     .j-upsell-copy { display: block; color: var(--muted); font-size: 13px; line-height: 1.5; }
 
-    .j-ledger-intro { margin: 14px 0 8px; color: var(--on-dark-faint); font-size: 12px; line-height: 1.5; }
+    .factor-analysis { margin: 0 0 12px; color: var(--muted); font-size: 13px; line-height: 1.55; }
+    .j-disclosure .factor-analysis { color: var(--on-dark-soft); }
     .j-disclosure .factor-ledger { border-color: var(--line-on-dark); }
     .j-disclosure .factor-row { border-color: var(--line-on-dark); }
     .j-disclosure .factor-summary strong { color: var(--paper); }
@@ -1744,15 +1745,12 @@
               </div>
               <details class="j-disclosure">
                 <summary>Ver interpretación y todos los temas</summary>
-                <p class="j-full-copy" id="j-cv-copy-full">—</p>
-                <!-- El recuento completo: por qué ganaron estos temas y no
-                     otros. Va plegado porque el paso a paso existe para que no
-                     haya tanta información delante como para scrollear rápido;
-                     abrirlo es una decisión de quien quiere el detalle. -->
-                <p class="j-ledger-intro">Todos los temas que aparecieron, y en cuántas de las cuatro tradiciones. Los de arriba son los que se afirmaron; ábrelos para ver qué señal sostiene cada uno.</p>
+                <!-- Solo la tabla. Se leia con dos parrafos introductorios y la
+                     interpretacion larga encima: explicaciones para algo que ya
+                     se explica solo -tema, cuantas tradiciones, barra-. Lo que
+                     hacia falta no era presentarla sino que cada fila, al
+                     abrirse, diera su explicacion y despues sus senales. -->
                 <div class="factor-ledger" id="j-cv-ledger"></div>
-                <p class="j-ledger-intro">Y las señales de tu fecha, agrupadas por tradición:</p>
-                <div class="j-converge-grid" id="j-cv-chips"></div>
               </details>
             </div>
           </div>
@@ -3654,7 +3652,7 @@
             const matches=(source.matchedAttributes||[]).join(", ")||SOY_FACTORS[factor.key].label.toLowerCase();
             return `<div class="source-card"><strong>${escapeHTML(contextualSoySourceLabel(source))}</strong><small>Coincide en: ${escapeHTML(matches)}</small></div>`;
           }).join("");
-          return `<details class="factor-row"><summary class="factor-summary"><strong>${escapeHTML(SOY_FACTORS[factor.key].label)}</strong><div class="factor-track" aria-label="${factor.traditionCount} de 4 tradiciones"><i style="--factor-strength:${strength}%"></i></div><span class="factor-meta"><b>${factor.traditionCount} de 4 tradiciones</b><i>Ver señales</i></span></summary><div class="factor-sources">${sourceCards}</div></details>`;
+          return `<details class="factor-row"><summary class="factor-summary"><strong>${escapeHTML(SOY_FACTORS[factor.key].label)}</strong><div class="factor-track" aria-label="${factor.traditionCount} de 4 tradiciones"><i style="--factor-strength:${strength}%"></i></div><span class="factor-meta"><b>${factor.traditionCount} de 4 tradiciones</b><i>Ver señales</i></span></summary><div class="factor-sources"><p class="factor-analysis">${escapeHTML(SOY_FACTORS[factor.key].analysis)}</p>${sourceCards}</div></details>`;
         }).join("");
       }
 
@@ -4385,7 +4383,6 @@ const NATAL_API = (()=>{ try { return localStorage.getItem("natal-api"); } catch
         const frases=(s.synthesis.copy.match(/[^.!?]+[.!?]+/g)||[]).map(f=>f.trim());
         const limite=frases.find(f=>/\bexceso\b|\bsombra\b/i.test(f));
         jSet("j-cv-copy",[frases[0],limite].filter(Boolean).join(" ")||s.synthesis.copy);
-        jSet("j-cv-copy-full",s.synthesis.copy);
         jSet("j-cv-gift",s.profile.gift);
         jSet("j-cv-gift-copy",s.profile.giftCopy);
         jSet("j-cv-shadow",s.profile.shadow);
@@ -4427,9 +4424,6 @@ const NATAL_API = (()=>{ try { return localStorage.getItem("natal-api"); } catch
 
         // Las señales agrupadas en las 4 tradiciones ya recorridas: cierra el
         // circuito con exactamente los atributos que la persona acaba de ver.
-        const main=s.factors.find(factor=>factor.traditionCount>=2);
-        const supporting=new Set((main?.sources||[]).map(source=>source.key));
-
         /* Los temas que una sola tradición levantó y ninguna otra respaldó.
            Nombrarlos es lo que convierte la convergencia en una afirmación con
            filo: si todo lo que aparece se presenta como señal, nada se
@@ -4453,25 +4447,9 @@ const NATAL_API = (()=>{ try { return localStorage.getItem("natal-api"); } catch
           });
           descartada.append(document.createTextNode("."));
         }
-        const chips=$("#j-cv-chips");
-        chips.textContent="";
-        [["Numerología",["life"]],
-         ["Occidental",["western-sign","western-element","western-modality"]],
-         ["Chino",["chinese-animal","chinese-element","chinese-polarity"]],
-         ["Tarot",["tarot","tarot-1","tarot-2"]]].forEach(([tradition,keys])=>{
-          const own=s.signals.filter(signal=>keys.includes(signal.key));
-          if(!own.length)return;
-          const row=document.createElement("div");row.className="j-converge-row";
-          const label=document.createElement("span");label.textContent=tradition;
-          const box=document.createElement("div");
-          own.forEach(signal=>{
-            const chip=document.createElement("span");
-            chip.className=supporting.has(signal.key)?"j-chip on":"j-chip";
-            chip.textContent=signal.label;
-            box.append(chip);
-          });
-          row.append(label,box);chips.append(row);
-        });
+        /* Los chips agrupados por tradicion salieron del desplegable: ahora
+           cada fila de la tabla trae sus propias senales, donde significan
+           algo -que sostiene ESE tema- en vez de una lista suelta al final. */
 
         const greeting=journeyName.value.trim()?`${journeyName.value.trim()}, tu`:"Tu";
         /* El paso puente desapareció; su contenido útil —nombrar el Soy ya
