@@ -17,6 +17,15 @@
       --line: #c9c5b8;
       --line-dark: #9c988c;
       --brass: #8d6417;
+      /* Superficie oscura. El bloque de convergencia se inventaba su propio
+         cafe (#2f2418) y era el UNICO oscuro distinto de --ink en todo el
+         producto -80 usos contra 2-, sentado justo encima de un boton --ink.
+         Sus cinco colores derivados estaban sueltos y sin declarar. */
+      --on-dark: #f2ede1;
+      --on-dark-soft: var(--on-dark-soft);
+      --on-dark-faint: var(--on-dark-faint);
+      --brass-on-dark: var(--brass-on-dark);
+      --line-on-dark: var(--line-on-dark);
       --green: #234b3d;
       --red: #8b3f32;
       --matrix-direct: #8d6417;
@@ -1249,15 +1258,15 @@
     .j-upsell-top i { color: var(--brass); font-family: var(--mono); font-size: 12px; font-style: normal; letter-spacing: .06em; }
     .j-upsell-copy { display: block; color: var(--muted); font-size: 13px; line-height: 1.5; }
 
-    .j-ledger-intro { margin: 14px 0 8px; color: #aaa69b; font-size: 12px; line-height: 1.5; }
-    .j-disclosure .factor-ledger { border-color: rgba(235, 231, 220, .22); }
-    .j-disclosure .factor-row { border-color: rgba(235, 231, 220, .22); }
+    .j-ledger-intro { margin: 14px 0 8px; color: var(--on-dark-faint); font-size: 12px; line-height: 1.5; }
+    .j-disclosure .factor-ledger { border-color: var(--line-on-dark); }
+    .j-disclosure .factor-row { border-color: var(--line-on-dark); }
     .j-disclosure .factor-summary strong { color: var(--paper); }
-    .j-disclosure .factor-meta b { color: #c99b46; }
-    .j-disclosure .factor-meta i { color: #aaa69b; }
-    .j-disclosure .source-card { border-color: rgba(235, 231, 220, .22); }
+    .j-disclosure .factor-meta b { color: var(--brass-on-dark); }
+    .j-disclosure .factor-meta i { color: var(--on-dark-faint); }
+    .j-disclosure .source-card { border-color: var(--line-on-dark); }
     .j-disclosure .source-card strong { color: var(--paper); }
-    .j-disclosure .source-card small { color: #aaa69b; }
+    .j-disclosure .source-card small { color: var(--on-dark-faint); }
 
     .j-discarded { margin: 10px 0 0; color: rgba(235, 231, 220, .58); font-family: var(--mono); font-size: 10px; line-height: 1.65; letter-spacing: .04em; }
     .j-discarded b { color: rgba(235, 231, 220, .82); font-weight: 400; }
@@ -1286,30 +1295,30 @@
        pantalla que es el premio del recorrido. Este tono conserva el contraste
        (>12:1 sobre el texto claro) pero pertenece a la familia del papel y el
        latón, no al gris. */
-    .j-converge { margin: 20px 0 24px; border: 1px solid #2f2418; background: #2f2418; color: #f2ede1; }
-    .j-converge-head { padding: 16px 20px; border-bottom: 1px solid rgba(235, 231, 220, .22); }
-    .j-converge-head span { color: #c99b46; font-family: var(--mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; }
+    .j-converge { margin: 20px 0 24px; border: 1px solid var(--ink); background: var(--ink); color: var(--on-dark); }
+    .j-converge-head { padding: 16px 20px; border-bottom: 1px solid var(--line-on-dark); }
+    .j-converge-head span { color: var(--brass-on-dark); font-family: var(--mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; }
     .j-converge-body { padding: 22px 20px 24px; }
     .j-converge-body h2 { margin: 0 0 8px; font-family: var(--serif); font-size: clamp(30px, 7vw, 42px); font-weight: 420; line-height: 1.05; letter-spacing: -.02em; }
-    .j-converge-body .j-sources { margin: 0 0 10px; color: #c99b46; font-size: 13px; }
-    .j-converge-body .j-copy { margin: 0; color: #cdc9bd; font-size: 15px; line-height: 1.45; }
+    .j-converge-body .j-sources { margin: 0 0 10px; color: var(--brass-on-dark); font-size: 13px; }
+    .j-converge-body .j-copy { margin: 0; color: var(--on-dark-soft); font-size: 15px; line-height: 1.45; }
     .j-converge .j-disclosure { border-color: rgba(235, 231, 220, .18); }
-    .j-converge .j-disclosure summary { color: #aaa69b; }
-    .j-converge .j-disclosure summary::after { color: #c99b46; }
-    .j-converge .j-full-copy { margin: 0 0 14px; color: #cdc9bd; font-size: 14px; line-height: 1.48; }
+    .j-converge .j-disclosure summary { color: var(--on-dark-faint); }
+    .j-converge .j-disclosure summary::after { color: var(--brass-on-dark); }
+    .j-converge .j-full-copy { margin: 0 0 14px; color: var(--on-dark-soft); font-size: 14px; line-height: 1.48; }
     /* El segundo tema: presente pero subordinado. Mismo bloque, media línea
        de jerarquía menos, para que no compita con la conclusión principal. */
-    .j-second { margin-top: 14px; padding-top: 12px; border-top: 1px solid rgba(235, 231, 220, .22); }
-    .j-second > span { display: block; margin-bottom: 3px; color: #c99b46; font-family: var(--mono); font-size: 9px; letter-spacing: .1em; text-transform: uppercase; }
+    .j-second { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--line-on-dark); }
+    .j-second > span { display: block; margin-bottom: 3px; color: var(--brass-on-dark); font-family: var(--mono); font-size: 9px; letter-spacing: .1em; text-transform: uppercase; }
     .j-second strong { display: block; font-family: var(--serif); font-size: 22px; font-weight: 500; line-height: 1.15; }
-    .j-second p { margin: 3px 0 0; color: #cdc9bd; font-size: 13px; line-height: 1.45; }
+    .j-second p { margin: 3px 0 0; color: var(--on-dark-soft); font-size: 13px; line-height: 1.45; }
 
     .j-converge-grid { margin-top: 12px; border-top: 1px solid rgba(235, 231, 220, .18); }
     .j-converge-row { display: grid; grid-template-columns: 74px 1fr; gap: 10px; align-items: baseline; padding: 5px 0; border-bottom: 1px solid rgba(235, 231, 220, .18); }
     .j-converge-row > span { color: #8f8b80; font-family: var(--mono); font-size: 9px; letter-spacing: .1em; text-transform: uppercase; }
     .j-converge-row > div { display: flex; flex-wrap: wrap; gap: 5px; }
-    .j-chip { padding: 4px 8px; border: 1px solid rgba(235, 231, 220, .3); font-family: var(--mono); font-size: 9px; letter-spacing: .06em; text-transform: uppercase; color: #cdc9bd; }
-    .j-chip.on { border-color: #c99b46; color: #edd39a; }
+    .j-chip { padding: 4px 8px; border: 1px solid rgba(235, 231, 220, .3); font-family: var(--mono); font-size: 9px; letter-spacing: .06em; text-transform: uppercase; color: var(--on-dark-soft); }
+    .j-chip.on { border-color: var(--brass-on-dark); color: #edd39a; }
 
     .j-takeaways { display: grid; gap: 10px; margin: 0 0 24px; }
     .j-takeaway { padding: 14px 16px; border: 1px solid var(--line-dark); background: var(--paper-2); }
