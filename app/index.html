@@ -4719,7 +4719,7 @@ const NATAL_API = (()=>{ try { return localStorage.getItem("natal-api"); } catch
       function isValidJourneyBirth(value){
         if(!isValidISODate(value))return false;
         const date=parseDate(value);
-        return date.getUTCFullYear()>=1900&&date.getTime()<=Date.now();
+        return date.getUTCFullYear()>=1900&&date.getUTCFullYear()<=2100;
       }
 
       /* El paso 2 no puede limitarse a escribir en los inputs reales: `required`
@@ -4730,7 +4730,7 @@ const NATAL_API = (()=>{ try { return localStorage.getItem("natal-api"); } catch
       function commitJourneyBirth(){
         const value=journeyBirth.value;
         if(!isValidJourneyBirth(value)){
-          journeyBirthError.textContent="Necesitamos una fecha de nacimiento válida, posterior a 1900 y no futura.";
+          journeyBirthError.textContent="Necesitamos una fecha de nacimiento o planificada válida, entre 1900 y 2100.";
           journeyBirth.focus();
           return false;
         }
